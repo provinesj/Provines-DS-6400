@@ -1,0 +1,18 @@
+project:
+  type: book
+
+book:
+  title: "DS 6400: Advanced Machine Learning I"
+  author: "Jason Provines"
+  
+  chapters:
+    - index.qmd
+    - 1_Bias In Error Est for CV_VarmaSimon_2006.qmd
+
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+
+jupyter: python3

@@ -8,7 +8,7 @@
 
 <meta name="author" content="Jason Provines">
 
-<title>Week 2 - Initial Exploration (09/01/26)</title>
+<title>DS 6400: Advanced Machine Learning I</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -30,30 +30,115 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="09012026_Cross_Valid_files/libs/clipboard/clipboard.min.js"></script>
-<script src="09012026_Cross_Valid_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="09012026_Cross_Valid_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="09012026_Cross_Valid_files/libs/quarto-html/popper.min.js"></script>
-<script src="09012026_Cross_Valid_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="09012026_Cross_Valid_files/libs/quarto-html/anchor.min.js"></script>
-<link href="09012026_Cross_Valid_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="09012026_Cross_Valid_files/libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="09012026_Cross_Valid_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="09012026_Cross_Valid_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="09012026_Cross_Valid_files/libs/bootstrap/bootstrap-215b371544c282197b31c8aa00ce3677.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./1_Bias In Error Est for CV_VarmaSimon_2006.html" rel="next">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-631496449bf32ff9b0bb69a6bfd9195d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
 
 
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">DS 6400: Advanced Machine Learning I</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">DS 6400: Advanced Machine Learning I</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">DS 6400: Advanced Machine Learning I</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./1_Bias In Error Est for CV_VarmaSimon_2006.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Performance Measures</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Week 2 - Initial Exploration (09/01/26)</h1>
+<h1 class="title">DS 6400: Advanced Machine Learning I</h1>
 </div>
 
 
@@ -76,40 +161,11 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="paper-selected" class="level1">
-<h1>Paper Selected</h1>
-<p>Bias in error estimation when using cross-validation for model selection by Varma and Simon (2006)</p>
-</section>
-<section id="paper-summary" class="level1">
-<h1>Paper Summary</h1>
-<section id="key-ideas" class="level2">
-<h2 class="anchored" data-anchor-id="key-ideas">Key Ideas</h2>
-<p>In datasets with a small number of samples, cross-validation (CV) is often used to estimate the error of a model, and thus help with model selection. CV has been shown to be unbiased if all aspects of model training are done inside the CV loop, including feature selection, classifier type selection, and classifier parameter tuning. However, if this process is violated, it leads to biased error estimates. This is especially true for datasets with a small number of samples and a large number of features, which is common in microarray data.</p>
-<p>The paper used 1000 “null” simulated datasets consisting of 40 samples and 6000 features for classifier training using both shrunken centroids and support vector machine (SVM) classifiers. The null datasets included a 50/50 split of Class 1 and Class 2. The authors found that when feature selection and classifier parameter tuning to minimize errors were done outside of the CV loop, CV can produce biased models. Although 10-fold CV and leave-one-out CV (LOOCV) resampling methods were evaluated in this study, the result was shown to be present in all CV methods.</p>
-<p>The authors also presented a nested CV method that was used to develop a more unbiased model. This method was evaluated using the same simulated datasets and used both shrunken centroids and SVM classifiers. In the nested CV method, the outer CV loop used a LOOCV approach, while the inner CV loop used a 10-fold CV approach to determine the classifier parameters and model. Once the inner CV loop was completed, the model was evaluated on the left out sample from the outer CV loop. The average error from the outer CV loop was shown to be effective in reducing model bias over the simulated datasets.</p>
-<p>STOP DOING: Standard CV with datasets that include a small number of samples and a large number of features.</p>
-<p>START DOING: Nested CV with similarly sized datasets.</p>
-</section>
-<section id="example-demonstrating-the-key-ideas" class="level2">
-<h2 class="anchored" data-anchor-id="example-demonstrating-the-key-ideas">Example Demonstrating the Key Ideas</h2>
-<p>The authors developed classifiers on the simulated null datasets using both shrunken centroids and SVM classifiers. The shrunken centroids and SVM classifiers resulted in less than 30% training error 18.5% and 22.2% of the time, respectively. The mean bias for the models was found to be -12.2% and -8.3%, respectively. The nested CV method was found to have only a slight overestimate of the true error, witha mean bias of 4.2%.</p>
-</section>
-<section id="other-things-i-learned" class="level2">
-<h2 class="anchored" data-anchor-id="other-things-i-learned">Other Things I Learned</h2>
-<p>A classifier is a model for categorical data.</p>
-<p>The shrunken centroids classifier works by shrinking the centroids of each class towards the overall data centroid using the within class standard deviation.</p>
-<p>The support vector machine (SVM) classifier works by finding a hyperplane that separates the classes by a maximum margin.</p>
-<p>Kernels are the representation of scalar products in a transformed feature space.</p>
-<p>Leave-One-Out-CV (LOOCV) is a form of CV in which one sample is left out during each CV fold. Error is then computed on the left out sample. This is done for datasets with very small sample sizes.</p>
-</section>
-</section>
-<section id="simulation-ideas" class="level1">
-<h1>Simulation Ideas</h1>
-<p>It would be interesting to recreate this simulation to learn more about shrunken centroids and SVM classifiers and to help better understand the bias in error estimation when using CV for model selection. It would also be interesting to do a parametric study on datasets with a different number of samples and features to see how the bias changes as the dataset dimensions change.</p>
-</section>
+<p>This book contains Jason Provines’s assignments for DS 6400.</p>
 
-</main>
-<!-- /main column -->
+
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -510,6 +566,15 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./1_Bias In Error Est for CV_VarmaSimon_2006.html" class="pagination-link" aria-label="Performance Measures">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Performance Measures</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

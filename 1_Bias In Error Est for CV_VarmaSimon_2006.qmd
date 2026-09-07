@@ -1,0 +1,204 @@
+---
+title: 'Performance Measures'
+
+---
+
+## Bias in error estimation when using cross-validation for model selection by Varma and Simon (2006)
+
+### Paper Summary
+
+The goal of the Varma and Simon (2006) paper was to show that if feature selection and classifier parameter tuning are done outside of the cross-validation (CV) loop, it can lead to biased error estimates. The authors also proposed a nested CV approach that was used to develop an unbiased error estimate. 
+
+### Potential Bias in Error Estimation During CV
+
+CV has been shown to be unbiased if all aspects of model training are done inside the CV loop, including feature selection, classifier type selection, and classifier parameter tuning. However, if this process is violated, it leads to biased error estimates. For example, sometimes feature selection is performed on the entire dataset instead of the smaller training set within each CV loop, leading to bias error estimates. Similar issues can occur with classifier parameter tuning. 
+
+### Nested CV As a Potential Solution
+
+The authors used a nested CV method that was used to develop a more unbiased error estimate. The inner CV loop was used to perform hyperparameter tuning, while the outer CV loop was used to determine the error estimate. The authors found that the nested CV approach able to provide a more unbiased error estimate than the standard CV approach.
+
+### Methods Used
+
+The authors used a simulation study for their analysis.
+
+### Study Details
+
+The analysis in the paper used 1000 "null" simulated datasets consisting of 40 samples and 6000 features for classifier training using both shrunken centroids and support vector machine (SVM) classifiers. The null datasets included a 50/50 split of Class 1 and Class 2. The authors found that when feature selection and classifier hyperparameter tuning were done outside of the CV loop, CV can produce biased error estimates. Although 10-fold CV and leave-one-out CV (LOOCV) resampling methods were evaluated in this study, the result was generalized to be present in all CV methods.
+
+The authors also presented a nested CV method that was used to develop a more unbiased error estimate. This method was evaluated using the same simulated datasets and used both shrunken centroids and SVM classifiers. In the nested CV method, the outer CV loop used a LOOCV approach, while the inner CV loop used a 10-fold CV approach to determine the classifier parameters and model. Once the inner CV loop was completed, the model was evaluated on the left out sample from the outer CV loop. The average error from the outer CV loop was shown to be effective in reducing model error bias over the simulated datasets.
+
+### Computation Plan
+
+My computation plan is to replicate a portion of the simulation performed in the paper. I plan to focus on the shrunken centroids classifier and will use both the standard 10-fold CV approach and the nested CV approach to compare the error estimates. I will consider a smaller number of features (e.g., 100) and a smaller number of simulations (e.g., 20) to reduce computation time. I plan to generate similar histograms to those shown in the paper to illustrate the difference in error estimates between the two CV approaches.
+
+### Computation Details
+
+First, a simulated "null" dataset with 40 samples and 100 features was generated, with a 50/50 split of Class 1 and Class 2.
+```{python}
+from source_code.generate_noise_data import generate_noise_data
+X, y = generate_noise_data(n_samples=40, n_features=100)
+```
+
+Then, the data was plotted to visualize its distribution.
+```{python}
+import matplotlib.pyplot as plt
+
+plt.scatter(X[y == 1, 0], X[y == 1, 1], color='blue', label='Class 1')
+plt.scatter(X[y == 2, 0], X[y == 2, 1], color='red', label='Class 2')
+plt.title('Simulated Dataset with 50/50 Class Split')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.legend()
+plt.show()
+```
+
+The Nearest Centroid classifier within the scikit-learn library was used, and the shrink_threshold parameter was used as the paper's delta hyperparameter. Ten values of delta were evaluated, ranging from 0.01 to 1.0.
+```{python}
+import numpy as np
+from sklearn.neighbors import NearestCentroid
+
+delta_values = np.linspace(0.01, 1.0, 10)  # 10 evenly spaced values from 0.01 to 1.0
+model = NearestCentroid(metric='euclidean')
+```
+
+The standard 10-fold CV approach was used to train the model and determine the optimal delta hyperparameter, delta star. For each value of delta, the mean CV accuracy was determined. The delta star hyperparameter corresponded to the delta value that produced the greatest mean CV accuracy. In other words, the delta star hyperparameter corresponded to the delta value that produced the smallest mean CV error. 
+```{python}
+# Use 10-fold CV to determine the optimal delta hyperparameter
+from sklearn.model_selection import cross_val_score, KFold
+kf = KFold(n_splits=10, shuffle=True, random_state=1) 
+
+# Initialize a list to store mean CV scores for each delta value
+cv_scores = []
+
+for delta in delta_values:
+    model.set_params(shrink_threshold=delta)
+    
+    scores = cross_val_score(
+        model,  # nearest centroid model as defined above
+        X,      # feature matrix
+        y,      # labels - Class 1 and Class 2
+        cv=kf,  # CV using the Kfold as defined above
+        scoring='accuracy'
+    )
+    
+    cv_scores.append(scores.mean())  # store mean CV score for each delta value
+
+idx_max_score = np.argmax(cv_scores)  # returns the index of the delta value that had the highest mean CV score
+delta_star = delta_values[idx_max_score]  # returns the delta value that had the highest mean CV score
+cv_error_delta_star = 1 - cv_scores[idx_max_score]  # returns the mean CV error for the optimal delta
+
+print(f"Delta star value: {delta_star}")
+print(f"Mean CV error for delta star: {cv_error_delta_star:.3f}")
+```
+
+A classifier model, delta star model, was then developed using the optimal delta hyperparameter and trained on the original dataset. The error of this model was estimated on a larger simulated null dataset of 1000 samples. The paper used a dataset of 20,000 samples, but a smaller dataset was used here to reduce computation time. Then the true error of the delta star model was determined by comparing the predicted class labels to the true class labels of the larger null dataset.
+```{python}
+# create delta star model with delta star hyperparameter
+model_delta_star = NearestCentroid(metric='euclidean', shrink_threshold=delta_star)
+
+# fit model on original dataset
+model_delta_star.fit(X, y)
+
+# generate new, null dataset with 1000 samples
+X_eval, y_eval = generate_noise_data(n_samples=1000, n_features=100)
+
+# use model to predict class on the new, larger null dataset
+y_pred = model_delta_star.predict(X_eval)
+
+# determine true error of the delta star model
+from sklearn.metrics import accuracy_score
+accuracy = accuracy_score(y_eval, y_pred)
+true_error_delta_star = 1 - accuracy
+
+print(f"True error estimate for delta star model: {true_error_delta_star:.3f}")
+```
+
+This procedure was then repeated for 100 simulations to reproduce the histogram shown in the paper to compare the mean CV error estimate vs. the true error estimate for the delta star model. The paper used 1,000 simulations, but a smaller number of simulations was used here to reduce computation time.
+```{python}
+import pandas as pd
+num_simulations = 100
+
+# create empty list to store results
+results = []
+
+from source_code.run_simulation import run_simulation
+for i in range(num_simulations):
+    results.append(run_simulation())
+
+results_df = pd.DataFrame(results)
+results_df.head()
+```
+
+Finally, a figure was developed to show the distributions of the CV error vs. true error for the delta star model over the 100 simulations. As shown in the figure, there is a distinct difference between the two error types.
+```{python}
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(6, 5))
+
+plot_params = {"bins":20, "alpha":0.6}
+
+plt.hist(
+    results_df["cv_error_delta_star"], color="blue", label="CV Error for Delta Star Model",
+    **plot_params)
+
+plt.hist(
+    results_df["true_error_delta_star"], color="red", label="True Error for Delta Star Model",
+    **plot_params)
+
+plt.xlabel("Error")
+plt.ylabel("Frequency")
+plt.title("Histograms Showing CV Error vs. True Error for Delta Star Model")
+plt.legend()
+plt.show()
+```
+
+Next, the nested CV approach was used to determine the nested CV error of the delta star model. In this approach, the outer loop uses leave one out CV (LOOCV) to determine the error of the delta star model, while the inner loop uses 10-fold CV to determine the delta star value.
+```{python}
+# Generate null dataset
+from source_code.generate_noise_data import generate_noise_data
+X, y = generate_noise_data(n_samples=40, n_features=100)
+
+# Perform nested cross validation on the dataset
+from source_code.nested_cross_validation import nested_cross_validation
+nested_cv_error = nested_cross_validation(X, y)
+
+print(f"Nested CV error: {nested_cv_error:.3f}")
+```
+
+This procedure was then repeated for 50 simulations to reproduce the histogram shown in the paper to compare the nested CV error estimate vs. the true error estimate for the delta star model. 
+```{python}
+import pandas as pd
+num_nested_simulations = 50
+
+# create empty list to store results
+nested_cv_results = []
+
+from source_code.run_nested_simulation import run_nested_simulation
+for i in range(num_nested_simulations):
+    nested_cv_results.append(run_nested_simulation())
+
+nested_cv_results_df = pd.DataFrame(nested_cv_results)
+nested_cv_results_df.head()
+```
+
+Finally, a figure was developed to show the distributions of the CV error vs. true error for the delta star model over the 100 simulations. As shown in the figure, there is a distinct difference between the two error types.
+```{python}
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(6, 5))
+
+plot_params = {"bins":20, "alpha":0.6}
+
+plt.hist(
+    nested_cv_results_df["nested_cv_error"], color="blue", label="Nested CV Error",
+    **plot_params)
+
+plt.hist(
+    nested_cv_results_df["true_error_delta_star"], color="red", label="True Error for Delta Star Model",
+    **plot_params)
+
+plt.xlabel("Error")
+plt.ylabel("Frequency")
+plt.title("Histograms Showing Nested CV Error vs. True Error for Delta Star Model")
+plt.legend()
+plt.show()

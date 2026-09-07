@@ -1,0 +1,6 @@
+---
+title: "DS 6400: Advanced Machine Learning I"
+---
+
+This book contains Jason Provines's assignments for DS 6400.
+
