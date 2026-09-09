@@ -1,0 +1,30 @@
+---
+title: '0.632+ Bootstrap Method for Error Estimation'
+
+---
+
+## Improvements on Cross-Validation: The 0.632+ Bootstrap Method by Efron and Tibshirani (1997)
+
+### Paper Summary
+
+The goal of the Efron and Tibshirani (1997) paper was to show ... 
+
+### Potential Bias in Error Estimation During CV
+
+CV has been shown to be unbiased if all aspects of model training are done inside the CV loop, including feature selection, classifier type selection, and classifier parameter tuning. However, if this process is violated, it leads to biased error estimates. For example, sometimes feature selection is performed on the entire dataset instead of the smaller training set within each CV loop, leading to bias error estimates. Similar issues can occur with classifier parameter tuning. 
+
+### 0.632+ Bootstrap As a Potential Solution
+
+The authors used a ...
+
+### Methods Used
+
+The authors analyzed a combination of simulated data and subsets of actual data for their analysis.
+
+### Study Details
+
+2 paragraphs...
+
+### Computation Plan
+
+My computation plan is to ...

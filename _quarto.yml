@@ -2,12 +2,13 @@ project:
   type: book
 
 book:
-  title: "DS 6400: Advanced Machine Learning I"
+  title: "Provines DS 6400: Advanced Machine Learning I"
   author: "Jason Provines"
   
   chapters:
     - index.qmd
     - 1_Bias In Error Est for CV_VarmaSimon_2006.qmd
+    - 2_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997.qmd
 
 
 format:
