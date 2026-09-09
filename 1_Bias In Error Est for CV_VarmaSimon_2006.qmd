@@ -61,7 +61,7 @@ delta_values = np.linspace(0.01, 1.0, 10)  # 10 evenly spaced values from 0.01 t
 model = NearestCentroid(metric='euclidean')
 ```
 
-The standard 10-fold CV approach was used to train the model and determine the optimal delta hyperparameter, delta star. For each value of delta, the mean CV accuracy was determined. The delta star hyperparameter corresponded to the delta value that produced the greatest mean CV accuracy. In other words, the delta star hyperparameter corresponded to the delta value that produced the smallest mean CV error. 
+The standard 10-fold CV approach was used to determine the optimal delta hyperparameter, delta star. For each value of delta, the mean CV accuracy was determined. The delta star hyperparameter corresponded to the delta value that produced the greatest mean CV accuracy. In other words, the delta star hyperparameter corresponded to the delta value that produced the smallest mean CV error. 
 ```{python}
 # Use 10-fold CV to determine the optimal delta hyperparameter
 from sklearn.model_selection import cross_val_score, KFold
@@ -152,7 +152,7 @@ plt.legend()
 plt.show()
 ```
 
-Next, the nested CV approach was used to determine the nested CV error of the delta star model. In this approach, the outer loop uses leave one out CV (LOOCV) to determine the error of the delta star model, while the inner loop uses 10-fold CV to determine the delta star value.
+Next, the nested CV approach was used to determine the nested CV error of the delta star model. In this approach, the outer loop uses leave one out CV (LOOCV) to determine the error of the delta star model, while the inner loop uses 10-fold CV to evaluate different delta hyperparameter values.
 ```{python}
 # Generate null dataset
 from source_code.generate_noise_data import generate_noise_data
@@ -181,7 +181,7 @@ nested_cv_results_df = pd.DataFrame(nested_cv_results)
 nested_cv_results_df.head()
 ```
 
-Finally, a figure was developed to show the distributions of the CV error vs. true error for the delta star model over the 100 simulations. As shown in the figure, there is a distinct difference between the two error types.
+Finally, a figure was developed to show the distributions of the nested CV error vs. true error for the delta star model over the 50 simulations. As shown in the figure, the two error estimates are much more similar when using nested CV vs. standard CV.
 ```{python}
 import matplotlib.pyplot as plt
 
@@ -202,3 +202,6 @@ plt.ylabel("Frequency")
 plt.title("Histograms Showing Nested CV Error vs. True Error for Delta Star Model")
 plt.legend()
 plt.show()
+```
+
+This computation shows that typical CV can produce bias in error estimates if hyperparameter tuning is done outside of the CV loop. The nested CV approach proposed in the paper was shown to produce unbiased error estimates.
