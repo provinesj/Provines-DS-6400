@@ -7,15 +7,15 @@ title: '0.632+ Bootstrap Method for Error Estimation'
 
 ### Paper Summary
 
-The goal of the Efron and Tibshirani (1997) paper was to show ... 
+The goal of the Efron and Tibshirani (1997) paper was to show that although cross validation can provide relatively unbiased error predictions, it can be have high variability. As an alternative, the authors presented the 0.632+ bootstrap method for error prediction, which produced error estimates which were less biased and had less variability than with using cross validation.
 
-### Potential Bias in Error Estimation During CV
+### Variability in Error Estimation During CV
 
-CV has been shown to be unbiased if all aspects of model training are done inside the CV loop, including feature selection, classifier type selection, and classifier parameter tuning. However, if this process is violated, it leads to biased error estimates. For example, sometimes feature selection is performed on the entire dataset instead of the smaller training set within each CV loop, leading to bias error estimates. Similar issues can occur with classifier parameter tuning. 
+Cross validation (CV) is a common method for determining error estimate of a model. Leave one out CV (LOOCV) is typically unbiased, but can display high variability. Alternatively, 5-fold or 10-fold CV exhibit lower variance, but can display higher bias. 
 
 ### 0.632+ Bootstrap As a Potential Solution
 
-The authors used a ...
+A bootstrap procedure was shown to be a suitable alternative for alleviating the variability challenges with CV. The 0.632+ method was shown to produce root mean squared (RMS) errors only about 80% as large as errors determined through CV.
 
 ### Methods Used
 
@@ -23,8 +23,12 @@ The authors analyzed a combination of simulated data and subsets of actual data 
 
 ### Study Details
 
-2 paragraphs...
+The authors presented a 0.632+ bootstrap method, which was developed to be an improvement on the 0.632 bootstrap method. The 0.632 model gets its name because during bootstrap sampling, there is, on average, approximately 63.2% of the original observations from the original dataset that that appear at least once in a bootstrap sample, leaving approximately 36.8% as out-of-bag observations. The 0.632 method consists of calculating two error estimates: one in which the model is trained on the bootstrap sample ane evaluated on the same observations (Errboot) and the other in which the model is trained on the bootstrap sample and evaluated on the observations not selected during bootstrap sampling (ErrOOB). The 0.632 model error is then the sum of 0.368 Errboot + 0.632 ErrOOB.
+
+The 0.632+ bootstrap method presesented in the paper improves on the 0.632 method by using a weight factor applied to both errors. This weight factor is determined based on the relative overfitting of the model compared to the error of the model if no information were known about the model. 
+
+In the paper, the authors analyzed the error predictions of various models developed from 24 different datasets using both the 0.632+ method and CV. Some datasets were simulted, while others were subsets of actual data. The datasets consisted of sample sizes ranging from 12 to 100, various distributions, class sizes ranging from 2 to 15, and various model types used. The authors found that 50 bootstrap samples were sufficient for their experiments. In all 24 experiments, the 0.632+ method outperformed CV.
 
 ### Computation Plan
 
-My computation plan is to ...
+My computation plan is to perform error estimation of a model developed from simulated data using both the 0.632+ bootstrap method and the nested CV method. I plan to use the same simulated dataset and the nested CV approach from the Varma and Simon (2006) paper. I plan to evaluate both error estimation methods based on their relative bias, variability, and computation time. I also plan to compare the results of each method with an independent test error developed using the delta star model selection approach also described in the Varma and Simon (2006) paper.
