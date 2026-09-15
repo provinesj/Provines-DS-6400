@@ -68,7 +68,7 @@ def generate_noise_data(n_samples=40, n_features=100):
 X, y = generate_noise_data(n_samples=40, n_features=100)
 ```
 
-Then, the data was plotted to visualize it.
+Then the data was plotted to visualize it.
 ```{python}
 import matplotlib.pyplot as plt
 
@@ -81,7 +81,7 @@ plt.legend()
 plt.show()
 ```
 
-The class proportions of the dataset were then developed. These will be used later during the calculation of the Err_noinfo term in the bootstrap error estimation.
+The class proportions of the dataset were then developed. These will be used later during the calculation of the err_noinfo term in the bootstrap error estimation.
 ```{python}
 import numpy as np
 
@@ -131,7 +131,7 @@ def bootstrap_sampling(X, y, B=50):
 boot_indices, oob_indices, X_boot, y_boot = bootstrap_sampling(X, y, B=50)
 ```
 
-Similar to the computation for the Varma and Simon (2006) paper, the Nearest Centroid classifier within the scikit-learn library was used. The shrink_threshold parameter was used as the paper's delta hyperparameter. Ten values of delta were evaluated, ranging from 0.01 to 1.0.
+Similar to the computation for the Varma and Simon (2006) paper, the Nearest Centroid classifier within the scikit-learn library was used. The shrink_threshold parameter was used as the paper's delta hyperparameter. Ten values of delta were evaluated, ranging from 0.01 to 1.0. A 10-fold cross validation process was used to determine the optimal delta hyperparameter, called delta star.
 ```{python}
 import numpy as np
 from sklearn.neighbors import NearestCentroid
@@ -242,7 +242,7 @@ err_632_plus = calc_err_632_plus(X, y, boot_indices, oob_indices, delta_star, cl
 print(err_632_plus)
 ```
 
-The above procedure was then repeated for 50 simulations to determine the distribution of error estimates using the 0.632+ methodology. The computation was timed to determine how long it took to run these simulations.
+The above procedure was then repeated for 100 simulations to determine the distribution of error estimates using the 0.632+ methodology. The computation was timed to determine how long it took to run these simulations using the 0.632+ error estimation method.
 ```{python}
 # start timing process to determine how long this set of simulations takes to run
 import time
@@ -373,7 +373,7 @@ err_nested_cv_results_df = pd.DataFrame(nested_cv_results)
 err_nested_cv_results_df.head()
 ```
 
-Then the nested CV error distributions over all of the simulations were plotted to compare their results to the 0.632+ error estimation approach.
+Then the nested CV error distributions were plotted to compare their results to the 0.632+ error estimation approach.
 ```{python}
 import matplotlib.pyplot as plt
 
