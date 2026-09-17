@@ -1,6 +1,6 @@
 ---
-title: "DS 6400: Advanced Machine Learning I"
+title: "Provines DS 6400 Notebook"
 ---
 
-This book contains Jason Provines's assignments for DS 6400.
+This book contains Jason Provines's notes and assignments for DS 6400.
 

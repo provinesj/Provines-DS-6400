@@ -23,9 +23,56 @@ The authors analyzed a combination of simulated data and subsets of actual data 
 
 ### Study Details
 
-The authors presented a 0.632+ bootstrap method, which was developed to be an improvement on the 0.632 bootstrap method. The 0.632 model gets its name because during bootstrap sampling, there is, on average, approximately 63.2% of the original observations from the original dataset that that appear at least once in a bootstrap sample, leaving approximately 36.8% as out-of-bag observations. The 0.632 method consists of calculating two error estimates: one in which the model is trained on the bootstrap sample ane evaluated on the same observations (Errboot) and the other in which the model is trained on the bootstrap sample and evaluated on the observations not selected during bootstrap sampling (ErrOOB). The 0.632 model error is then the sum of 0.368 Errboot + 0.632 ErrOOB.
+The authors presented a 0.632+ bootstrap method, which was developed to be an improvement on the 0.632 bootstrap method. The 0.632 model gets its name because during bootstrap sampling, on average, there is approximately 63.2% of the original observations from the original dataset that that appear at least once in a bootstrap sample, leaving approximately 36.8% as out-of-bag observations. These percentages can be derived from the following equations.
+$$
+P(\text{observation appears}) &= 1 - e^{-1} = 0.632 \\
+P(\text{observation is left out}) &= e^{-1} = 0.368
+$$
 
-The 0.632+ bootstrap method presesented in the paper improves on the 0.632 method by using a weight factor applied to both errors. This weight factor is determined based on the relative overfitting of the model compared to the error of the model if no information were known about the model. 
+The 0.632 method consists of calculating two error estimates: one in which the model is trained on the bootstrap sample and evaluated on the same observations and the other in which the model is trained on the bootstrap sample and evaluated on the observations not selected during bootstrap sampling. The 0.632 model error is then given by the following equation.
+$$
+\widehat{Err}^{(.632)} = 0.368\,\overline{err} + 0.632\,\widehat{Err}^{(1)}
+$$
+
+$$
+\begin{aligned}
+&\text{where:} \\
+\widehat{\mathit{Err}}^{(.632)} ={}& \text{estimated error using the .632 approach} \\
+\overline{\mathit{err}} ={}& \text{estimated error when the model is trained and tested on a} \\
+&\text{bootstrap sample } (\mathit{Err}_{\text{boot}} \text{ in computation}) \\
+\widehat{\mathit{Err}}^{(1)} ={}& \text{estimated error when the model is trained on a bootstrap} \\
+&\text{sample and tested on out-of-bag samples } (\mathit{Err}_{\text{oob}} \text{ in computation})
+\end{aligned}
+$$
+
+The 0.632+ bootstrap method presesented in the paper improves on the 0.632 method by using a weight factor applied to both errors. This weight factor is determined based on the relative overfitting of the model compared to the error of the model if no information were known about the model. The relative overfitting rate is given by the following equation.
+$$
+\widehat{R} = \frac{\widehat{Err}^{(1)} - \overline{err}}
+{\widehat{\gamma} - \overline{err}}
+$$
+
+$$
+\begin{aligned}
+&\text{where:} \\
+\widehat{R} ={}& \text{relative overfitting factor} \\
+\widehat{\gamma} ={}& \text{no information error }
+  (\mathit{Err}_{\text{no info}} \text{ in computation})
+\end{aligned}
+$$
+
+The relative overfitting rate ranges from 0 with no overfitting ($\widehat{Err}^{(1)} = \overline{err}$) to 1, with overfitting equal to the no-information value $\widehat{\gamma} - \overline{err}$.
+
+The weight factor can then be calculated using the following equation. The weight factor ranges from 0.632 if $\widehat{R} = 0$ to 1 if $\widehat{R} = 1$.
+$$ 
+\widehat{w} = \frac{0.632}{1 - 0.368\widehat{R}}
+$$
+
+Finally, the .632+ error can be calculated using the following equation. The .632+ error ranges from $\widehat{Err}^{(.632+)}$ to $\widehat{Err}^{(1)}$.
+$$
+\widehat{Err}^{(.632+)}
+= (1-\widehat{w})\cdot\overline{err}
++ \widehat{w}\cdot\widehat{Err}^{(1)}
+$$
 
 In the paper, the authors analyzed the error predictions of various models developed from 24 different datasets using both the 0.632+ method and CV. Some datasets were simulted, while others were subsets of actual data. The datasets consisted of sample sizes ranging from 12 to 100, various distributions, class sizes ranging from 2 to 15, and various model types used. The authors found that 50 bootstrap samples were sufficient for their experiments. In all 24 experiments, the 0.632+ method outperformed CV.
 
