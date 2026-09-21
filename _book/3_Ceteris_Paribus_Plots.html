@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Jason Provines">
 
-<title>Provines DS 6400: Advanced Machine Learning I</title>
+<title>4&nbsp; Ceteris Paribus Plots – Provines DS 6400: Advanced Machine Learning I</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -37,7 +36,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./1_Bias In Error Est for CV_VarmaSimon_2006.html" rel="next">
+<link href="./2_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -76,6 +75,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -88,7 +116,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Provines DS 6400 Notebook</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./3_Ceteris_Paribus_Plots.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ceteris Paribus Plots</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -115,7 +143,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Provines DS 6400 Notebook</span></span></a>
   </div>
 </li>
@@ -131,32 +159,44 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">0.632+ Bootstrap Method for Error Estimation</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3_Ceteris_Paribus_Plots.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ceteris Paribus Plots</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">4.1</span> Overview</a></li>
+  <li><a href="#algorithm" id="toc-algorithm" class="nav-link" data-scroll-target="#algorithm"><span class="header-section-number">4.2</span> Algorithm</a>
+  <ul class="collapse">
+  <li><a href="#for-numerical-features" id="toc-for-numerical-features" class="nav-link" data-scroll-target="#for-numerical-features"><span class="header-section-number">4.2.1</span> For numerical features:</a></li>
+  <li><a href="#for-categorical-features" id="toc-for-categorical-features" class="nav-link" data-scroll-target="#for-categorical-features"><span class="header-section-number">4.2.2</span> For categorical features:</a></li>
+  </ul></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">4.3</span> Examples</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Provines DS 6400: Advanced Machine Learning I</h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ceteris Paribus Plots</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Jason Provines </p>
-          </div>
-  </div>
     
   
     
@@ -167,9 +207,78 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This book contains Jason Provines’s notes and assignments for DS 6400.</p>
+<section id="overview" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">4.1</span> Overview</h2>
+<p>Ceteris paribus (CP) plots:</p>
+<ol type="1">
+<li>Visualize how changes in a single feature change the prediction of a data point</li>
+<li>Simple analysis technique</li>
+<li>Model-agnostic, so can be used to compare models</li>
+<li>Building blocks for Individual Conditional Expectation (ICE) curves and Partial Dependents Plots(PDP)</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://christophm.github.io/interpretable-ml-book/images/cp-ice-pdp.jpg" class="img-fluid figure-img"></p>
+<figcaption>Comparison of Ceteris Paribus, ICE, and PDP from Interpretable Machine Learning by Christoph Molnar</figcaption>
+</figure>
+</div>
+<p>ICE plots are CP plots containing all CP curves for an entire dataset. A PDP is the average of all CP curves of one dataset.</p>
+</section>
+<section id="algorithm" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="algorithm"><span class="header-section-number">4.2</span> Algorithm</h2>
+<p>Let’s say input = Data point <span class="math inline">\({x}^{i}\)</span> to explain feature <span class="math inline">\({j}\)</span>.</p>
+<section id="for-numerical-features" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="for-numerical-features"><span class="header-section-number">4.2.1</span> For numerical features:</h3>
+<ol type="1">
+<li>Create equidistant value grid: <span class="math inline">\(z_1,...,z_K\)</span> where typically <span class="math inline">\(z_1 = min(x_j)\)</span> <span class="math inline">\(z_k = max(x_j)\)</span></li>
+<li>For each grid value: <span class="math inline">\(z_k \in \{z_1,...,z_K\}\)</span>:
+<ol type="1">
+<li>Create new data point: <span class="math inline">\(x^{(i)}_{j:=z_k}\)</span></li>
+<li>Get prediction: <span class="math inline">\(\widehat{f}\left(x^{(i)}_{j:=z_k}\right)\)</span></li>
+</ol></li>
+<li>Visualize the CP curves:
+<ul>
+<li>Plot line for data points <span class="math inline">\(\left\{z_l, \widehat{f}\left(x^{(i)}_{j:=z_l}\right)\right\}_{l=1}^{K}\)</span></li>
+<li>Plot dot for original data point <span class="math inline">\(\left(x_k^{(i)}, \widehat{f}\left(x^{(i)}\right)\right)\)</span></li>
+</ul></li>
+</ol>
+<p>The more grid values, the more fine-grained the CP curve, but the more calls you have to make to predict the function of the model.</p>
+</section>
+<section id="for-categorical-features" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="for-categorical-features"><span class="header-section-number">4.2.2</span> For categorical features:</h3>
+<ol type="1">
+<li>Create list of unique categories: <span class="math inline">\(z_1,...,z_K\)</span></li>
+<li>For each category: <span class="math inline">\(z_k \in \{z_1,...,z_K\}\)</span>:
+<ol type="1">
+<li>Create new data point: <span class="math inline">\(x^{(i)}_{j:=z_k}\)</span></li>
+<li>Get prediction: <span class="math inline">\(\widehat{f}\left(x^{(i)}_{j:=z_k}\right)\)</span></li>
+</ol></li>
+<li>Create bar plot or dot plot with categories on x-axis and predictions on y-axis.</li>
+</ol>
+</section>
+</section>
+<section id="examples" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="examples"><span class="header-section-number">4.3</span> Examples</h2>
+<ol type="1">
+<li>Using random forest model to predict probability that a penguin is female.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://christophm.github.io/interpretable-ml-book/ceteris-paribus_files/figure-html/fig-ceteris-penguins-1.png" class="img-fluid figure-img"></p>
+<figcaption>CP plot for probability of female vs.&nbsp;bill depth from Interpretable Machine Learning by Christoph Molnar</figcaption>
+</figure>
+</div>
+<p>This example is for 2 classes, but could include more if we had them.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://christophm.github.io/interpretable-ml-book/ceteris-paribus_files/figure-html/fig-pairwise-not-enough-1.png" class="img-fluid figure-img"></p>
+<figcaption>Scatter plot of body mass vs.&nbsp;bill depth from Interpretable Machine Learning by Christoph Molar</figcaption>
+</figure>
+</div>
+<p>We need to keep in mind that changing a feature can break dependence with other features. For example, bill depth is correlated with body mass and flipper length. The above figure shows that the original data point is realistic when considering body mass, bill depth, and species. However, the new data point is not realistic when considering the combination of those three features.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -574,11 +683,11 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./2_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997.html" class="pagination-link" aria-label="0.632+ Bootstrap Method for Error Estimation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">0.632+ Bootstrap Method for Error Estimation</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./1_Bias In Error Est for CV_VarmaSimon_2006.html" class="pagination-link" aria-label="Bias in Error Estimation When Using CV">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Bias in Error Estimation When Using CV</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

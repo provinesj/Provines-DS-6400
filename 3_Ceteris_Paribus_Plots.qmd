@@ -1,0 +1,62 @@
+---
+title: 'Ceteris Paribus Plots'
+
+---
+
+## Overview
+
+Ceteris paribus (CP) plots:
+
+1. Visualize how changes in a single feature change the prediction of a data point
+2. Simple analysis technique
+3. Model-agnostic, so can be used to compare models
+4. Building blocks for Individual Conditional Expectation (ICE) curves and Partial Dependents Plots(PDP)
+
+![Comparison of Ceteris Paribus, ICE, and PDP from Interpretable Machine Learning by Christoph Molnar](https://christophm.github.io/interpretable-ml-book/images/cp-ice-pdp.jpg)
+
+ICE plots are CP plots containing all CP curves for an entire dataset. A PDP is the average of all CP curves of one dataset.
+
+## Algorithm
+
+Let's say input = Data point ${x}^{i}$ to explain feature ${j}$.
+
+### For numerical features:
+
+1. Create equidistant value grid: 
+    $z_1,...,z_K$ 
+    where typically $z_1 = min(x_j)$
+                    $z_k = max(x_j)$
+2. For each grid value:
+    $z_k \in \{z_1,...,z_K\}$:
+    1. Create new data point: $x^{(i)}_{j:=z_k}$
+    2. Get prediction: $\widehat{f}\left(x^{(i)}_{j:=z_k}\right)$
+3. Visualize the CP curves:
+    - Plot line for data points
+     $\left\{z_l, \widehat{f}\left(x^{(i)}_{j:=z_l}\right)\right\}_{l=1}^{K}$
+    - Plot dot for original data point
+     $\left(x_k^{(i)}, \widehat{f}\left(x^{(i)}\right)\right)$
+
+The more grid values, the more fine-grained the CP curve, but the more calls you have to make to predict the function of the model.
+
+### For categorical features:
+
+1. Create list of unique categories: 
+    $z_1,...,z_K$ 
+2. For each category:
+    $z_k \in \{z_1,...,z_K\}$:
+    1. Create new data point: $x^{(i)}_{j:=z_k}$
+    2. Get prediction: $\widehat{f}\left(x^{(i)}_{j:=z_k}\right)$
+3. Create bar plot or dot plot with categories on x-axis and predictions on y-axis.
+
+## Examples
+
+1. Using random forest model to predict probability that a penguin is female.
+
+![CP plot for probability of female vs. bill depth from Interpretable Machine Learning by Christoph Molnar](https://christophm.github.io/interpretable-ml-book/ceteris-paribus_files/figure-html/fig-ceteris-penguins-1.png)
+
+This example is for 2 classes, but could include more if we had them.
+
+![Scatter plot of body mass vs. bill depth from Interpretable Machine Learning by Christoph Molar](https://christophm.github.io/interpretable-ml-book/ceteris-paribus_files/figure-html/fig-pairwise-not-enough-1.png)
+
+We need to keep in mind that changing a feature can break dependence with other features. For example, bill depth is correlated with body mass and flipper length. The above figure shows that the original data point is realistic when considering body mass, bill depth, and species. However, the new data point is not realistic when considering the combination of those three features.
+

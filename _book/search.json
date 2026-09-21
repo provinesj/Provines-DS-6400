@@ -48,5 +48,45 @@
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>0.632+ Bootstrap Method for Error Estimation</span>"
     ]
+  },
+  {
+    "objectID": "3_Ceteris_Paribus_Plots.html",
+    "href": "3_Ceteris_Paribus_Plots.html",
+    "title": "4  Ceteris Paribus Plots",
+    "section": "",
+    "text": "4.1 Overview\nCeteris paribus (CP) plots:\nICE plots are CP plots containing all CP curves for an entire dataset. A PDP is the average of all CP curves of one dataset.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Ceteris Paribus Plots</span>"
+    ]
+  },
+  {
+    "objectID": "3_Ceteris_Paribus_Plots.html#overview",
+    "href": "3_Ceteris_Paribus_Plots.html#overview",
+    "title": "4  Ceteris Paribus Plots",
+    "section": "",
+    "text": "Visualize how changes in a single feature change the prediction of a data point\nSimple analysis technique\nModel-agnostic, so can be used to compare models\nBuilding blocks for Individual Conditional Expectation (ICE) curves and Partial Dependents Plots(PDP)\n\n\n\n\nComparison of Ceteris Paribus, ICE, and PDP from Interpretable Machine Learning by Christoph Molnar",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Ceteris Paribus Plots</span>"
+    ]
+  },
+  {
+    "objectID": "3_Ceteris_Paribus_Plots.html#algorithm",
+    "href": "3_Ceteris_Paribus_Plots.html#algorithm",
+    "title": "4  Ceteris Paribus Plots",
+    "section": "4.2 Algorithm",
+    "text": "4.2 Algorithm\nLet’s say input = Data point \\({x}^{i}\\) to explain feature \\({j}\\).\n\n4.2.1 For numerical features:\n\nCreate equidistant value grid: \\(z_1,...,z_K\\) where typically \\(z_1 = min(x_j)\\) \\(z_k = max(x_j)\\)\nFor each grid value: \\(z_k \\in \\{z_1,...,z_K\\}\\):\n\nCreate new data point: \\(x^{(i)}_{j:=z_k}\\)\nGet prediction: \\(\\widehat{f}\\left(x^{(i)}_{j:=z_k}\\right)\\)\n\nVisualize the CP curves:\n\nPlot line for data points \\(\\left\\{z_l, \\widehat{f}\\left(x^{(i)}_{j:=z_l}\\right)\\right\\}_{l=1}^{K}\\)\nPlot dot for original data point \\(\\left(x_k^{(i)}, \\widehat{f}\\left(x^{(i)}\\right)\\right)\\)\n\n\nThe more grid values, the more fine-grained the CP curve, but the more calls you have to make to predict the function of the model.\n\n\n4.2.2 For categorical features:\n\nCreate list of unique categories: \\(z_1,...,z_K\\)\nFor each category: \\(z_k \\in \\{z_1,...,z_K\\}\\):\n\nCreate new data point: \\(x^{(i)}_{j:=z_k}\\)\nGet prediction: \\(\\widehat{f}\\left(x^{(i)}_{j:=z_k}\\right)\\)\n\nCreate bar plot or dot plot with categories on x-axis and predictions on y-axis.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Ceteris Paribus Plots</span>"
+    ]
+  },
+  {
+    "objectID": "3_Ceteris_Paribus_Plots.html#examples",
+    "href": "3_Ceteris_Paribus_Plots.html#examples",
+    "title": "4  Ceteris Paribus Plots",
+    "section": "4.3 Examples",
+    "text": "4.3 Examples\n\nUsing random forest model to predict probability that a penguin is female.\n\n\n\n\nCP plot for probability of female vs. bill depth from Interpretable Machine Learning by Christoph Molnar\n\n\nThis example is for 2 classes, but could include more if we had them.\n\n\n\nScatter plot of body mass vs. bill depth from Interpretable Machine Learning by Christoph Molar\n\n\nWe need to keep in mind that changing a feature can break dependence with other features. For example, bill depth is correlated with body mass and flipper length. The above figure shows that the original data point is realistic when considering body mass, bill depth, and species. However, the new data point is not realistic when considering the combination of those three features.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Ceteris Paribus Plots</span>"
+    ]
   }
 ]

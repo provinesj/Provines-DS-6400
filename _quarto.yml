@@ -9,7 +9,8 @@ book:
     - index.qmd
     - 1_Bias In Error Est for CV_VarmaSimon_2006.qmd
     - 2_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997.qmd
-
+    - 3_Ceteris_Paribus_Plots.qmd
+    
 
 format:
   html:
