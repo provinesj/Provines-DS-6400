@@ -181,7 +181,14 @@ window.Quarto = {
   <li><a href="#for-numerical-features" id="toc-for-numerical-features" class="nav-link" data-scroll-target="#for-numerical-features"><span class="header-section-number">4.2.1</span> For numerical features:</a></li>
   <li><a href="#for-categorical-features" id="toc-for-categorical-features" class="nav-link" data-scroll-target="#for-categorical-features"><span class="header-section-number">4.2.2</span> For categorical features:</a></li>
   </ul></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">4.3</span> Examples</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">4.3</span> Examples</a>
+  <ul class="collapse">
+  <li><a href="#using-random-forest-model-to-predict-probability-that-a-penguin-is-female" id="toc-using-random-forest-model-to-predict-probability-that-a-penguin-is-female" class="nav-link" data-scroll-target="#using-random-forest-model-to-predict-probability-that-a-penguin-is-female"><span class="header-section-number">4.3.1</span> Using random forest model to predict probability that a penguin is female</a></li>
+  <li><a href="#using-support-vector-machine-svm-to-predict-number-of-rented-bikes-based-on-weather-and-seasonal-info" id="toc-using-support-vector-machine-svm-to-predict-number-of-rented-bikes-based-on-weather-and-seasonal-info" class="nav-link" data-scroll-target="#using-support-vector-machine-svm-to-predict-number-of-rented-bikes-based-on-weather-and-seasonal-info"><span class="header-section-number">4.3.2</span> Using Support Vector Machine (SVM) to predict number of rented bikes based on weather and seasonal info</a></li>
+  <li><a href="#additional-explanation" id="toc-additional-explanation" class="nav-link" data-scroll-target="#additional-explanation"><span class="header-section-number">4.3.3</span> Additional Explanation</a></li>
+  <li><a href="#strengths" id="toc-strengths" class="nav-link" data-scroll-target="#strengths"><span class="header-section-number">4.3.4</span> Strengths</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations"><span class="header-section-number">4.3.5</span> Limitations</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -259,9 +266,8 @@ window.Quarto = {
 </section>
 <section id="examples" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="examples"><span class="header-section-number">4.3</span> Examples</h2>
-<ol type="1">
-<li>Using random forest model to predict probability that a penguin is female.</li>
-</ol>
+<section id="using-random-forest-model-to-predict-probability-that-a-penguin-is-female" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="using-random-forest-model-to-predict-probability-that-a-penguin-is-female"><span class="header-section-number">4.3.1</span> Using random forest model to predict probability that a penguin is female</h3>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://christophm.github.io/interpretable-ml-book/ceteris-paribus_files/figure-html/fig-ceteris-penguins-1.png" class="img-fluid figure-img"></p>
@@ -276,8 +282,54 @@ window.Quarto = {
 </figure>
 </div>
 <p>We need to keep in mind that changing a feature can break dependence with other features. For example, bill depth is correlated with body mass and flipper length. The above figure shows that the original data point is realistic when considering body mass, bill depth, and species. However, the new data point is not realistic when considering the combination of those three features.</p>
+</section>
+<section id="using-support-vector-machine-svm-to-predict-number-of-rented-bikes-based-on-weather-and-seasonal-info" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="using-support-vector-machine-svm-to-predict-number-of-rented-bikes-based-on-weather-and-seasonal-info"><span class="header-section-number">4.3.2</span> Using Support Vector Machine (SVM) to predict number of rented bikes based on weather and seasonal info</h3>
+<p>Pick winter day with good weather and see how changing features changes the prediction. Create plots for all features.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://christophm.github.io/interpretable-ml-book/ceteris-paribus_files/figure-html/fig-whatif-bike-1.png" class="img-fluid figure-img"></p>
+<figcaption>How changing individual features changes predicted number of bike rentals from Interpretable Machine Learning by Christoph Molar</figcaption>
+</figure>
+</div>
+<p>The feature that represents the biggest change in the prediction is the number of bikes rented 2 days before. Higher temps means more rentals up to a point.</p>
+<p>Can also package CP plots into sparklines, minimalistic plot lines.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://christophm.github.io/interpretable-ml-book/ceteris-paribus_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img"></p>
+<figcaption>CP plots shown as minimal sparklines from Interpretable Machine Learning by Christoph Molnar</figcaption>
+</figure>
+</div>
+</section>
+<section id="additional-explanation" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="additional-explanation"><span class="header-section-number">4.3.3</span> Additional Explanation</h3>
+<p>CP plots show how feature changes affect prediction. Comparing features side by side with shared y-axis allows us to see which feature has more influence on the data point’s prediction. Correlation between features is a concern, especially when interpreting CP curve far away from original feature.</p>
+<p>We can also use CP plots for comparison of models to better understand how they treat features differently.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://christophm.github.io/interpretable-ml-book/ceteris-paribus_files/figure-html/fig-cp-bike-models-1.png" class="img-fluid figure-img"></p>
+<figcaption>CP plots for bike prediction using different models from Interpretable Machine Learning by Christoph Molnar</figcaption>
+</figure>
+</div>
+</section>
+<section id="strengths" class="level3" data-number="4.3.4">
+<h3 data-number="4.3.4" class="anchored" data-anchor-id="strengths"><span class="header-section-number">4.3.4</span> Strengths</h3>
+<ol type="1">
+<li><p>Simple to implement and understand</p></li>
+<li><p>Can fix limitations of attribution methods - Attribution methods like SHAP or LIME don’t show how sensitive the prediction is to local changes. CP plots provide the complete picture.</p></li>
+<li><p>Flexible building blocks - Can be used for interpretation. Can combine lines across models, classes, hyperparameter settings, and features.</p></li>
+</ol>
+</section>
+<section id="limitations" class="level3" data-number="4.3.5">
+<h3 data-number="4.3.5" class="anchored" data-anchor-id="limitations"><span class="header-section-number">4.3.5</span> Limitations</h3>
+<ol type="1">
+<li><p>Only show one feature at a time - Don’t get to see how features interact without changing two features and plotting them.</p></li>
+<li><p>Interpretation suffers when features are correlated - When this occurs, not all parts of the curves may be realistic. Can be alleviated by restricting plots to shorter ranges for correlated features. Need to know what these ranges are.</p></li>
+<li><p>Careful with casual interpretation - Lower barrier to entry so these plots can be shown to non-experts.</p></li>
+</ol>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
