@@ -71,6 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./3_Ceteris_Paribus_Plots.html" rel="next">
 <link href="./1_Bias In Error Est for CV_VarmaSimon_2006.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -111,7 +112,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
+
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -197,6 +201,12 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">0.632+ Bootstrap Method for Error Estimation</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3_Ceteris_Paribus_Plots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ceteris Paribus Plots</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -262,21 +272,44 @@ window.Quarto = {
 </section>
 <section id="study-details" class="level3" data-number="3.1.5">
 <h3 data-number="3.1.5" class="anchored" data-anchor-id="study-details"><span class="header-section-number">3.1.5</span> Study Details</h3>
-<p>The authors presented a 0.632+ bootstrap method, which was developed to be an improvement on the 0.632 bootstrap method. The 0.632 model gets its name because during bootstrap sampling, on average, there is approximately 63.2% of the original observations from the original dataset that that appear at least once in a bootstrap sample, leaving approximately 36.8% as out-of-bag observations. These percentages can be derived from the following equations.</p>
-<p><span class="math display">\[
+<p>The authors presented a 0.632+ bootstrap method, which was developed to be an improvement on the 0.632 bootstrap method. The 0.632 model gets its name because during bootstrap sampling, on average, there is approximately 63.2% of the original observations from the original dataset that that appear at least once in a bootstrap sample, leaving approximately 36.8% as out-of-bag observations. These percentages can be derived from the following equations. <span class="math display">\[
 P(\text{observation appears}) = 1 - e^{-1} = 0.632 \\
 P(\text{observation is left out}) = e^{-1} = 0.368
 \]</span></p>
 <p>The 0.632 method consists of calculating two error estimates: one in which the model is trained on the bootstrap sample and evaluated on the same observations and the other in which the model is trained on the bootstrap sample and evaluated on the observations not selected during bootstrap sampling. The 0.632 model error is then given by the following equation. <span class="math display">\[
-\widehat{Err}^{(.632)} = 0.368\,\overline{err} + 0.632\,\widehat{Err}^{(1)} \\
+\widehat{Err}^{(.632)} = 0.368\,\overline{err} + 0.632\,\widehat{Err}^{(1)}
 \]</span></p>
 <p><span class="math display">\[
-where: \\
-\widehat{Err}^{(.632)} = estimated error using .632 approach \\
-\overline{err} = estimated error when model is trained and tested on bootstrap sample (Errboot) \\
-\widehat{Err}^{(1)} = estimated error when model is trained on bootstrap sample and tested on out of bag samples (Erroob)
+\begin{aligned}
+&amp;\text{where:} \\
+\widehat{\mathit{Err}}^{(.632)} ={}&amp; \text{estimated error using the .632 approach} \\
+\overline{\mathit{err}} ={}&amp; \text{estimated error when the model is trained and tested on a} \\
+&amp;\text{bootstrap sample } (\mathit{Err}_{\text{boot}} \text{ in computation}) \\
+\widehat{\mathit{Err}}^{(1)} ={}&amp; \text{estimated error when the model is trained on a bootstrap} \\
+&amp;\text{sample and tested on out-of-bag samples } (\mathit{Err}_{\text{oob}} \text{ in computation})
+\end{aligned}
 \]</span></p>
-<p>The 0.632+ bootstrap method presesented in the paper improves on the 0.632 method by using a weight factor applied to both errors. This weight factor is determined based on the relative overfitting of the model compared to the error of the model if no information were known about the model.</p>
+<p>The 0.632+ bootstrap method presesented in the paper improves on the 0.632 method by using a weight factor applied to both errors. This weight factor is determined based on the relative overfitting of the model compared to the error of the model if no information were known about the model. The relative overfitting rate is given by the following equation. <span class="math display">\[
+\widehat{R} = \frac{\widehat{Err}^{(1)} - \overline{err}}
+{\widehat{\gamma} - \overline{err}}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\text{where:} \\
+\widehat{R} ={}&amp; \text{relative overfitting factor} \\
+\widehat{\gamma} ={}&amp; \text{no information error }
+  (\mathit{Err}_{\text{no info}} \text{ in computation})
+\end{aligned}
+\]</span></p>
+<p>The relative overfitting rate ranges from 0 with no overfitting (<span class="math inline">\(\widehat{Err}^{(1)} = \overline{err}\)</span>) to 1, with overfitting equal to the no-information value <span class="math inline">\(\widehat{\gamma} - \overline{err}\)</span>.</p>
+<p>The weight factor can then be calculated using the following equation. The weight factor ranges from 0.632 if <span class="math inline">\(\widehat{R} = 0\)</span> to 1 if <span class="math inline">\(\widehat{R} = 1\)</span>. <span class="math display">\[
+\widehat{w} = \frac{0.632}{1 - 0.368\widehat{R}}
+\]</span></p>
+<p>Finally, the .632+ error can be calculated using the following equation. The .632+ error ranges from <span class="math inline">\(\widehat{Err}^{(.632+)}\)</span> to <span class="math inline">\(\widehat{Err}^{(1)}\)</span>. <span class="math display">\[
+\widehat{Err}^{(.632+)}
+= (1-\widehat{w})\cdot\overline{err}
++ \widehat{w}\cdot\widehat{Err}^{(1)}
+\]</span></p>
 <p>In the paper, the authors analyzed the error predictions of various models developed from 24 different datasets using both the 0.632+ method and CV. Some datasets were simulted, while others were subsets of actual data. The datasets consisted of sample sizes ranging from 12 to 100, various distributions, class sizes ranging from 2 to 15, and various model types used. The authors found that 50 bootstrap samples were sufficient for their experiments. In all 24 experiments, the 0.632+ method outperformed CV.</p>
 </section>
 <section id="computation-plan" class="level3" data-number="3.1.6">
@@ -286,7 +319,7 @@ where: \\
 <section id="computation-details" class="level3" data-number="3.1.7">
 <h3 data-number="3.1.7" class="anchored" data-anchor-id="computation-details"><span class="header-section-number">3.1.7</span> Computation Details</h3>
 <p>First, a simulated null dataset was developed using the same methodology as in the Varma and Simon (2006) paper. The data set consisted of 40 samples, 100 features, and had a 50/50 split of Class 1 and Class 2.</p>
-<div id="0ffad5b7" class="cell" data-execution_count="1">
+<div id="a37530c2" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_noise_data(n_samples<span class="op">=</span><span class="dv">40</span>, n_features<span class="op">=</span><span class="dv">100</span>):</span>
@@ -318,7 +351,7 @@ where: \\
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> generate_noise_data(n_samples<span class="op">=</span><span class="dv">40</span>, n_features<span class="op">=</span><span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then the data was plotted to visualize it.</p>
-<div id="cc7b42ee" class="cell" data-execution_count="2">
+<div id="d846c594" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(X[y <span class="op">==</span> <span class="dv">1</span>, <span class="dv">0</span>], X[y <span class="op">==</span> <span class="dv">1</span>, <span class="dv">1</span>], color<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span><span class="st">'Class 1'</span>)</span>
@@ -331,13 +364,13 @@ where: \\
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="2_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997_files/figure-html/cell-3-output-1.png" width="588" height="450" class="figure-img"></p>
+<p><img src="2_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997_files/figure-html/cell-3-output-1.png" width="592" height="450" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The class proportions of the dataset were then developed. These will be used later during the calculation of the err_noinfo term in the bootstrap error estimation.</p>
-<div id="6fe0e5d9" class="cell" data-execution_count="3">
+<div id="8a642035" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># determines the names and counts of each class in the dataset</span></span>
@@ -352,7 +385,7 @@ where: \\
 </div>
 </div>
 <p>Bootstrap sampling (with replacement) was performed on the dataset. 50 samples were selected from the original dataset during bootstrap sampling to mimic the bootstrap sample size in the Efron and Tibshirani (1997) paper. Bootstrap sampling was conducted on the indices of the original dataset so that the indices of the in-bag and out-of-bag samples could easily be determined. These will be needed later in error estimation.</p>
-<div id="b1c7152a" class="cell" data-execution_count="4">
+<div id="da07e3d0" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.utils <span class="im">import</span> resample</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bootstrap_sampling(X, y, B<span class="op">=</span><span class="dv">50</span>):</span>
@@ -388,7 +421,7 @@ where: \\
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>boot_indices, oob_indices, X_boot, y_boot <span class="op">=</span> bootstrap_sampling(X, y, B<span class="op">=</span><span class="dv">50</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Similar to the computation for the Varma and Simon (2006) paper, the Nearest Centroid classifier within the scikit-learn library was used. The shrink_threshold parameter was used as the paper’s delta hyperparameter. Ten values of delta were evaluated, ranging from 0.01 to 1.0. A 10-fold cross validation process was used to determine the optimal delta hyperparameter, called delta star.</p>
-<div id="55063fcd" class="cell" data-execution_count="5">
+<div id="bca63551" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> NearestCentroid</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score, KFold</span>
@@ -448,7 +481,7 @@ where: \\
 </div>
 </div>
 <p>After the delta_star hyperparameter was selected, the delta star model was created. The .632+ method of error estimation was then used to evaluate the delta star model. This was done by first training the delta star model on the bootstrap sample. Then the error was evaluated on both entire bootstrap sample and out-of-bag sample. Finally, the relative overfitting factor and weight factor were calculated to compute the final .632+ error of the model.</p>
-<div id="c54d4c14" class="cell" data-execution_count="6">
+<div id="5a4b468a" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calc_err_632_plus(X, y, boot_indices, oob_indices, delta_star, class_proportions):</span>
@@ -499,11 +532,11 @@ where: \\
 <span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>err_632_plus <span class="op">=</span> calc_err_632_plus(X, y, boot_indices, oob_indices, delta_star, class_proportions)</span>
 <span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(err_632_plus)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.5767588747879993</code></pre>
+<pre><code>0.43254182406907726</code></pre>
 </div>
 </div>
 <p>The above procedure was then repeated for 100 simulations to determine the distribution of error estimates using the 0.632+ methodology. The computation was timed to determine how long it took to run these simulations using the 0.632+ error estimation method.</p>
-<div id="3aaf6fad" class="cell" data-execution_count="7">
+<div id="5be86b10" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># start timing process to determine how long this set of simulations takes to run</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.perf_counter()</span>
@@ -544,9 +577,9 @@ where: \\
 <span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>err_632_plus_results_df <span class="op">=</span> pd.DataFrame(err_632_plus_results)</span>
 <span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>err_632_plus_results_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>41.375564100104384</code></pre>
+<pre><code>24.01200919994153</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="18">
 <div>
 
 
@@ -560,7 +593,7 @@ where: \\
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>0.769203</td>
+<td>0.576119</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
@@ -568,11 +601,11 @@ where: \\
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
-<td>0.233278</td>
+<td>0.432342</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
-<td>0.318540</td>
+<td>1.014288</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
@@ -585,7 +618,7 @@ where: \\
 </div>
 </div>
 <p>The .632+ error distributions over all of the simulations were plotted to view their bias and variability.</p>
-<div id="7e824ec3" class="cell" data-execution_count="8">
+<div id="0045b4df" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
@@ -602,13 +635,13 @@ where: \\
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="2_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997_files/figure-html/cell-9-output-1.png" width="511" height="450" class="figure-img"></p>
+<p><img src="2_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997_files/figure-html/cell-9-output-1.png" width="519" height="450" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Next the nested CV error estimation approach was conducted to compare with the .632+ error estimates. Only 20 simulations were conducted to reduce computation time.</p>
-<div id="af848cd2" class="cell" data-execution_count="9">
+<div id="136ea999" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># start timing process to determine how long this set of simulations takes to run</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.perf_counter()</span>
@@ -618,7 +651,7 @@ where: \\
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> NearestCentroid</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>num_sims_nested_cv <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>num_sims_nested_cv <span class="op">=</span> <span class="dv">20</span></span>
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># create empty list to store results</span></span>
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>nested_cv_results <span class="op">=</span> []</span>
@@ -677,9 +710,9 @@ where: \\
 <span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>err_nested_cv_results_df <span class="op">=</span> pd.DataFrame(nested_cv_results)</span>
 <span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>err_nested_cv_results_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>16.713841899996623</code></pre>
+<pre><code>216.08841359999496</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="20">
 <div>
 
 
@@ -693,7 +726,23 @@ where: \\
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>0.525</td>
+<td>0.300</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>0.400</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>0.300</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>0.475</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>0.475</td>
 </tr>
 </tbody>
 </table>
@@ -702,7 +751,7 @@ where: \\
 </div>
 </div>
 <p>Then the nested CV error distributions were plotted to compare their results to the 0.632+ error estimation approach.</p>
-<div id="6799ef71" class="cell" data-execution_count="10">
+<div id="1301891f" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
@@ -727,7 +776,7 @@ where: \\
 </div>
 <p>As shown in the figure, the simulated results from both approaches appear to be centered around 0.5, which is the theoretical mean of the null dataset. However, the 0.632+ appears to have greater variability than the nested CV approach. This could also be due to the greater number of simulations run for the 0.632+ approach.</p>
 <p>Finally, some statistics were generated to numerically compare the two approaches.</p>
-<div id="711d4a8f" class="cell" data-execution_count="11">
+<div id="232cb9f2" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate mean error of both approaches during simulations</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>mean_err_632 <span class="op">=</span> err_632_plus_results_df.iloc[:,<span class="dv">0</span>].mean()</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>mean_err_nested_cv <span class="op">=</span> err_nested_cv_results_df.iloc[:,<span class="dv">0</span>].mean()</span>
@@ -754,7 +803,7 @@ where: \\
 <span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>results_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="22">
 <div>
 
 
@@ -771,26 +820,26 @@ where: \\
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
 <td>Mean Error</td>
-<td>0.541808</td>
-<td>0.525000</td>
+<td>0.597872</td>
+<td>0.446250</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
 <td>Standard Deviation</td>
-<td>0.283847</td>
-<td>NaN</td>
+<td>0.273755</td>
+<td>0.086707</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
 <td>RMSE</td>
-<td>0.285502</td>
-<td>0.025000</td>
+<td>0.289433</td>
+<td>0.100156</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
 <td>Time per Simulation</td>
-<td>0.413756</td>
-<td>16.713842</td>
+<td>0.240120</td>
+<td>10.804421</td>
 </tr>
 </tbody>
 </table>
@@ -1212,6 +1261,9 @@ where: \\
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./3_Ceteris_Paribus_Plots.html" class="pagination-link" aria-label="Ceteris Paribus Plots">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ceteris Paribus Plots</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

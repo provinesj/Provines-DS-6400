@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; Performance Measures – DS 6400: Advanced Machine Learning I</title>
+<title>2&nbsp; Bias in Error Estimation When Using CV – Provines DS 6400: Advanced Machine Learning I</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -71,6 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./2_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997.html" rel="next">
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -111,7 +112,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
+
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
 
 
 </head>
@@ -125,7 +129,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_Bias In Error Est for CV_VarmaSimon_2006.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Performance Measures</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./1_Bias In Error Est for CV_VarmaSimon_2006.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Bias in Error Estimation When Using CV</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -140,7 +144,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">DS 6400: Advanced Machine Learning I</a> 
+      <a href="./">Provines DS 6400: Advanced Machine Learning I</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -153,13 +157,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">DS 6400: Advanced Machine Learning I</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Provines DS 6400 Notebook</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./1_Bias In Error Est for CV_VarmaSimon_2006.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Performance Measures</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Bias in Error Estimation When Using CV</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./2_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">0.632+ Bootstrap Method for Error Estimation</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./3_Ceteris_Paribus_Plots.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Ceteris Paribus Plots</span></span></a>
   </div>
 </li>
     </ul>
@@ -190,7 +206,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Performance Measures</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Bias in Error Estimation When Using CV</span></h1>
 </div>
 
 
@@ -237,12 +253,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="computation-details" class="level3" data-number="2.1.7">
 <h3 data-number="2.1.7" class="anchored" data-anchor-id="computation-details"><span class="header-section-number">2.1.7</span> Computation Details</h3>
 <p>First, a simulated “null” dataset with 40 samples and 100 features was generated, with a 50/50 split of Class 1 and Class 2.</p>
-<div id="d2d88a76" class="cell" data-execution_count="1">
+<div id="8b6dc2db" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> source_code.generate_noise_data <span class="im">import</span> generate_noise_data</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> generate_noise_data(n_samples<span class="op">=</span><span class="dv">40</span>, n_features<span class="op">=</span><span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then, the data was plotted to visualize its distribution.</p>
-<div id="278123aa" class="cell" data-execution_count="2">
+<div id="1e13de2f" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(X[y <span class="op">==</span> <span class="dv">1</span>, <span class="dv">0</span>], X[y <span class="op">==</span> <span class="dv">1</span>, <span class="dv">1</span>], color<span class="op">=</span><span class="st">'blue'</span>, label<span class="op">=</span><span class="st">'Class 1'</span>)</span>
@@ -255,21 +271,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="1_Bias In Error Est for CV_VarmaSimon_2006_files/figure-html/cell-3-output-1.png" width="588" height="450" class="figure-img"></p>
+<p><img src="1_Bias In Error Est for CV_VarmaSimon_2006_files/figure-html/cell-3-output-1.png" width="593" height="450" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The Nearest Centroid classifier within the scikit-learn library was used, and the shrink_threshold parameter was used as the paper’s delta hyperparameter. Ten values of delta were evaluated, ranging from 0.01 to 1.0.</p>
-<div id="938281d3" class="cell" data-execution_count="3">
+<div id="197c1f1d" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> NearestCentroid</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>delta_values <span class="op">=</span> np.linspace(<span class="fl">0.01</span>, <span class="fl">1.0</span>, <span class="dv">10</span>)  <span class="co"># 10 evenly spaced values from 0.01 to 1.0</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> NearestCentroid(metric<span class="op">=</span><span class="st">'euclidean'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>The standard 10-fold CV approach was used to train the model and determine the optimal delta hyperparameter, delta star. For each value of delta, the mean CV accuracy was determined. The delta star hyperparameter corresponded to the delta value that produced the greatest mean CV accuracy. In other words, the delta star hyperparameter corresponded to the delta value that produced the smallest mean CV error.</p>
-<div id="552ed5ea" class="cell" data-execution_count="4">
+<p>The standard 10-fold CV approach was used to determine the optimal delta hyperparameter, delta star. For each value of delta, the mean CV accuracy was determined. The delta star hyperparameter corresponded to the delta value that produced the greatest mean CV accuracy. In other words, the delta star hyperparameter corresponded to the delta value that produced the smallest mean CV error.</p>
+<div id="02d96b35" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use 10-fold CV to determine the optimal delta hyperparameter</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score, KFold</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>kf <span class="op">=</span> KFold(n_splits<span class="op">=</span><span class="dv">10</span>, shuffle<span class="op">=</span><span class="va">True</span>, random_state<span class="op">=</span><span class="dv">1</span>) </span>
@@ -297,12 +313,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Delta star value: </span><span class="sc">{</span>delta_star<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Mean CV error for delta star: </span><span class="sc">{</span>cv_error_delta_star<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Delta star value: 0.67
-Mean CV error for delta star: 0.425</code></pre>
+<pre><code>Delta star value: 0.45
+Mean CV error for delta star: 0.400</code></pre>
 </div>
 </div>
 <p>A classifier model, delta star model, was then developed using the optimal delta hyperparameter and trained on the original dataset. The error of this model was estimated on a larger simulated null dataset of 1000 samples. The paper used a dataset of 20,000 samples, but a smaller dataset was used here to reduce computation time. Then the true error of the delta star model was determined by comparing the predicted class labels to the true class labels of the larger null dataset.</p>
-<div id="d8bab418" class="cell" data-execution_count="5">
+<div id="532f4f69" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create delta star model with delta star hyperparameter</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model_delta_star <span class="op">=</span> NearestCentroid(metric<span class="op">=</span><span class="st">'euclidean'</span>, shrink_threshold<span class="op">=</span>delta_star)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -322,13 +338,13 @@ Mean CV error for delta star: 0.425</code></pre>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"True error estimate for delta star model: </span><span class="sc">{</span>true_error_delta_star<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>True error estimate for delta star model: 0.503</code></pre>
+<pre><code>True error estimate for delta star model: 0.502</code></pre>
 </div>
 </div>
 <p>This procedure was then repeated for 100 simulations to reproduce the histogram shown in the paper to compare the mean CV error estimate vs.&nbsp;the true error estimate for the delta star model. The paper used 1,000 simulations, but a smaller number of simulations was used here to reduce computation time.</p>
-<div id="56bd20cd" class="cell" data-execution_count="6">
+<div id="f4485832" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>num_simulations <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>num_simulations <span class="op">=</span> <span class="dv">100</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create empty list to store results</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
@@ -339,7 +355,7 @@ Mean CV error for delta star: 0.425</code></pre>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>results_df <span class="op">=</span> pd.DataFrame(results)</span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>results_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="15">
+<div class="cell-output cell-output-display" data-execution_count="6">
 <div>
 
 
@@ -354,28 +370,28 @@ Mean CV error for delta star: 0.425</code></pre>
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>0.150</td>
-<td>0.484</td>
+<td>0.350</td>
+<td>0.517</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
-<td>0.550</td>
-<td>0.524</td>
+<td>0.425</td>
+<td>0.515</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
-<td>0.475</td>
-<td>0.482</td>
+<td>0.375</td>
+<td>0.469</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
-<td>0.275</td>
-<td>0.484</td>
+<td>0.725</td>
+<td>0.502</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
 <td>0.375</td>
-<td>0.467</td>
+<td>0.472</td>
 </tr>
 </tbody>
 </table>
@@ -384,7 +400,7 @@ Mean CV error for delta star: 0.425</code></pre>
 </div>
 </div>
 <p>Finally, a figure was developed to show the distributions of the CV error vs.&nbsp;true error for the delta star model over the 100 simulations. As shown in the figure, there is a distinct difference between the two error types.</p>
-<div id="ebb82c7d" class="cell" data-execution_count="7">
+<div id="b2f279ba" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
@@ -407,13 +423,13 @@ Mean CV error for delta star: 0.425</code></pre>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="1_Bias In Error Est for CV_VarmaSimon_2006_files/figure-html/cell-8-output-1.png" width="557" height="450" class="figure-img"></p>
+<p><img src="1_Bias In Error Est for CV_VarmaSimon_2006_files/figure-html/cell-8-output-1.png" width="544" height="450" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Next, the nested CV approach was used to determine the nested CV error of the delta star model. In this approach, the outer loop uses leave one out CV (LOOCV) to determine the error of the delta star model, while the inner loop uses 10-fold CV to determine the delta star value.</p>
-<div id="25228de8" class="cell" data-execution_count="8">
+<p>Next, the nested CV approach was used to determine the nested CV error of the delta star model. In this approach, the outer loop uses leave one out CV (LOOCV) to determine the error of the delta star model, while the inner loop uses 10-fold CV to evaluate different delta hyperparameter values.</p>
+<div id="f62060b1" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate null dataset</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> source_code.generate_noise_data <span class="im">import</span> generate_noise_data</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> generate_noise_data(n_samples<span class="op">=</span><span class="dv">40</span>, n_features<span class="op">=</span><span class="dv">100</span>)</span>
@@ -422,15 +438,15 @@ Mean CV error for delta star: 0.425</code></pre>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> source_code.nested_cross_validation <span class="im">import</span> nested_cross_validation</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>nested_cv_error <span class="op">=</span> nested_cross_validation(X, y)</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Nested CV error for delta star model: </span><span class="sc">{</span>nested_cv_error<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Nested CV error: </span><span class="sc">{</span>nested_cv_error<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Nested CV error for delta star model: 0.400</code></pre>
+<pre><code>Nested CV error: 0.350</code></pre>
 </div>
 </div>
-<p>This procedure was then repeated for 100 simulations to reproduce the histogram shown in the paper to compare the nested CV error estimate vs.&nbsp;the true error estimate for the delta star model.</p>
-<div id="0c04b52b" class="cell" data-execution_count="9">
+<p>This procedure was then repeated for 50 simulations to reproduce the histogram shown in the paper to compare the nested CV error estimate vs.&nbsp;the true error estimate for the delta star model.</p>
+<div id="89092386" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>num_nested_simulations <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>num_nested_simulations <span class="op">=</span> <span class="dv">50</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create empty list to store results</span></span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>nested_cv_results <span class="op">=</span> []</span>
@@ -441,7 +457,7 @@ Mean CV error for delta star: 0.425</code></pre>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>nested_cv_results_df <span class="op">=</span> pd.DataFrame(nested_cv_results)</span>
 <span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>nested_cv_results_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="18">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 
 
@@ -449,29 +465,35 @@ Mean CV error for delta star: 0.425</code></pre>
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">0</th>
+<th data-quarto-table-cell-role="th">nested_cv_error</th>
+<th data-quarto-table-cell-role="th">true_error_delta_star</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>0.600</td>
+<td>0.450</td>
+<td>0.484</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
-<td>0.575</td>
+<td>0.450</td>
+<td>0.502</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
-<td>0.475</td>
+<td>0.400</td>
+<td>0.497</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
-<td>0.425</td>
+<td>0.525</td>
+<td>0.494</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
 <td>0.475</td>
+<td>0.522</td>
 </tr>
 </tbody>
 </table>
@@ -479,6 +501,36 @@ Mean CV error for delta star: 0.425</code></pre>
 </div>
 </div>
 </div>
+<p>Finally, a figure was developed to show the distributions of the nested CV error vs.&nbsp;true error for the delta star model over the 50 simulations. As shown in the figure, the two error estimates are much more similar when using nested CV vs.&nbsp;standard CV.</p>
+<div id="0d9b928e" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>plot_params <span class="op">=</span> {<span class="st">"bins"</span>:<span class="dv">20</span>, <span class="st">"alpha"</span>:<span class="fl">0.6</span>}</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>plt.hist(</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    nested_cv_results_df[<span class="st">"nested_cv_error"</span>], color<span class="op">=</span><span class="st">"blue"</span>, label<span class="op">=</span><span class="st">"Nested CV Error"</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>plot_params)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>plt.hist(</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    nested_cv_results_df[<span class="st">"true_error_delta_star"</span>], color<span class="op">=</span><span class="st">"red"</span>, label<span class="op">=</span><span class="st">"True Error for Delta Star Model"</span>,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>plot_params)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Error"</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Frequency"</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Histograms Showing Nested CV Error vs. True Error for Delta Star Model"</span>)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="1_Bias In Error Est for CV_VarmaSimon_2006_files/figure-html/cell-11-output-1.png" width="595" height="450" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This computation shows that typical CV can produce bias in error estimates if hyperparameter tuning is done outside of the CV loop. The nested CV approach proposed in the paper was shown to produce unbiased error estimates.</p>
 
 
 </section>
@@ -887,11 +939,14 @@ Mean CV error for delta star: 0.425</code></pre>
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="DS 6400: Advanced Machine Learning I">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">DS 6400: Advanced Machine Learning I</span></span>
+      <a href="./index.html" class="pagination-link" aria-label="Provines DS 6400 Notebook">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Provines DS 6400 Notebook</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./2_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997.html" class="pagination-link" aria-label="0.632+ Bootstrap Method for Error Estimation">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">0.632+ Bootstrap Method for Error Estimation</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

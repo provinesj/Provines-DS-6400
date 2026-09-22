@@ -97,3 +97,18 @@ We can also use CP plots for comparison of models to better understand how they 
 2. Interpretation suffers when features are correlated - When this occurs, not all parts of the curves may be realistic. Can be alleviated by restricting plots to shorter ranges for correlated features. Need to know what these ranges are.
 
 3. Careful with casual interpretation - Lower barrier to entry so these plots can be shown to non-experts.
+
+## Computation Plan
+
+FILL IN TEXT
+
+## Computation
+
+First, a simulated dataset was created with the following model:
+
+
+``` {python}
+# create 
+```
+
+
