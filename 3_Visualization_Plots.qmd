@@ -281,7 +281,7 @@ import matplotlib.pyplot as plt
 # random forest model plot
 fig, ax = plt.subplots(figsize=(6, 5))
 display = PartialDependenceDisplay.from_estimator(estimator=model_forest, X=X, features=["X_2"], kind="average", centered=False, percentiles=(0,1), ax=ax)
-plt.title('ICE Plot for X_2 for Random Forest Model')
+plt.title('PDP for X_2 for Random Forest Model')
 plt.ylabel("Model Prediction")
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.show
@@ -289,10 +289,26 @@ plt.show
 # linear regression with splines plot
 fig, ax = plt.subplots(figsize=(6, 5))
 display = PartialDependenceDisplay.from_estimator(estimator=model_spline, X=X, features=["X_2"], kind="average", centered=False, percentiles=(0,1), ax=ax)
-plt.title('ICE Plot for X_2 for Linear Regression with Splines')
+plt.title('PDP for X_2 for Linear Regression with Splines')
 plt.ylabel("Model Prediction")
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.show
 ```
 
 The PDPs show the average of all of the ICE curves. These average curves are calculated by averaging the predictions across all observations at each value of X_2. 
+
+ALE plots
+```{python}
+#from alibi.explainers import ALE
+#from alibi.explainers.ale import plot_ale
+
+#ale_explainer = ALE(predictor=model_forest.predict, feature_names=["X_1", "X_2", "X_3"])
+
+#ale_exp = ale_explainer.explain(X.values)
+
+#fig, ax = plt.subplots(figsize=(6, 5))
+
+#plot_ale(ale_exp, features=["X_2"], ax=ax)
+
+#plt.show()
+```

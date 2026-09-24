@@ -408,7 +408,7 @@ X_3 &amp;\sim \operatorname{Bernoulli}(p=0.4) \\
 \end{aligned}
 \]</span></p>
 <p>The X_1, X_2, and X_3 features were created based on the model. A dataset, X, of with an assumed 1,000 observations was created.</p>
-<div id="dcc61dfa" class="cell" data-execution_count="1">
+<div id="1e54786d" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -440,33 +440,33 @@ X_3 &amp;\sim \operatorname{Bernoulli}(p=0.4) \\
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>1.647075</td>
-<td>-0.472759</td>
+<td>-0.271341</td>
+<td>1.282527</td>
 <td>0.0</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
-<td>1.733803</td>
-<td>0.401015</td>
-<td>0.0</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
-<td>0.721935</td>
-<td>0.065244</td>
-<td>0.0</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>0.715162</td>
-<td>-0.526192</td>
+<td>-0.119738</td>
+<td>-1.234235</td>
 <td>1.0</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
-<td>-0.638736</td>
-<td>-0.205658</td>
+<th data-quarto-table-cell-role="th">2</th>
+<td>0.341568</td>
+<td>2.005430</td>
+<td>1.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>1.188030</td>
+<td>0.264329</td>
 <td>0.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>-0.575078</td>
+<td>-0.549973</td>
+<td>1.0</td>
 </tr>
 </tbody>
 </table>
@@ -475,12 +475,12 @@ X_3 &amp;\sim \operatorname{Bernoulli}(p=0.4) \\
 </div>
 </div>
 <p>Next, the signoid function was defined for use in creating Y.</p>
-<div id="9d0a2a6d" class="cell" data-execution_count="2">
+<div id="86ecd358" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sigmoid(x):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Finally, the target values were developed from the expectation of Y given X and normally distributed error with variance of 1.</p>
-<div id="d7fc83b4" class="cell" data-execution_count="3">
+<div id="af55205d" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>expected_Y <span class="op">=</span> np.sqrt(<span class="dv">5</span>) <span class="op">*</span> sigmoid(X_1 <span class="op">+</span> X_3) <span class="op">+</span> np.sqrt(<span class="dv">5</span>) <span class="op">*</span> sigmoid(X_2) <span class="op">*</span> X_3</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>error <span class="op">=</span> np.random.normal(loc<span class="op">=</span><span class="dv">0</span>, scale<span class="op">=</span><span class="dv">1</span>, size<span class="op">=</span>num_obs)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> expected_Y <span class="op">+</span> error</span>
@@ -502,23 +502,23 @@ X_3 &amp;\sim \operatorname{Bernoulli}(p=0.4) \\
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>1.921009</td>
+<td>-0.201969</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
-<td>1.548113</td>
+<td>3.003014</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
-<td>1.915492</td>
+<td>5.718088</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
-<td>3.987476</td>
+<td>1.754136</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
-<td>0.686036</td>
+<td>1.414826</td>
 </tr>
 </tbody>
 </table>
@@ -528,7 +528,7 @@ X_3 &amp;\sim \operatorname{Bernoulli}(p=0.4) \\
 </div>
 <p>Next the two models were created and fitted. The random forest model was assumed to have 250 trees in which the data is split.</p>
 <p>Several hyperparameters were assumed in the linear model with splines. Knots are the points that separate splines. 10 knots were assumed in this model. The degree hyperparameter controls the degree of the polynomial spline between the knots. Degree=3 was assumed so that the splines are cubic functions. Extrapolation was assumed to be linear outside of the training range. A value of 0.001 was assumed for the Ridge regression factor, alpha.</p>
-<div id="c17a3de5" class="cell" data-execution_count="4">
+<div id="f8a01669" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create random forest model</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>model_forest <span class="op">=</span> RandomForestRegressor(n_estimators<span class="op">=</span><span class="dv">250</span>, random_state<span class="op">=</span><span class="dv">1</span>)</span>
@@ -1493,7 +1493,7 @@ Will return sparse CSR matrix if set True else will return an array.<br>
 <br>
 List of BSplines objects, one for each feature.</span></a></td>
 <td class="fitted-att-type">list</td>
-<td>[&lt;scipy.interp...00287897A27B0&gt;, &lt;scipy.interp...002878973B390&gt;, &lt;scipy.interp...002878973BED0&gt;]</td>
+<td>[&lt;scipy.interp...00221A9B327B0&gt;, &lt;scipy.interp...00221A9ACB390&gt;, &lt;scipy.interp...00221A9ACBED0&gt;]</td>
 </tr>
 <tr class="default odd">
 <td class="param"><a href="https://scikit-learn.org/1.9/modules/generated/sklearn.preprocessing.SplineTransformer.html#:~:text=feature_names_in_,-ndarray%20of%20shape%20%28n_features_in_%2C%29" class="param-doc-link" style="anchor-name: --doc-link-feature_names_in_;" rel="noreferrer" target="_blank">feature_names_in_ <span class="param-doc-description" style="position-anchor: --doc-link-feature_names_in_;"> feature_names_in_: ndarray of shape (`n_features_in_`,)<br>
@@ -1839,7 +1839,7 @@ See :term:`Glossary &lt;random_state&gt;` for details.<br>
 <br>
 Weight vector(s).</span></a></td>
 <td class="fitted-att-type">ndarray[float64](36,)</td>
-<td>[-5.95, 1.16,-1.51,..., 0.29, 1.15, 0.29]</td>
+<td>[-6.29,-0.24, 0.47,..., 0.26, 1.03, 0.26]</td>
 </tr>
 <tr class="default odd">
 <td class="param"><a href="https://scikit-learn.org/1.9/modules/generated/sklearn.linear_model.Ridge.html#:~:text=intercept_,-float%20or%20ndarray%20of%20shape%20%28n_targets%2C%29" class="param-doc-link" style="anchor-name: --doc-link-intercept_;" rel="noreferrer" target="_blank">intercept_ <span class="param-doc-description" style="position-anchor: --doc-link-intercept_;"> intercept_: float or ndarray of shape (n_targets,)<br>
@@ -1847,7 +1847,7 @@ Weight vector(s).</span></a></td>
 Independent term in decision function. Set to 0.0 if<br>
 ``fit_intercept = False``.</span></a></td>
 <td class="fitted-att-type">ndarray[float64](1,)</td>
-<td>[1.44]</td>
+<td>[0.65]</td>
 </tr>
 <tr class="default even">
 <td class="param"><a href="https://scikit-learn.org/1.9/modules/generated/sklearn.linear_model.Ridge.html#:~:text=n_features_in_,-int" class="param-doc-link" style="anchor-name: --doc-link-n_features_in_;" rel="noreferrer" target="_blank">n_features_in_ <span class="param-doc-description" style="position-anchor: --doc-link-n_features_in_;"> n_features_in_: int<br>
@@ -2072,7 +2072,7 @@ forceTheme('sk-container-id-1');</script>
 - <span class="math inline">\(\beta_j\)</span> is the regression coefficient for predictor <span class="math inline">\(j\)</span>.<br>
 - <span class="math inline">\(\alpha\)</span> is the regularization parameter that controls the strength of the penalty on the regression coefficients.</p>
 <p>A partial effects (Ceteris Paribus) plot was developed to visualize how the prediction of Y changes when X_1 and X_3 are held constant at their median values (assumed) and X_2 is allowed to vary over its observed range.</p>
-<div id="d7cce34f" class="cell" data-execution_count="5">
+<div id="a6d5c683" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define function for develop CP plot</span></span>
@@ -2114,21 +2114,21 @@ forceTheme('sk-container-id-1');</script>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="3_Visualization_Plots_files/figure-html/cell-6-output-1.png" width="515" height="450" class="figure-img"></p>
+<p><img src="3_Visualization_Plots_files/figure-html/cell-6-output-1.png" width="535" height="450" class="figure-img"></p>
 </figure>
 </div>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="3_Visualization_Plots_files/figure-html/cell-6-output-2.png" width="539" height="450" class="figure-img"></p>
+<p><img src="3_Visualization_Plots_files/figure-html/cell-6-output-2.png" width="527" height="450" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The partial effects plots show how the prediction of Y changes as X_2 varies while X_1 and X_3 are held constant at their median values. The shape and slope of the curves indicate how sensitive the models’ predictions are to changes in X_2. The random forest model produces a much more jagged curve than the linear model with splines because the random forest model includes predictions from many decision trees. The linear model with splines creates a much smoother relationship between the prediction and X_2.</p>
 <p>Then, individual conditional expectation (ICE) plots were developed to show how the prediction of Y changes for each observation in the dataset when changing only one feature. In this case, X_1 and X_3 were held constant at their median values, and X_2 was allowed to vary along its observed range.</p>
-<div id="885ea972" class="cell" data-execution_count="6">
+<div id="41edb4eb" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.inspection <span class="im">import</span> PartialDependenceDisplay</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2166,7 +2166,7 @@ forceTheme('sk-container-id-1');</script>
 </div>
 <p>The ICE plots contain many more lines than the partial effects plots because they show predictions for each observation in the dataset. This helps to show the range of predictions across the dataset and how they vary as the X_2 feature changes. Since the random forest model produces a more jagged partial effects plot, the lines in its ICE plot overlap and are therefore more difficult to distinguish. The linear model with splines produces nearly parallel lines which are much easier to interpret.</p>
 <p>Finally, a partial dependence plot (PDP) was developed to show an average of the ICE plots for both models.</p>
-<div id="9d2a7a92" class="cell" data-execution_count="7">
+<div id="5663c96c" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.inspection <span class="im">import</span> PartialDependenceDisplay</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2203,6 +2203,21 @@ forceTheme('sk-container-id-1');</script>
 </div>
 </div>
 <p>The PDPs show the average of all of the ICE curves. These average curves are calculated by averaging the predictions across all observations at each value of X_2.</p>
+<p>ALE plots</p>
+<div id="5faec989" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#from alibi.explainers import ALE</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#from alibi.explainers.ale import plot_ale</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#ale_explainer = ALE(predictor=model_forest.predict, feature_names=["X_1", "X_2", "X_3"])</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#ale_exp = ale_explainer.explain(X.values)</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#fig, ax = plt.subplots(figsize=(6, 5))</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#plot_ale(ale_exp, features=["X_2"], ax=ax)</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#plt.show()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
 </section>
