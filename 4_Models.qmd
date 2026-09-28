@@ -1,0 +1,76 @@
+---
+title: 'Models'
+
+---
+
+# Generalized Linear Model
+
+## Motivating Ideas
+
+The Generalized Linear Model (GLM) represents a class of models that Nelder and Wedderburn set to unify in their 1972 paper. Prior to the Nelder and Wedderburn (1972) paper, models for normal, binomial, poisson, and gamma distributed responses were treated as separate statistical techniques. However, Nelder and Wedderburn noted that these model types shared a common structure and developed a procedure for unifying the models based on maximum likelihood estimation. 
+
+The framework is based on assuming a probability distribution of the response of the dataset. Nelder and Wedderburn then proposed using an appropriate link function to transform the expected response onto a scale where a linear combination of features and coefficients can model it. The link function concept made it possible to use a linear model to develop predictions for datasets with responses with different probability distributions.
+
+The GLM framework offers several benefits over ordinary linear regression models when the response is not normally distributed. The link function ensures that model predictions remain within a valid range, such as positive values for counts in a Poisson distribution or probabilities between 0 and 1 in a Binomial distribution. It also allows a familiar linear model to be used to model expected response. The coefficients of this linear model can often be more easily interpreted than those of other models.
+
+NEEDS HISTORY
+
+## Mathematics
+
+The general GLM framework includes two components: random and systematic. The random component describes the inherent variation in the response ($Y_i$). The systematic component describes the predictable part of the response based on a combination of the features ($\eta_i$). These two components can be written mathematically as follows.
+
+Assume a dataset with features $X$, targets $Y$, and mean $\mu$. For observation i, the conditional mean of the response is:
+$$
+E[Y_i \mid X_i] = \mu_i
+$$
+
+The random component specifies a probability distribution for the response, describing inherent variation in $Y_i$ conditional on the features. 
+
+$$
+Y_i \mid X_i \sim \text{Exponential Family}(\mu_i, \phi)
+$$
+
+In the above equation, $\phi$ controls the amount of variation in the response distribution.
+
+The systematic component can be written with the following equation.
+$$
+\eta_i = \beta_0 + \beta_1 X_{i1} + \cdots + \beta_p X_{ip}
+$$
+
+where:
+
+- $\eta_i$ is the systematic component for observation $i$.
+- $\beta_0$ is the intercept.
+- $\beta_j$ is the coefficient associated with feature $j$.
+- $X_{ij}$ is the value of feature $j$ for observation $i$.
+- $p$ is the total number of features.
+
+The random and systematic components are connected through a link function. The link function allows the linear predictor to be related to the conditional mean of the response, even when the response has different probability distributions. In the equation below, $g(\mu_i)$ is this link function that transforms the conditional mean of the response, $\mu_i$, to the scale of the linear predictor, $\eta_i$.
+
+$$
+g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
+= \eta_i
+= \beta_0 + \beta_1X_{i1} + \cdots + \beta_pX_{ip}
+$$
+
+Link functions for the four different probability distributions are given in the table below.
+
+| Distribution | Response | Regression Model | Link Function |
+|---|---|---|---|---|
+| Normal | Positive or negative, continuous, approximately symmetric | Linear | $\eta_i = \mu_i$ |
+| Binomial | Binary outcome or proportion | Logistic | $\eta_i = \log\left(\frac{\mu_i}{1-\mu_i}\right)$ |
+| Poisson | Positive integer counts | Poisson | $\eta_i = \log(\mu_i)$ |
+| Gamma | Positive, continuous, right-skewed | Gamma |$\eta_i = 1/\mu_i$ or $\eta_i = \log(\mu_i)$ |	​
+ 
+## Coding
+
+code
+
+## Visualizations of Prediction Relationship
+
+text
+
+## Special Considerations
+
+text
+
