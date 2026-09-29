@@ -255,7 +255,6 @@ window.Quarto = {
 <p>The Generalized Linear Model (GLM) represents a class of models that Nelder and Wedderburn set to unify in their 1972 paper. Prior to the Nelder and Wedderburn (1972) paper, models for normal, binomial, poisson, and gamma distributed responses were treated as separate statistical techniques. However, Nelder and Wedderburn noted that these model types shared a common structure and developed a procedure for unifying the models based on maximum likelihood estimation.</p>
 <p>The framework is based on assuming a probability distribution of the response of the dataset. Nelder and Wedderburn then proposed using an appropriate link function to transform the expected response onto a scale where a linear combination of features and coefficients can model it. The link function concept made it possible to use a linear model to develop predictions for datasets with responses with different probability distributions.</p>
 <p>The GLM framework offers several benefits over ordinary linear regression models when the response is not normally distributed. The link function ensures that model predictions remain within a valid range, such as positive values for counts in a Poisson distribution or probabilities between 0 and 1 in a Binomial distribution. It also allows a familiar linear model to be used to model expected response. The coefficients of this linear model can often be more easily interpreted than those of other models.</p>
-<p>NEEDS HISTORY</p>
 </section>
 <section id="mathematics" class="level3" data-number="5.1.2">
 <h3 data-number="5.1.2" class="anchored" data-anchor-id="mathematics"><span class="header-section-number">5.1.2</span> Mathematics</h3>
@@ -329,7 +328,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <td>Gamma</td>
 <td>Positive, continuous, right-skewed</td>
 <td>Gamma</td>
-<td><span class="math inline">\(g(\mu_i) = 1/\mu_i\)</span> or <span class="math inline">\(\eta_i = \log(\mu_i)\)</span></td>
+<td><span class="math inline">\(g(\mu_i) = 1/\mu_i\)</span> or <span class="math inline">\(g(\mu_i) = \log(\mu_i)\)</span></td>
 <td>​</td>
 </tr>
 </tbody>
@@ -346,7 +345,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 </li>
 <li>Whether or not it was a work day - yes/no based on 50/50 chance</li>
 </ul>
-<div id="6649ee00" class="cell" data-execution_count="1">
+<div id="96bddbe4" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># created simulated data</span></span>
@@ -354,12 +353,12 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>X_sleep <span class="op">=</span> np.random.randint(<span class="dv">1</span>, <span class="dv">11</span>, <span class="dv">200</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>X_work <span class="op">=</span> np.random.binomial(<span class="dv">1</span>, <span class="fl">0.5</span>, <span class="dv">200</span>)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># assume Poisson distribution </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># assume Poisson distribution for coffees consumed</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>lam <span class="op">=</span> np.exp(<span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.2</span> <span class="op">*</span> X_stress <span class="op">-</span> <span class="fl">0.3</span> <span class="op">*</span> X_sleep <span class="op">+</span> <span class="fl">0.2</span> <span class="op">*</span> X_work)  <span class="co"># equating Poisson link function = linear model and then solving for lambda  </span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>Y_coffee <span class="op">=</span> np.random.poisson(lam)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A histogram was created to see the distribution of number of coffees consumed.</p>
-<div id="a25abbfd" class="cell" data-execution_count="2">
+<div id="030e10a2" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>plt.hist(Y_coffee, bins<span class="op">=</span>np.arange(Y_coffee.<span class="bu">max</span>() <span class="op">+</span> <span class="dv">2</span>) <span class="op">-</span> <span class="fl">0.5</span>)</span>
@@ -379,7 +378,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 </div>
 <p>The response is a discrete count variable and, as shown by the histogram, is clearly not normally distributed. This makes this dataset a good candidate for GLM.</p>
 <p>In order to demonstrate the effectiveness of the GLM, a linear model was first used to predict the number of coffees consumed, assuming a normal distribution.</p>
-<div id="6e233fe7" class="cell" data-execution_count="3">
+<div id="509ee253" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># combine features</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.column_stack((X_stress, X_sleep, X_work))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -397,7 +396,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>Y_coffee_pred_linear <span class="op">=</span> linear_results.predict(X)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A histogram was created to show the results of the linear model predictions.</p>
-<div id="200eaa55" class="cell" data-execution_count="4">
+<div id="ff6aaaeb" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plt.hist(Y_coffee_pred_linear, bins<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Predicted number of coffees using linear model"</span>)</span>
@@ -415,12 +414,12 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 </div>
 <p>The histogram shows that the linear model predicted a negative number of coffees on some days, which does not make sense.</p>
 <p>Next, the GLM approach was used to develop a model for predicting the number of daily coffees consumed. It was assumed that the <span class="math inline">\(\beta\)</span> factors were unknown in the Poisson expression for the number of coffees consumed on a given day. Therefore, they needed to be calculated.</p>
-<div id="21a0db47" class="cell" data-execution_count="5">
+<div id="70d69762" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># combine features and add intercept</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.column_stack((X_stress, X_sleep, X_work))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(X)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># use GLM approach to create and fit model using Poisson dist </span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># use GLM approach to create and fit model using Poisson distribution</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>glm_model <span class="op">=</span> sm.GLM(Y_coffee, X, family<span class="op">=</span>sm.families.Poisson())</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>glm_results <span class="op">=</span> glm_model.fit()</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
@@ -430,12 +429,12 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># see calculated beta factors used to create Y_coffee</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(glm_results.params) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[ 0.52889751  0.18655339 -0.28802687  0.2359848 ]</code></pre>
+<pre><code>[ 0.48403368  0.21266914 -0.32226207  0.16363753]</code></pre>
 </div>
 </div>
 <p>The calculated <span class="math inline">\(\beta\)</span> factors are nearly the same as the ones used in the Poisson expression to develop Y_coffee.</p>
 <p>Next, a histogram was created to show the results of the GLM approach using the Poisson distribution.</p>
-<div id="d8ad4d4d" class="cell" data-execution_count="6">
+<div id="bb4ad8dd" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.hist(Y_coffee_pred_glm, bins<span class="op">=</span>np.arange(Y_coffee_pred_glm.<span class="bu">max</span>() <span class="op">+</span> <span class="dv">2</span>) <span class="op">-</span> <span class="fl">0.5</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Predicted number of coffees using GLM"</span>)</span>
@@ -446,7 +445,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="4_Models_files/figure-html/cell-7-output-1.png" width="594" height="451" class="figure-img"></p>
+<p><img src="4_Models_files/figure-html/cell-7-output-1.png" width="585" height="451" class="figure-img"></p>
 </figure>
 </div>
 </div>

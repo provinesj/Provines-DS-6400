@@ -58,16 +58,16 @@ Link functions for the four different probability distributions are given in the
 | Normal | Positive or negative, continuous, approximately symmetric | Linear | $g(\mu_i) = \mu_i$ |
 | Binomial | Binary outcome or proportion | Logistic | $g(\mu_i) = \log\left(\frac{\mu_i}{1-\mu_i}\right)$ |
 | Poisson | Positive integer counts | Poisson | $g(\mu_i) = \log(\mu_i)$ |
-| Gamma | Positive, continuous, right-skewed | Gamma |$g(\mu_i) = 1/\mu_i$ or $\eta_i = \log(\mu_i)$ |	​
+| Gamma | Positive, continuous, right-skewed | Gamma |$g(\mu_i) = 1/\mu_i$ or $g(\mu_i) = \log(\mu_i)$ |	​
  
 ### Coding Demonstration & Visualizations of Prediction Relationship
 
 An example will be used to demonstrate how GLMs can be implemented. A simulated dataset was used for this exercise and was taken from Interpretable Machine Learning by Christoph Molar. The simulated dataset consisted of the following daily records for 200 days:
 
-- Number of coffee cups consumed - drawn from Poisson distribution, modeling $\lambda$ (expected value of Poisson distribution) as a function of the rest of the features
 - Current stress level on a scale from 1-10 - drawn uniformly  
 - Quality of last night's sleep on a scale from 1-10 - drawn uniformly  
 - Whether or not it was a work day - yes/no based on 50/50 chance
+- Number of coffee cups consumed - drawn from Poisson distribution, modeling $\lambda$ (expected value of Poisson distribution) as a function of the rest of the features  
 ```{python}
 import numpy as np
 
@@ -94,7 +94,7 @@ plt.title("Distribution of Daily Coffee Consumption")
 plt.show()
 ```
 
-The response is a discrete count variable and, as shown by the histogram, is clearly not normally distributed. This makes this dataset a good candidate for GLM.
+The response is a discrete count variable and, as shown by the histogram, is clearly not normally distributed. This makes this dataset a potential candidate for GLM.
 
 In order to demonstrate the effectiveness of the GLM, a linear model was first used to predict the number of coffees consumed, assuming a normal distribution.  
 ```{python}
