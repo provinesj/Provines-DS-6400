@@ -308,28 +308,28 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <td>Normal</td>
 <td>Positive or negative, continuous, approximately symmetric</td>
 <td>Linear</td>
-<td><span class="math inline">\(\eta_i = \mu_i\)</span></td>
+<td><span class="math inline">\(g(\mu_i) = \mu_i\)</span></td>
 <td></td>
 </tr>
 <tr class="even">
 <td>Binomial</td>
 <td>Binary outcome or proportion</td>
 <td>Logistic</td>
-<td><span class="math inline">\(\eta_i = \log\left(\frac{\mu_i}{1-\mu_i}\right)\)</span></td>
+<td><span class="math inline">\(g(\mu_i) = \log\left(\frac{\mu_i}{1-\mu_i}\right)\)</span></td>
 <td></td>
 </tr>
 <tr class="odd">
 <td>Poisson</td>
 <td>Positive integer counts</td>
 <td>Poisson</td>
-<td><span class="math inline">\(\eta_i = \log(\mu_i)\)</span></td>
+<td><span class="math inline">\(g(\mu_i) = \log(\mu_i)\)</span></td>
 <td></td>
 </tr>
 <tr class="even">
 <td>Gamma</td>
 <td>Positive, continuous, right-skewed</td>
 <td>Gamma</td>
-<td><span class="math inline">\(\eta_i = 1/\mu_i\)</span> or <span class="math inline">\(\eta_i = \log(\mu_i)\)</span></td>
+<td><span class="math inline">\(g(\mu_i) = 1/\mu_i\)</span> or <span class="math inline">\(\eta_i = \log(\mu_i)\)</span></td>
 <td>​</td>
 </tr>
 </tbody>
@@ -346,7 +346,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 </li>
 <li>Whether or not it was a work day - yes/no based on 50/50 chance</li>
 </ul>
-<div id="b7d3648b" class="cell" data-execution_count="1">
+<div id="6649ee00" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># created simulated data</span></span>
@@ -359,7 +359,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>Y_coffee <span class="op">=</span> np.random.poisson(lam)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A histogram was created to see the distribution of number of coffees consumed.</p>
-<div id="7533335a" class="cell" data-execution_count="2">
+<div id="a25abbfd" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>plt.hist(Y_coffee, bins<span class="op">=</span>np.arange(Y_coffee.<span class="bu">max</span>() <span class="op">+</span> <span class="dv">2</span>) <span class="op">-</span> <span class="fl">0.5</span>)</span>
@@ -379,7 +379,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 </div>
 <p>The response is a discrete count variable and, as shown by the histogram, is clearly not normally distributed. This makes this dataset a good candidate for GLM.</p>
 <p>In order to demonstrate the effectiveness of the GLM, a linear model was first used to predict the number of coffees consumed, assuming a normal distribution.</p>
-<div id="5e8269d5" class="cell" data-execution_count="3">
+<div id="6e233fe7" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># combine features</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.column_stack((X_stress, X_sleep, X_work))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -397,7 +397,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>Y_coffee_pred_linear <span class="op">=</span> linear_results.predict(X)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A histogram was created to show the results of the linear model predictions.</p>
-<div id="8754ab57" class="cell" data-execution_count="4">
+<div id="200eaa55" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plt.hist(Y_coffee_pred_linear, bins<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Predicted number of coffees using linear model"</span>)</span>
@@ -415,7 +415,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 </div>
 <p>The histogram shows that the linear model predicted a negative number of coffees on some days, which does not make sense.</p>
 <p>Next, the GLM approach was used to develop a model for predicting the number of daily coffees consumed. It was assumed that the <span class="math inline">\(\beta\)</span> factors were unknown in the Poisson expression for the number of coffees consumed on a given day. Therefore, they needed to be calculated.</p>
-<div id="64b037fe" class="cell" data-execution_count="5">
+<div id="21a0db47" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># combine features and add intercept</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.column_stack((X_stress, X_sleep, X_work))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(X)</span>
@@ -430,12 +430,12 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># see calculated beta factors used to create Y_coffee</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(glm_results.params) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[ 0.43470584  0.22666133 -0.32584817  0.11711428]</code></pre>
+<pre><code>[ 0.52889751  0.18655339 -0.28802687  0.2359848 ]</code></pre>
 </div>
 </div>
 <p>The calculated <span class="math inline">\(\beta\)</span> factors are nearly the same as the ones used in the Poisson expression to develop Y_coffee.</p>
 <p>Next, a histogram was created to show the results of the GLM approach using the Poisson distribution.</p>
-<div id="ba0cfb9c" class="cell" data-execution_count="6">
+<div id="d8ad4d4d" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.hist(Y_coffee_pred_glm, bins<span class="op">=</span>np.arange(Y_coffee_pred_glm.<span class="bu">max</span>() <span class="op">+</span> <span class="dv">2</span>) <span class="op">-</span> <span class="fl">0.5</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Predicted number of coffees using GLM"</span>)</span>
@@ -446,7 +446,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="4_Models_files/figure-html/cell-7-output-1.png" width="587" height="451" class="figure-img"></p>
+<p><img src="4_Models_files/figure-html/cell-7-output-1.png" width="594" height="451" class="figure-img"></p>
 </figure>
 </div>
 </div>

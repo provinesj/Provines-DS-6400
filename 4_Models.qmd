@@ -13,8 +13,6 @@ The framework is based on assuming a probability distribution of the response of
 
 The GLM framework offers several benefits over ordinary linear regression models when the response is not normally distributed. The link function ensures that model predictions remain within a valid range, such as positive values for counts in a Poisson distribution or probabilities between 0 and 1 in a Binomial distribution. It also allows a familiar linear model to be used to model expected response. The coefficients of this linear model can often be more easily interpreted than those of other models.
 
-NEEDS HISTORY
-
 ### Mathematics
 
 The general GLM framework includes two components: random and systematic. The random component describes the inherent variation in the response ($Y_i$). The systematic component describes the predictable part of the response based on a combination of the features ($\eta_i$). These two components can be written mathematically as follows.
@@ -57,10 +55,10 @@ Link functions for the four different probability distributions are given in the
 
 | Distribution | Response | Regression Model | Link Function |
 |---|---|---|---|---|
-| Normal | Positive or negative, continuous, approximately symmetric | Linear | $\eta_i = \mu_i$ |
-| Binomial | Binary outcome or proportion | Logistic | $\eta_i = \log\left(\frac{\mu_i}{1-\mu_i}\right)$ |
-| Poisson | Positive integer counts | Poisson | $\eta_i = \log(\mu_i)$ |
-| Gamma | Positive, continuous, right-skewed | Gamma |$\eta_i = 1/\mu_i$ or $\eta_i = \log(\mu_i)$ |	​
+| Normal | Positive or negative, continuous, approximately symmetric | Linear | $g(\mu_i) = \mu_i$ |
+| Binomial | Binary outcome or proportion | Logistic | $g(\mu_i) = \log\left(\frac{\mu_i}{1-\mu_i}\right)$ |
+| Poisson | Positive integer counts | Poisson | $g(\mu_i) = \log(\mu_i)$ |
+| Gamma | Positive, continuous, right-skewed | Gamma |$g(\mu_i) = 1/\mu_i$ or $\eta_i = \log(\mu_i)$ |	​
  
 ### Coding Demonstration & Visualizations of Prediction Relationship
 
@@ -78,7 +76,7 @@ X_stress = np.random.randint(1, 11, 200)
 X_sleep = np.random.randint(1, 11, 200)
 X_work = np.random.binomial(1, 0.5, 200)
 
-# assume Poisson distribution 
+# assume Poisson distribution for coffees consumed
 lam = np.exp(0.5 + 0.2 * X_stress - 0.3 * X_sleep + 0.2 * X_work)  # equating Poisson link function = linear model and then solving for lambda  
 Y_coffee = np.random.poisson(lam)
 ```
@@ -136,7 +134,7 @@ Next, the GLM approach was used to develop a model for predicting the number of 
 X = np.column_stack((X_stress, X_sleep, X_work))
 X = sm.add_constant(X)
 
-# use GLM approach to create and fit model using Poisson dist 
+# use GLM approach to create and fit model using Poisson distribution
 glm_model = sm.GLM(Y_coffee, X, family=sm.families.Poisson())
 glm_results = glm_model.fit()
 
