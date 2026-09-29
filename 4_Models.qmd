@@ -3,9 +3,9 @@ title: 'Models'
 
 ---
 
-# Generalized Linear Model
+## Generalized Linear Model
 
-## Motivating Ideas
+### Motivating Ideas
 
 The Generalized Linear Model (GLM) represents a class of models that Nelder and Wedderburn set to unify in their 1972 paper. Prior to the Nelder and Wedderburn (1972) paper, models for normal, binomial, poisson, and gamma distributed responses were treated as separate statistical techniques. However, Nelder and Wedderburn noted that these model types shared a common structure and developed a procedure for unifying the models based on maximum likelihood estimation. 
 
@@ -15,7 +15,7 @@ The GLM framework offers several benefits over ordinary linear regression models
 
 NEEDS HISTORY
 
-## Mathematics
+### Mathematics
 
 The general GLM framework includes two components: random and systematic. The random component describes the inherent variation in the response ($Y_i$). The systematic component describes the predictable part of the response based on a combination of the features ($\eta_i$). These two components can be written mathematically as follows.
 
@@ -62,15 +62,107 @@ Link functions for the four different probability distributions are given in the
 | Poisson | Positive integer counts | Poisson | $\eta_i = \log(\mu_i)$ |
 | Gamma | Positive, continuous, right-skewed | Gamma |$\eta_i = 1/\mu_i$ or $\eta_i = \log(\mu_i)$ |	​
  
-## Coding
+### Coding Demonstration & Visualizations of Prediction Relationship
 
-code
+An example will be used to demonstrate how GLMs can be implemented. A simulated dataset was used for this exercise and was taken from Interpretable Machine Learning by Christoph Molar. The simulated dataset consisted of the following daily records for 200 days:
 
-## Visualizations of Prediction Relationship
+- Number of coffee cups consumed - drawn from Poisson distribution, modeling $\lambda$ (expected value of Poisson distribution) as a function of the rest of the features
+- Current stress level on a scale from 1-10 - drawn uniformly  
+- Quality of last night's sleep on a scale from 1-10 - drawn uniformly  
+- Whether or not it was a work day - yes/no based on 50/50 chance
+```{python}
+import numpy as np
 
-text
+# created simulated data
+X_stress = np.random.randint(1, 11, 200)
+X_sleep = np.random.randint(1, 11, 200)
+X_work = np.random.binomial(1, 0.5, 200)
 
-## Special Considerations
+# assume Poisson distribution 
+lam = np.exp(0.5 + 0.2 * X_stress - 0.3 * X_sleep + 0.2 * X_work)  # equating Poisson link function = linear model and then solving for lambda  
+Y_coffee = np.random.poisson(lam)
+```
 
-text
+A histogram was created to see the distribution of number of coffees consumed.
+```{python}
+import matplotlib.pyplot as plt
+
+plt.hist(Y_coffee, bins=np.arange(Y_coffee.max() + 2) - 0.5)
+
+plt.xlabel("Number of coffees on a given day")
+plt.ylabel("Number of days")
+plt.title("Distribution of Daily Coffee Consumption")
+
+plt.show()
+```
+
+The response is a discrete count variable and, as shown by the histogram, is clearly not normally distributed. This makes this dataset a good candidate for GLM.
+
+In order to demonstrate the effectiveness of the GLM, a linear model was first used to predict the number of coffees consumed, assuming a normal distribution.  
+```{python}
+# combine features
+X = np.column_stack((X_stress, X_sleep, X_work))
+
+# develop linear model
+import statsmodels.api as sm
+
+# add intercept to feature matrix
+X = sm.add_constant(X)
+
+# create and fit model
+linear_model = sm.OLS(Y_coffee, X)
+linear_results = linear_model.fit()
+
+# make predictions using linear model
+Y_coffee_pred_linear = linear_results.predict(X)
+```
+
+A histogram was created to show the results of the linear model predictions.
+```{python}
+plt.hist(Y_coffee_pred_linear, bins=10)
+
+plt.xlabel("Predicted number of coffees using linear model")
+plt.ylabel("Number of days")
+plt.title("Linear Model Predictions of Daily Coffee Consumption")
+
+plt.show()
+```
+
+The histogram shows that the linear model predicted a negative number of coffees on some days, which does not make sense. 
+
+Next, the GLM approach was used to develop a model for predicting the number of daily coffees consumed. It was assumed that the $\beta$ factors were unknown in the Poisson expression for the number of coffees consumed on a given day. Therefore, they needed to be calculated.
+```{python}
+# combine features and add intercept
+X = np.column_stack((X_stress, X_sleep, X_work))
+X = sm.add_constant(X)
+
+# use GLM approach to create and fit model using Poisson dist 
+glm_model = sm.GLM(Y_coffee, X, family=sm.families.Poisson())
+glm_results = glm_model.fit()
+
+# use GLM for predictions
+Y_coffee_pred_glm = glm_results.predict(X)
+
+# see calculated beta factors used to create Y_coffee
+print(glm_results.params) 
+```
+
+The calculated $\beta$ factors are nearly the same as the ones used in the Poisson expression to develop Y_coffee. 
+
+Next, a histogram was created to show the results of the GLM approach using the Poisson distribution.
+```{python}
+plt.hist(Y_coffee_pred_glm, bins=np.arange(Y_coffee_pred_glm.max() + 2) - 0.5)
+
+plt.xlabel("Predicted number of coffees using GLM")
+plt.ylabel("Number of days")
+plt.title("Poisson GLM Predictions of Daily Coffee Consumption")
+
+plt.show()
+```
+
+The histogram of the GLM prediction results appears much more simialar to the overall shape of the original coffee consumption dataset. The predictions also fall within a reasonable range, showing no negative estimates for the number of coffees consumed.
+
+### Special Considerations
+
+GLMs provide a framework for modeling responses that are not normally distributed. However, when using a GLM, the selected probability distribution and resulting link function must be appropriate for the dataset. Other types of distributions falling outside of the exponential family may not be appropriate for the GLM. 
 
