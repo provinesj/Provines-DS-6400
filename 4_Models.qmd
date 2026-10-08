@@ -13,6 +13,9 @@ The framework is based on assuming a probability distribution of the response of
 
 The GLM framework offers several benefits over ordinary linear regression models when the response is not normally distributed. The link function ensures that model predictions remain within a valid range, such as positive values for counts in a Poisson distribution or probabilities between 0 and 1 in a Binomial distribution. It also allows a familiar linear model to be used to model expected response. The coefficients of this linear model can often be more easily interpreted than those of other models.
 
+A brief history of the GLM framework is provide below:
+- 
+
 ### Mathematics
 
 The general GLM framework includes two components: random and systematic. The random component describes the inherent variation in the response ($Y_i$). The systematic component describes the predictable part of the response based on a combination of the features ($\eta_i$). These two components can be written mathematically as follows.
@@ -62,7 +65,7 @@ Link functions for the four different probability distributions are given in the
  
 ### Coding Demonstration & Visualizations of Prediction Relationship
 
-An example will be used to demonstrate how GLMs can be implemented. A simulated dataset was used for this exercise and was taken from Interpretable Machine Learning by Christoph Molar. The simulated dataset consisted of the following daily records for 200 days:
+An example will be used to demonstrate how GLMs can be implemented. A simulated dataset was used for this exercise and was taken from Interpretable Machine Learning by Christoph Molar. The simulated dataset consisted of the following cofee intake daily records for 200 days:
 
 - Current stress level on a scale from 1-10 - drawn uniformly  
 - Quality of last night's sleep on a scale from 1-10 - drawn uniformly  
@@ -164,3 +167,260 @@ The histogram of the GLM prediction results appears much more simialar to the ov
 
 GLMs provide a framework for modeling responses that are not normally distributed. However, when using a GLM, the selected probability distribution and resulting link function must be appropriate for the dataset. Other types of distributions falling outside of the exponential family may not be appropriate for the GLM. 
 
+## Computation
+
+### Computation Plan
+
+For this computation, all four models discussed were evaluated on a single dataset to compare and contrast the resulting prediction rules and out-of-sample performance. The four models evaluated included ordinal regression, random forest, neural network, and generalized linear model. The dataset used for this evaluation is the coffee intake dataset used in the GLM demonstration. 
+
+The dataset was first split into training and testing datasets using an 80/20 split. The training dataset was used to develop the four models, and the testing dataset was used to evaluate the out-of-sample performance of the models. A calibration plot was created to visualize the relative performance between the four models. Root mean square error (RMSE) was also used to quantify the relative performance of the models.
+
+### Computation Execution
+
+#### Data Setup
+First, the coffee dataset was replicated from above, but with N=1000.
+```{python}
+import numpy as np
+
+# created simulated data
+X_stress = np.random.randint(1, 11, 1000)
+X_sleep = np.random.randint(1, 11, 1000)
+X_work = np.random.binomial(1, 0.5, 1000)
+X = np.column_stack((X_stress, X_sleep, X_work))
+
+# assume Poisson distribution for coffees consumed
+lam = np.exp(0.5 + 0.2 * X_stress - 0.3 * X_sleep + 0.2 * X_work)  # equating Poisson link function = linear model and then solving for lambda
+
+Y = np.random.poisson(lam)
+```
+
+Next, the dataset was split into training and testing datasets.
+```{python}
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+```
+
+#### Ordinal Model
+
+The ordinal model was then trained and fitted to the training dataset. In order to use the ordinal model, the response variable was converted from numerical to categorical data type since the ordinal model is designed to be used with categorical data. The logit function was used to create the ordinal model.
+$$
+\operatorname{logit}(p_k) = \log\left(\frac{p_k}{1-p_k}\right) = \alpha_k - \beta
+$$
+```{python}
+import numpy as np
+import pandas as pd
+from statsmodels.miscmodels.ordinal_model import OrderedModel
+
+# convert Y_train to categorical data type so it works with Ordinal model
+Y_train_cat = pd.Categorical(Y_train, ordered=True)
+
+# create ordinal model using logit function
+model_ordinal = OrderedModel(Y_train_cat, X_train, distr='logit')
+
+# fit the model to training data
+# bfgs = Broyden–Fletcher–Goldfarb–Shanno. optimization method.
+results_ordinal = model_ordinal.fit(method='bfgs')
+```
+
+Next, the ordinal model was used to make predictions on the testing dataset. An output table was created to show the predicted probabilities for each coffee count category for the first observation. Similar predicted probabilities were generated for each subsequent observation.This type of output is unique to the ordinal model compared to the other three model types evaluated in this computation.
+```{python}
+# predictions
+Y_pred_ordinal = results_ordinal.predict(X_test)
+
+# create table to show predicted probability for each coffee count category for first observation
+ordinal_table = pd.DataFrame({
+    "Coffee Count Category": Y_train_cat.categories, 
+    "Predicted Probability": Y_pred_ordinal[0]
+    })
+
+# formatting percentages and hiding index for readability
+ordinal_table.style.format({"Predicted Probability": "{:.2%}"}).hide(axis="index")
+```
+
+In order to plot the results of the ordinal model on a calibration curve, the predicted probabilities were converted into a single predicted coffee count. This was done using the following equation, where $y$ represents each coffee count.
+$$
+\hat{Y} = E[Y \mid X] = \sum_y yP(Y=y \mid X)
+$$
+
+Code for this conversion is shown below.
+```{python}
+import numpy as np
+# use dot product for this
+# Y_pred_ordinal is 200x13 array. 200 rows = observations, 13 columns = predicted probabilities for each coffee count category
+# Y_train_cat.categories is a 13x1 array of coffee count categories.
+# result will be 200x1 array of predicted coffee counts for each observation in testing dataset
+Y_pred_ordinal_calib = np.dot(Y_pred_ordinal, Y_train_cat.categories)
+```
+
+A calibration curve was then created to show the performance of the ordinal model on the testing dataset. 
+```{python}
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(6, 5))
+
+# plot ordinal model results
+plt.scatter(Y_pred_ordinal_calib, Y_test, marker='o', color ='blue', alpha=0.35, s=25, label='Ordinal Model')
+
+# 45-degree ideal calibration line
+plt.plot([Y_test.min(), Y_test.max()], [Y_test.min(), Y_test.max()], linestyle=':', color='black', label='Ideal Calibration')
+
+plt.xlabel("Predicted Coffee Count")
+plt.ylabel("Observed Coffee Count")
+plt.title("Four Model Comparison")
+plt.legend()
+
+plt.show()
+```
+
+#### Random Forest Model
+
+The random forest model was then evaluated on the same dataset. The random forest model was initialized with 500 trees and a maximum depth of 10. It was then fit to the training dataset and predictions were generated.
+```{python}
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.datasets import make_regression
+
+# initialize random forest model with 500 trees and max depth of 10
+model_rf = RandomForestRegressor(n_estimators=500, max_depth=10, random_state=20)
+
+# fit random forest model to training data
+model_rf.fit(X_train, Y_train)
+
+# make predictions using random forest model on testing data
+Y_pred_rf = model_rf.predict(X_test)
+```
+
+Predictions from the random forest model were then added to the calibration curve.
+```{python}
+plt.figure(figsize=(6, 5))
+
+# plot ordinal model results
+plt.scatter(Y_pred_ordinal_calib, Y_test, marker='o', color ='blue', alpha=0.35, s=25, label='Ordinal Model')
+plt.scatter(Y_pred_rf, Y_test, marker='^', color ='red', alpha=0.35, s=25, label='Random Forest Model')
+
+# 45-degree ideal calibration line
+plt.plot([Y_test.min(), Y_test.max()], [Y_test.min(), Y_test.max()], linestyle=':', color='black', label='Ideal Calibration')
+
+plt.xlabel("Predicted Coffee Count")
+plt.ylabel("Observed Coffee Count")
+plt.title("Four Model Comparison")
+plt.legend()
+
+plt.show()
+```
+
+#### Generalized Linear Model
+
+The GLM followed the same workflow as described above in the explanation of the model. Intercepts were added to the X test and train datasets since they are needed for the GLM.
+```{python}
+import statsmodels.api as sm
+
+# add intercept column to X train and test datasets
+X_train_glm = sm.add_constant(X_train)
+X_test_glm = sm.add_constant(X_test)
+
+# use GLM approach to create and fit model using Poisson distribution
+model_glm = sm.GLM(Y_train, X_train_glm, family=sm.families.Poisson())
+model_glm_results = model_glm.fit()
+
+# use GLM for predictions
+Y_pred_glm = model_glm_results.predict(X_test_glm)
+```
+
+Results were then plotted on the same calibration curve for comparison.
+```{python}
+plt.figure(figsize=(6, 5))
+
+# plot ordinal model results
+plt.scatter(Y_pred_ordinal_calib, Y_test, marker='o', color ='blue', alpha=0.35, s=25, label='Ordinal Model')
+plt.scatter(Y_pred_rf, Y_test, marker='^', color ='red', alpha=0.35, s=25, label='Random Forest Model')
+plt.scatter(Y_pred_glm, Y_test, marker='s', color ='green', alpha=0.35, s=25, label='GLM Model')
+
+# 45-degree ideal calibration line
+plt.plot([Y_test.min(), Y_test.max()], [Y_test.min(), Y_test.max()], linestyle=':', color='black', label='Ideal Calibration')
+
+plt.xlabel("Predicted Coffee Count")
+plt.ylabel("Observed Coffee Count")
+plt.title("Four Model Comparison")
+plt.legend()
+
+plt.show()
+```
+
+#### Neural Network
+
+Finally, the neural network model was initialized and trained on the training dataset. The sklearn Multi-Layer Perceptron neural network library was used for the model. Several parameters for this model were selected, including using a hidden layer with 10 neurons, a relu activation function, adam optimizer for weight optimization, and a maximum of 1000 epochs. The features were scaled using the StandardScaler library, since neural networks can perform better when features are scaled. Predictions were then calculated for the testing dataset using the neural network model.
+```{python}
+from sklearn.preprocessing import StandardScaler
+from sklearn.neural_network import MLPRegressor
+from sklearn.pipeline import make_pipeline
+
+# initialize the multi-layer perceptron regressor neural network model
+model_nn = MLPRegressor(
+    hidden_layer_sizes=(10,),      # hidden layer of 10 neurons
+    activation='relu',             # rectified linear unit (relu) activation function for hidden layers
+    solver='adam',                 # adaptive moment estimation (adam) optimizer used for weight optimization
+    max_iter=1000,                  # max number of training epochs
+    random_state=25                
+)
+
+# fit model using scaled feature data
+model_nn_scaled = make_pipeline(StandardScaler(), model_nn)
+model_nn_scaled.fit(X_train, Y_train)
+
+# make predictions using neural net model
+Y_pred_nn = model_nn_scaled.predict(X_test)
+```
+
+Finally, the results were included on the calibration plot to see how they compared to the other model types.
+```{python}
+plt.figure(figsize=(6, 5))
+
+# plot ordinal model results
+plt.scatter(Y_pred_ordinal_calib, Y_test, marker='o', color ='blue', alpha=0.35, s=25, label='Ordinal Model')
+plt.scatter(Y_pred_rf, Y_test, marker='^', color ='red', alpha=0.35, s=25, label='Random Forest Model')
+plt.scatter(Y_pred_glm, Y_test, marker='s', color ='green', alpha=0.35, s=25, label='GLM Model')
+plt.scatter(Y_pred_nn, Y_test, marker='D', color ='purple', alpha=0.35, s=25, label='Neural Network Model')
+
+# 45-degree ideal calibration line
+plt.plot([Y_test.min(), Y_test.max()], [Y_test.min(), Y_test.max()], linestyle=':', color='black', label='Ideal Calibration')
+
+plt.xlabel("Predicted Coffee Count")
+plt.ylabel("Observed Coffee Count")
+plt.title("Four Model Comparison")
+plt.legend()
+
+plt.show()
+```
+
+Some observations from the plot include the following:
+- The observed coffee counts ranged from 0-13 coffees.  
+    - Ordinal model predictions mostly ranged from 0-6 coffees.  
+    - Random forest model predictions mostly ranged from 0-7 coffees.  
+    - GLM model predictions mostly ranged from 0-8 coffees.  
+    - NN model predictions mostly ranged from 0-8 coffees.  
+- Predictions for all models are best for observed coffee counts between 1-3 coffees.  
+
+Finally, the models were compared using the root mean square error (RMSE) method to evaluate relative performance. The RMSE equation is shown below.
+$$
+RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(Y_i-\hat{Y}_i)^2}
+$$
+where:
+$n$ = number of observations
+$Y_i$ = observed value
+$\hat{Y}_i$ = predicted value
+```{python}
+from sklearn.metrics import root_mean_squared_error
+
+# calculate RMSE for each model
+rmse_ordinal = root_mean_squared_error(Y_test, Y_pred_ordinal_calib)
+rmse_rf = root_mean_squared_error(Y_test, Y_pred_rf)
+rmse_glm = root_mean_squared_error(Y_test, Y_pred_glm)
+rmse_nn = root_mean_squared_error(Y_test, Y_pred_nn)
+
+# create table for displaying results
+rmse_table = pd.DataFrame({"Model": ["Ordinal", "Random Forest", "GLM", "Neural Network"],
+"RMSE": [rmse_ordinal, rmse_rf, rmse_glm, rmse_nn]})
+
+rmse_table.style.format({"RMSE": "{:.3f}"}).hide(axis="index")
+```
+
+The results show that the models all performed very similar to one another.
