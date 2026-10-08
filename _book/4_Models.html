@@ -266,9 +266,11 @@ window.Quarto = {
 <p>The Generalized Linear Model (GLM) represents a class of models that Nelder and Wedderburn set to unify in their 1972 paper. Prior to the Nelder and Wedderburn (1972) paper, models for normal, binomial, poisson, and gamma distributed responses were treated as separate statistical techniques. However, Nelder and Wedderburn noted that these model types shared a common structure and developed a procedure for unifying the models based on maximum likelihood estimation.</p>
 <p>The framework is based on assuming a probability distribution of the response of the dataset. Nelder and Wedderburn then proposed using an appropriate link function to transform the expected response onto a scale where a linear combination of features and coefficients can model it. The link function concept made it possible to use a linear model to develop predictions for datasets with responses with different probability distributions.</p>
 <p>The GLM framework offers several benefits over ordinary linear regression models when the response is not normally distributed. The link function ensures that model predictions remain within a valid range, such as positive values for counts in a Poisson distribution or probabilities between 0 and 1 in a Binomial distribution. It also allows a familiar linear model to be used to model expected response. The coefficients of this linear model can often be more easily interpreted than those of other models.</p>
-<p>A brief history of the GLM framework based on the Nelder and Wedderburn (1972) paper is shown below: - 1952 — Finney: Developed well-known method for using maximum likelihood estimation for probit analysis. This method was used to unify the class of generalized linear models.<br>
+<p>A brief history of the GLM framework based on the Nelder and Wedderburn (1972) paper is shown below:<br>
+- 1952 — Finney: Developed well-known method for using maximum likelihood estimation for probit analysis. This method was used to unify the class of generalized linear models.<br>
 - 1966 — Nelder: Demonstrated how inverse polynomials could be calculated using the first approximation of the GLM framework.<br>
-- 1968 — Nelder: Extension of the systematic component of the GLM framework, but used a transformation to produce normal errors. A different transformation was used to produce linearity. - 1972 — Nelder &amp; Wedderburn: Unified these previously separate approaches into the generalized linear model framework, combining a random component from the exponential family, a linear systematic component, and a link function, with a common maximum-likelihood fitting procedure.</p>
+- 1968 — Nelder: Extension of the systematic component of the GLM framework, but used a transformation to produce normal errors. A different transformation was used to produce linearity.<br>
+- 1972 — Nelder &amp; Wedderburn: Unified these previously separate approaches into the generalized linear model framework, combining a random component from the exponential family, a linear systematic component, and a link function, with a common maximum-likelihood fitting procedure.</p>
 </section>
 <section id="mathematics" class="level3" data-number="5.1.2">
 <h3 data-number="5.1.2" class="anchored" data-anchor-id="mathematics"><span class="header-section-number">5.1.2</span> Mathematics</h3>
@@ -359,7 +361,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <li>Whether or not it was a work day - yes/no based on 50/50 chance</li>
 <li>Number of coffee cups consumed - drawn from Poisson distribution, modeling <span class="math inline">\(\lambda\)</span> (expected value of Poisson distribution) as a function of the rest of the features</li>
 </ul>
-<div id="c24b0ed8" class="cell" data-execution_count="1">
+<div id="86ad7679" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># created simulated data</span></span>
@@ -372,7 +374,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>Y_coffee <span class="op">=</span> np.random.poisson(lam)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A histogram was created to see the distribution of number of coffees consumed.</p>
-<div id="52a3da2d" class="cell" data-execution_count="2">
+<div id="7e36f7bd" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>plt.hist(Y_coffee, bins<span class="op">=</span>np.arange(Y_coffee.<span class="bu">max</span>() <span class="op">+</span> <span class="dv">2</span>) <span class="op">-</span> <span class="fl">0.5</span>)</span>
@@ -385,14 +387,14 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="4_Models_files/figure-html/cell-3-output-1.png" width="587" height="451" class="figure-img"></p>
+<p><img src="4_Models_files/figure-html/cell-3-output-1.png" width="585" height="451" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The response is a discrete count variable and, as shown by the histogram, is clearly not normally distributed. This makes this dataset a potential candidate for GLM.</p>
 <p>In order to demonstrate the effectiveness of the GLM, a linear model was first used to predict the number of coffees consumed, assuming a normal distribution.</p>
-<div id="5d26d4db" class="cell" data-execution_count="3">
+<div id="951e451e" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># combine features</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.column_stack((X_stress, X_sleep, X_work))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -410,7 +412,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>Y_coffee_pred_linear <span class="op">=</span> linear_results.predict(X)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A histogram was created to show the results of the linear model predictions.</p>
-<div id="ba0b30f8" class="cell" data-execution_count="4">
+<div id="07d11b16" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plt.hist(Y_coffee_pred_linear, bins<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Predicted number of coffees using linear model"</span>)</span>
@@ -428,7 +430,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 </div>
 <p>The histogram shows that the linear model predicted a negative number of coffees on some days, which does not make sense.</p>
 <p>Next, the GLM approach was used to develop a model for predicting the number of daily coffees consumed. It was assumed that the <span class="math inline">\(\beta\)</span> factors were unknown in the Poisson expression for the number of coffees consumed on a given day. Therefore, they needed to be calculated.</p>
-<div id="5dfccee5" class="cell" data-execution_count="5">
+<div id="a252e8ee" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># combine features and add intercept</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.column_stack((X_stress, X_sleep, X_work))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(X)</span>
@@ -443,12 +445,12 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># see calculated beta factors used to create Y_coffee</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(glm_results.params) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[ 0.70365162  0.19471421 -0.33106304  0.18723302]</code></pre>
+<pre><code>[ 0.47858464  0.21276954 -0.28576249  0.15604329]</code></pre>
 </div>
 </div>
 <p>The calculated <span class="math inline">\(\beta\)</span> factors are nearly the same as the ones used in the Poisson expression to develop Y_coffee.</p>
 <p>Next, a histogram was created to show the results of the GLM approach using the Poisson distribution.</p>
-<div id="6319a2ec" class="cell" data-execution_count="6">
+<div id="c2ee499b" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.hist(Y_coffee_pred_glm, bins<span class="op">=</span>np.arange(Y_coffee_pred_glm.<span class="bu">max</span>() <span class="op">+</span> <span class="dv">2</span>) <span class="op">-</span> <span class="fl">0.5</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Predicted number of coffees using GLM"</span>)</span>
@@ -459,7 +461,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="4_Models_files/figure-html/cell-7-output-1.png" width="590" height="451" class="figure-img"></p>
+<p><img src="4_Models_files/figure-html/cell-7-output-1.png" width="585" height="451" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -483,7 +485,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <section id="data-setup" class="level4" data-number="5.2.2.1">
 <h4 data-number="5.2.2.1" class="anchored" data-anchor-id="data-setup"><span class="header-section-number">5.2.2.1</span> Data Setup</h4>
 <p>First, the coffee dataset was replicated from above, but with N=1000.</p>
-<div id="0e06104a" class="cell" data-execution_count="7">
+<div id="524072de" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># created simulated data</span></span>
@@ -498,7 +500,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> np.random.poisson(lam)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, the dataset was split into training and testing datasets.</p>
-<div id="997d768b" class="cell" data-execution_count="8">
+<div id="daa96334" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>X_train, X_test, Y_train, Y_test <span class="op">=</span> train_test_split(X, Y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -509,7 +511,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <p>The ordinal model was then trained and fitted to the training dataset. In order to use the ordinal model, the response variable was converted from numerical to categorical data type since the ordinal model is designed to be used with categorical data. The logit function was used to create the ordinal model. <span class="math display">\[
 \operatorname{logit}(p_k) = \log\left(\frac{p_k}{1-p_k}\right) = \alpha_k - \beta
 \]</span></p>
-<div id="04aa948c" class="cell" data-execution_count="9">
+<div id="0dd79be4" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.miscmodels.ordinal_model <span class="im">import</span> OrderedModel</span>
@@ -525,14 +527,14 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>results_ordinal <span class="op">=</span> model_ordinal.fit(method<span class="op">=</span><span class="st">'bfgs'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Optimization terminated successfully.
-         Current function value: 1.324155
-         Iterations: 88
-         Function evaluations: 90
-         Gradient evaluations: 90</code></pre>
+         Current function value: 1.428477
+         Iterations: 66
+         Function evaluations: 67
+         Gradient evaluations: 67</code></pre>
 </div>
 </div>
 <p>Next, the ordinal model was used to make predictions on the testing dataset. An output table was created to show the predicted probabilities for each coffee count category for the first observation. Similar predicted probabilities were generated for each subsequent observation.This type of output is unique to the ordinal model compared to the other three model types evaluated in this computation.</p>
-<div id="fad17535" class="cell" data-execution_count="10">
+<div id="0e46026a" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># predictions</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>Y_pred_ordinal <span class="op">=</span> results_ordinal.predict(X_test)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -548,73 +550,69 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <style type="text/css">
 </style>
 
-<table id="T_baa40" class="caption-top table table-sm table-striped small">
+<table id="T_49da9" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th id="T_baa40_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Coffee Count Category</th>
-<th id="T_baa40_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Predicted Probability</th>
+<th id="T_49da9_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Coffee Count Category</th>
+<th id="T_49da9_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Predicted Probability</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_baa40_row0_col0" class="data row0 col0">0</td>
-<td id="T_baa40_row0_col1" class="data row0 col1">82.95%</td>
+<td id="T_49da9_row0_col0" class="data row0 col0">0</td>
+<td id="T_49da9_row0_col1" class="data row0 col1">9.12%</td>
 </tr>
 <tr class="even">
-<td id="T_baa40_row1_col0" class="data row1 col0">1</td>
-<td id="T_baa40_row1_col1" class="data row1 col1">13.69%</td>
+<td id="T_49da9_row1_col0" class="data row1 col0">1</td>
+<td id="T_49da9_row1_col1" class="data row1 col1">24.46%</td>
 </tr>
 <tr class="odd">
-<td id="T_baa40_row2_col0" class="data row2 col0">2</td>
-<td id="T_baa40_row2_col1" class="data row2 col1">2.40%</td>
+<td id="T_49da9_row2_col0" class="data row2 col0">2</td>
+<td id="T_49da9_row2_col1" class="data row2 col1">23.92%</td>
 </tr>
 <tr class="even">
-<td id="T_baa40_row3_col0" class="data row3 col0">3</td>
-<td id="T_baa40_row3_col1" class="data row3 col1">0.45%</td>
+<td id="T_49da9_row3_col0" class="data row3 col0">3</td>
+<td id="T_49da9_row3_col1" class="data row3 col1">19.42%</td>
 </tr>
 <tr class="odd">
-<td id="T_baa40_row4_col0" class="data row4 col0">4</td>
-<td id="T_baa40_row4_col1" class="data row4 col1">0.30%</td>
+<td id="T_49da9_row4_col0" class="data row4 col0">4</td>
+<td id="T_49da9_row4_col1" class="data row4 col1">12.87%</td>
 </tr>
 <tr class="even">
-<td id="T_baa40_row5_col0" class="data row5 col0">5</td>
-<td id="T_baa40_row5_col1" class="data row5 col1">0.09%</td>
+<td id="T_49da9_row5_col0" class="data row5 col0">5</td>
+<td id="T_49da9_row5_col1" class="data row5 col1">4.93%</td>
 </tr>
 <tr class="odd">
-<td id="T_baa40_row6_col0" class="data row6 col0">6</td>
-<td id="T_baa40_row6_col1" class="data row6 col1">0.06%</td>
+<td id="T_49da9_row6_col0" class="data row6 col0">6</td>
+<td id="T_49da9_row6_col1" class="data row6 col1">2.31%</td>
 </tr>
 <tr class="even">
-<td id="T_baa40_row7_col0" class="data row7 col0">7</td>
-<td id="T_baa40_row7_col1" class="data row7 col1">0.03%</td>
+<td id="T_49da9_row7_col0" class="data row7 col0">7</td>
+<td id="T_49da9_row7_col1" class="data row7 col1">1.20%</td>
 </tr>
 <tr class="odd">
-<td id="T_baa40_row8_col0" class="data row8 col0">8</td>
-<td id="T_baa40_row8_col1" class="data row8 col1">0.01%</td>
+<td id="T_49da9_row8_col0" class="data row8 col0">8</td>
+<td id="T_49da9_row8_col1" class="data row8 col1">0.53%</td>
 </tr>
 <tr class="even">
-<td id="T_baa40_row9_col0" class="data row9 col0">9</td>
-<td id="T_baa40_row9_col1" class="data row9 col1">0.00%</td>
+<td id="T_49da9_row9_col0" class="data row9 col0">9</td>
+<td id="T_49da9_row9_col1" class="data row9 col1">0.33%</td>
 </tr>
 <tr class="odd">
-<td id="T_baa40_row10_col0" class="data row10 col0">10</td>
-<td id="T_baa40_row10_col1" class="data row10 col1">0.01%</td>
+<td id="T_49da9_row10_col0" class="data row10 col0">10</td>
+<td id="T_49da9_row10_col1" class="data row10 col1">0.44%</td>
 </tr>
 <tr class="even">
-<td id="T_baa40_row11_col0" class="data row11 col0">11</td>
-<td id="T_baa40_row11_col1" class="data row11 col1">0.00%</td>
+<td id="T_49da9_row11_col0" class="data row11 col0">11</td>
+<td id="T_49da9_row11_col1" class="data row11 col1">0.21%</td>
 </tr>
 <tr class="odd">
-<td id="T_baa40_row12_col0" class="data row12 col0">12</td>
-<td id="T_baa40_row12_col1" class="data row12 col1">0.00%</td>
+<td id="T_49da9_row12_col0" class="data row12 col0">12</td>
+<td id="T_49da9_row12_col1" class="data row12 col1">0.20%</td>
 </tr>
 <tr class="even">
-<td id="T_baa40_row13_col0" class="data row13 col0">14</td>
-<td id="T_baa40_row13_col1" class="data row13 col1">0.00%</td>
-</tr>
-<tr class="odd">
-<td id="T_baa40_row14_col0" class="data row14 col0">15</td>
-<td id="T_baa40_row14_col1" class="data row14 col1">0.00%</td>
+<td id="T_49da9_row13_col0" class="data row13 col0">14</td>
+<td id="T_49da9_row13_col1" class="data row13 col1">0.06%</td>
 </tr>
 </tbody>
 </table>
@@ -624,7 +622,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 \hat{Y} = E[Y \mid X] = \sum_y yP(Y=y \mid X)
 \]</span></p>
 <p>Code for this conversion is shown below.</p>
-<div id="c3ef0b04" class="cell" data-execution_count="11">
+<div id="c35b1886" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># use dot product for this</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Y_pred_ordinal is 200x13 array. 200 rows = observations, 13 columns = predicted probabilities for each coffee count category</span></span>
@@ -633,7 +631,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>Y_pred_ordinal_calib <span class="op">=</span> np.dot(Y_pred_ordinal, Y_train_cat.categories)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A calibration curve was then created to show the performance of the ordinal model on the testing dataset.</p>
-<div id="2306939a" class="cell" data-execution_count="12">
+<div id="6140daae" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
@@ -653,7 +651,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="4_Models_files/figure-html/cell-13-output-1.png" width="502" height="451" class="figure-img"></p>
+<p><img src="4_Models_files/figure-html/cell-13-output-1.png" width="511" height="451" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -662,7 +660,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <section id="random-forest-model" class="level4" data-number="5.2.2.3">
 <h4 data-number="5.2.2.3" class="anchored" data-anchor-id="random-forest-model"><span class="header-section-number">5.2.2.3</span> Random Forest Model</h4>
 <p>The random forest model was then evaluated on the same dataset. The random forest model was initialized with 500 trees and a maximum depth of 10. It was then fit to the training dataset and predictions were generated.</p>
-<div id="cdb02703" class="cell" data-execution_count="13">
+<div id="5f7ccf0d" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_regression</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -676,7 +674,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>Y_pred_rf <span class="op">=</span> model_rf.predict(X_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Predictions from the random forest model were then added to the calibration curve.</p>
-<div id="da9dfbde" class="cell" data-execution_count="14">
+<div id="80a2257d" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot ordinal model results</span></span>
@@ -695,7 +693,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="4_Models_files/figure-html/cell-15-output-1.png" width="502" height="451" class="figure-img"></p>
+<p><img src="4_Models_files/figure-html/cell-15-output-1.png" width="511" height="451" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -704,7 +702,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <section id="generalized-linear-model-1" class="level4" data-number="5.2.2.4">
 <h4 data-number="5.2.2.4" class="anchored" data-anchor-id="generalized-linear-model-1"><span class="header-section-number">5.2.2.4</span> Generalized Linear Model</h4>
 <p>The GLM followed the same workflow as described above in the explanation of the model. Intercepts were added to the X test and train datasets since they are needed for the GLM.</p>
-<div id="547b5041" class="cell" data-execution_count="15">
+<div id="7949fe2c" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># add intercept column to X train and test datasets</span></span>
@@ -719,7 +717,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>Y_pred_glm <span class="op">=</span> model_glm_results.predict(X_test_glm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Results were then plotted on the same calibration curve for comparison.</p>
-<div id="89ecbbc7" class="cell" data-execution_count="16">
+<div id="a35feeb9" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot ordinal model results</span></span>
@@ -739,7 +737,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="4_Models_files/figure-html/cell-17-output-1.png" width="502" height="451" class="figure-img"></p>
+<p><img src="4_Models_files/figure-html/cell-17-output-1.png" width="511" height="451" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -748,7 +746,7 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <section id="neural-network" class="level4" data-number="5.2.2.5">
 <h4 data-number="5.2.2.5" class="anchored" data-anchor-id="neural-network"><span class="header-section-number">5.2.2.5</span> Neural Network</h4>
 <p>Finally, the neural network model was initialized and trained on the training dataset. The sklearn Multi-Layer Perceptron neural network library was used for the model. Several parameters for this model were selected, including using a hidden layer with 10 neurons, a relu activation function, adam optimizer for weight optimization, and a maximum of 1000 epochs. The features were scaled using the StandardScaler library, since neural networks can perform better when features are scaled. Predictions were then calculated for the testing dataset using the neural network model.</p>
-<div id="4b05a418" class="cell" data-execution_count="17">
+<div id="7d627722" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neural_network <span class="im">import</span> MLPRegressor</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
@@ -768,94 +766,85 @@ g(\mu_i) = g\left(E[Y_i \mid X_i]\right)
 <span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a><span class="co"># make predictions using neural net model</span></span>
 <span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>Y_pred_nn <span class="op">=</span> model_nn_scaled.predict(X_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\provi\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\sklearn\neural_network\_multilayer_perceptron.py:785: ConvergenceWarning: Stochastic Optimizer: Maximum iterations (1000) reached and the optimization hasn't converged yet.
-  warnings.warn(</code></pre>
-</div>
 </div>
 <p>Finally, the results were included on the calibration plot to see how they compared to the other model types.</p>
-<div id="45c45735" class="cell" data-execution_count="18">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot ordinal model results</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>plt.scatter(Y_pred_ordinal_calib, Y_test, marker<span class="op">=</span><span class="st">'o'</span>, color <span class="op">=</span><span class="st">'blue'</span>, alpha<span class="op">=</span><span class="fl">0.35</span>, s<span class="op">=</span><span class="dv">25</span>, label<span class="op">=</span><span class="st">'Ordinal Model'</span>)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plt.scatter(Y_pred_rf, Y_test, marker<span class="op">=</span><span class="st">'^'</span>, color <span class="op">=</span><span class="st">'red'</span>, alpha<span class="op">=</span><span class="fl">0.35</span>, s<span class="op">=</span><span class="dv">25</span>, label<span class="op">=</span><span class="st">'Random Forest Model'</span>)</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>plt.scatter(Y_pred_glm, Y_test, marker<span class="op">=</span><span class="st">'s'</span>, color <span class="op">=</span><span class="st">'green'</span>, alpha<span class="op">=</span><span class="fl">0.35</span>, s<span class="op">=</span><span class="dv">25</span>, label<span class="op">=</span><span class="st">'GLM Model'</span>)</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>plt.scatter(Y_pred_nn, Y_test, marker<span class="op">=</span><span class="st">'D'</span>, color <span class="op">=</span><span class="st">'purple'</span>, alpha<span class="op">=</span><span class="fl">0.35</span>, s<span class="op">=</span><span class="dv">25</span>, label<span class="op">=</span><span class="st">'Neural Network Model'</span>)</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 45-degree ideal calibration line</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>plt.plot([Y_test.<span class="bu">min</span>(), Y_test.<span class="bu">max</span>()], [Y_test.<span class="bu">min</span>(), Y_test.<span class="bu">max</span>()], linestyle<span class="op">=</span><span class="st">':'</span>, color<span class="op">=</span><span class="st">'black'</span>, label<span class="op">=</span><span class="st">'Ideal Calibration'</span>)</span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Predicted Coffee Count"</span>)</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Observed Coffee Count"</span>)</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Four Model Comparison"</span>)</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="c0f8e9eb" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># plot ordinal model results</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>plt.scatter(Y_pred_ordinal_calib, Y_test, marker<span class="op">=</span><span class="st">'o'</span>, color <span class="op">=</span><span class="st">'blue'</span>, alpha<span class="op">=</span><span class="fl">0.35</span>, s<span class="op">=</span><span class="dv">25</span>, label<span class="op">=</span><span class="st">'Ordinal Model'</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>plt.scatter(Y_pred_rf, Y_test, marker<span class="op">=</span><span class="st">'^'</span>, color <span class="op">=</span><span class="st">'red'</span>, alpha<span class="op">=</span><span class="fl">0.35</span>, s<span class="op">=</span><span class="dv">25</span>, label<span class="op">=</span><span class="st">'Random Forest Model'</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>plt.scatter(Y_pred_glm, Y_test, marker<span class="op">=</span><span class="st">'s'</span>, color <span class="op">=</span><span class="st">'green'</span>, alpha<span class="op">=</span><span class="fl">0.35</span>, s<span class="op">=</span><span class="dv">25</span>, label<span class="op">=</span><span class="st">'GLM Model'</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>plt.scatter(Y_pred_nn, Y_test, marker<span class="op">=</span><span class="st">'D'</span>, color <span class="op">=</span><span class="st">'purple'</span>, alpha<span class="op">=</span><span class="fl">0.35</span>, s<span class="op">=</span><span class="dv">25</span>, label<span class="op">=</span><span class="st">'Neural Network Model'</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 45-degree ideal calibration line</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>plt.plot([Y_test.<span class="bu">min</span>(), Y_test.<span class="bu">max</span>()], [Y_test.<span class="bu">min</span>(), Y_test.<span class="bu">max</span>()], linestyle<span class="op">=</span><span class="st">':'</span>, color<span class="op">=</span><span class="st">'black'</span>, label<span class="op">=</span><span class="st">'Ideal Calibration'</span>)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Predicted Coffee Count"</span>)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Observed Coffee Count"</span>)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Four Model Comparison"</span>)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="4_Models_files/figure-html/cell-19-output-1.png" width="502" height="451" class="figure-img"></p>
+<p><img src="4_Models_files/figure-html/cell-19-output-1.png" width="511" height="451" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Some observations from the plot include the following: - The observed coffee counts ranged from 0-13 coffees.<br>
-- Ordinal model predictions mostly ranged from 0-6 coffees.<br>
-- Random forest model predictions mostly ranged from 0-7 coffees.<br>
-- GLM model predictions mostly ranged from 0-8 coffees.<br>
-- NN model predictions mostly ranged from 0-8 coffees.<br>
-- Predictions for all models are best for observed coffee counts between 1-3 coffees.</p>
+<p>Some observations from the plot include the following: - The models appeared to perform similarly. - Predictions for all models are best for observed coffee counts between 1-3 coffees.</p>
 <p>Finally, the models were compared using the root mean square error (RMSE) method to evaluate relative performance. The RMSE equation is shown below. <span class="math display">\[
 RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(Y_i-\hat{Y}_i)^2}
 \]</span> where: <span class="math inline">\(n\)</span> = number of observations <span class="math inline">\(Y_i\)</span> = observed value <span class="math inline">\(\hat{Y}_i\)</span> = predicted value</p>
-<div id="0d366bbf" class="cell" data-execution_count="19">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> root_mean_squared_error</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate RMSE for each model</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>rmse_ordinal <span class="op">=</span> root_mean_squared_error(Y_test, Y_pred_ordinal_calib)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>rmse_rf <span class="op">=</span> root_mean_squared_error(Y_test, Y_pred_rf)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>rmse_glm <span class="op">=</span> root_mean_squared_error(Y_test, Y_pred_glm)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>rmse_nn <span class="op">=</span> root_mean_squared_error(Y_test, Y_pred_nn)</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create table for displaying results</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>rmse_table <span class="op">=</span> pd.DataFrame({<span class="st">"Model"</span>: [<span class="st">"Ordinal"</span>, <span class="st">"Random Forest"</span>, <span class="st">"GLM"</span>, <span class="st">"Neural Network"</span>],</span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="st">"RMSE"</span>: [rmse_ordinal, rmse_rf, rmse_glm, rmse_nn]})</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>rmse_table.style.<span class="bu">format</span>({<span class="st">"RMSE"</span>: <span class="st">"</span><span class="sc">{:.3f}</span><span class="st">"</span>}).hide(axis<span class="op">=</span><span class="st">"index"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="8417a557" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> root_mean_squared_error</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate RMSE for each model</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>rmse_ordinal <span class="op">=</span> root_mean_squared_error(Y_test, Y_pred_ordinal_calib)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>rmse_rf <span class="op">=</span> root_mean_squared_error(Y_test, Y_pred_rf)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>rmse_glm <span class="op">=</span> root_mean_squared_error(Y_test, Y_pred_glm)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>rmse_nn <span class="op">=</span> root_mean_squared_error(Y_test, Y_pred_nn)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create table for displaying results</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>rmse_table <span class="op">=</span> pd.DataFrame({<span class="st">"Model"</span>: [<span class="st">"Ordinal"</span>, <span class="st">"Random Forest"</span>, <span class="st">"GLM"</span>, <span class="st">"Neural Network"</span>],</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="st">"RMSE"</span>: [rmse_ordinal, rmse_rf, rmse_glm, rmse_nn]})</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>rmse_table.style.<span class="bu">format</span>({<span class="st">"RMSE"</span>: <span class="st">"</span><span class="sc">{:.3f}</span><span class="st">"</span>}).hide(axis<span class="op">=</span><span class="st">"index"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="19">
 <style type="text/css">
 </style>
 
-<table id="T_5c2c2" class="caption-top table table-sm table-striped small">
+<table id="T_77d06" class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th id="T_5c2c2_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Model</th>
-<th id="T_5c2c2_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">RMSE</th>
+<th id="T_77d06_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Model</th>
+<th id="T_77d06_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">RMSE</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_5c2c2_row0_col0" class="data row0 col0">Ordinal</td>
-<td id="T_5c2c2_row0_col1" class="data row0 col1">1.160</td>
+<td id="T_77d06_row0_col0" class="data row0 col0">Ordinal</td>
+<td id="T_77d06_row0_col1" class="data row0 col1">1.579</td>
 </tr>
 <tr class="even">
-<td id="T_5c2c2_row1_col0" class="data row1 col0">Random Forest</td>
-<td id="T_5c2c2_row1_col1" class="data row1 col1">1.287</td>
+<td id="T_77d06_row1_col0" class="data row1 col0">Random Forest</td>
+<td id="T_77d06_row1_col1" class="data row1 col1">1.577</td>
 </tr>
 <tr class="odd">
-<td id="T_5c2c2_row2_col0" class="data row2 col0">GLM</td>
-<td id="T_5c2c2_row2_col1" class="data row2 col1">1.187</td>
+<td id="T_77d06_row2_col0" class="data row2 col0">GLM</td>
+<td id="T_77d06_row2_col1" class="data row2 col1">1.496</td>
 </tr>
 <tr class="even">
-<td id="T_5c2c2_row3_col0" class="data row3 col0">Neural Network</td>
-<td id="T_5c2c2_row3_col1" class="data row3 col1">1.188</td>
+<td id="T_77d06_row3_col0" class="data row3 col0">Neural Network</td>
+<td id="T_77d06_row3_col1" class="data row3 col1">1.569</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<p>The results show that the models all performed very similar to one another.</p>
+<p>The results show that the models all performed similarly to one another.</p>
 
 
 </section>

@@ -396,9 +396,9 @@ plt.legend()
 plt.show()
 ```
 
-Some observations from the plot include the following:
-- The models appeared to perform similarly. 
-- Predictions for all models are best for observed coffee counts between 1-3 coffees.  
+Some observations from the plot include the following:  
+- The models appeared to perform similarly.  
+- Predictions for all models are best for observed coffee counts between 1-3 coffees.    
 
 Finally, the models were compared using the root mean square error (RMSE) method to evaluate relative performance. The RMSE equation is shown below.
 $$
