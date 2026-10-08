@@ -13,8 +13,11 @@ The framework is based on assuming a probability distribution of the response of
 
 The GLM framework offers several benefits over ordinary linear regression models when the response is not normally distributed. The link function ensures that model predictions remain within a valid range, such as positive values for counts in a Poisson distribution or probabilities between 0 and 1 in a Binomial distribution. It also allows a familiar linear model to be used to model expected response. The coefficients of this linear model can often be more easily interpreted than those of other models.
 
-A brief history of the GLM framework is provide below:
-- 
+A brief history of the GLM framework based on the Nelder and Wedderburn (1972) paper is shown below:  
+- 1952 — Finney: Developed well-known method for using maximum likelihood estimation for probit analysis. This method was used to unify the class of generalized linear models.    
+- 1966 — Nelder: Demonstrated how inverse polynomials could be calculated using the first approximation of the GLM framework.   
+- 1968 — Nelder: Extension of the systematic component of the GLM framework, but used a transformation to produce normal errors. A different transformation was used to produce linearity.  
+- 1972 — Nelder & Wedderburn: Unified these previously separate approaches into the generalized linear model framework, combining a random component from the exponential family, a linear systematic component, and a link function, with a common maximum-likelihood fitting procedure.  
 
 ### Mathematics
 
@@ -196,6 +199,8 @@ Y = np.random.poisson(lam)
 
 Next, the dataset was split into training and testing datasets.
 ```{python}
+from sklearn.model_selection import train_test_split
+
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
 ```
 
@@ -392,11 +397,7 @@ plt.show()
 ```
 
 Some observations from the plot include the following:
-- The observed coffee counts ranged from 0-13 coffees.  
-    - Ordinal model predictions mostly ranged from 0-6 coffees.  
-    - Random forest model predictions mostly ranged from 0-7 coffees.  
-    - GLM model predictions mostly ranged from 0-8 coffees.  
-    - NN model predictions mostly ranged from 0-8 coffees.  
+- The models appeared to perform similarly. 
 - Predictions for all models are best for observed coffee counts between 1-3 coffees.  
 
 Finally, the models were compared using the root mean square error (RMSE) method to evaluate relative performance. The RMSE equation is shown below.
@@ -423,4 +424,4 @@ rmse_table = pd.DataFrame({"Model": ["Ordinal", "Random Forest", "GLM", "Neural 
 rmse_table.style.format({"RMSE": "{:.3f}"}).hide(axis="index")
 ```
 
-The results show that the models all performed very similar to one another.
+The results show that the models all performed similarly to one another.
