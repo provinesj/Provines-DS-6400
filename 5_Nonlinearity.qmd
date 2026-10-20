@@ -1,0 +1,116 @@
+---
+title: 'Nonlinearity'
+
+---
+
+## Kernel Basis Expansion Method
+
+### General Info on Linear Models
+
+One principal factor in understanding that linear models $\neq$ linear relationship is that the "linear" in linear model refers to the linearity in the parameters $\beta$, not in the predictors $x$. Basis expansion is one way to use a linear model to find understand relationships between nonlinear variables. Basis expansion does this by adding additional functions of $x$ to the linear model. Consider the standard linear model and its variance.
+$$
+E[Y \mid x] = \beta_0 + \sum_{j=1}^{p} \beta_j x_j
+$$
+$$
+\operatorname{Var}(Y \mid x) = \sigma^2
+$$
+
+When using basis expansion, $x$ is transformed into a set of derived features $b_1(x), b_2(x), \ldots, b_k(x)$. Then the linear model can be re-written as follows:
+$$
+E[Y \mid x] = \beta_0 + \sum_{j=1}^{k} \beta_j b_j(x)
+$$
+
+### Kernels
+
+Kernel basis functions are the same function $K$, placed at different locations in the range of $x$, also called knots. The knot locations can be denoted by $c_1, \ldots, c_M$. The basis functions for kernels take the following form.
+$$
+b_i(x) = K (x - c_i)
+$$
+where, $K(x)$ is a kernel function
+
+Kernel basis functions are typically symmetric and continuous. A common choice is the Gaussian kernel, $K(u) = e^{-u^2/2}$.
+
+Kernel functions also typically use a hyperparameter, $h$ to consider the basis functions at wider or narrower scales. The kernel basis function can be re-written in the following form with the hyperparameter.
+$$
+b_i(x) = K\left(\frac{x-c_i}{h}\right)
+$$
+
+This kernel function can then be substituted into the linear model as the following.
+$$
+E[Y \mid x] = \beta_0 + \sum_{j=1}^{k} \beta_i K\left(\frac{x-c_i}{h}\right)
+$$
+
+Linear combinations of multiple kernel functions can be used in a model, depending on the dataset. At the tails of the dataset, the model reverts back to a value of $\beta_0$.
+
+### Example of Kernel Basis Expansion
+An example plot was created to show the kernel basis expansion approach for using a linear model for nonlinear relationships. A noisey sine wave was used as the dataset for this example.
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+# generate one period of a sine wave
+np.random.seed(24)
+x = np.linspace(0, 2 * np.pi, 100)
+y_true = np.sin(x)
+
+# add random noise
+noise = np.random.normal(0, 0.2, size=len(x))
+y = y_true + noise
+
+# plot simulated data
+plt.figure(figsize=(6, 4))
+plt.scatter(x, y, alpha=0.7, label="Noisy sine wave")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Kernel function example")
+```
+
+Next, the rbf_kernel library from sklearn was used to construct the kernel functions. A total of 10 kernel functions were used, and their centers were placed evenly across the range of x. The hyperparameter $h$ was set to 0.5 for all kernel functions.
+```{python}
+from sklearn.metrics.pairwise import rbf_kernel
+
+# number of kernel functions used
+M = 10
+
+# place centers evenly across x
+centers = np.linspace(x.min(), x.max(), M)
+
+# hyperparameter, h, or width of kernel functions
+h = 0.5
+```
+
+Then the $h$ hyperparameter was converted to the $\gamma$ hyperparameter needed for the kernel function in the rbf_kernel library. Then the kernel functions were calculated.
+```{python}
+# convert h to gamma hyperparameter from sklearn rbf_kernel library
+gamma = 1 / (2 * h**2)
+
+# convert x and centers into 2D arrays
+X = x.reshape(-1, 1)
+C = centers.reshape(-1, 1)
+
+# calculate kernel functions
+X_kernel = rbf_kernel(X, C, gamma=gamma)
+```
+
+Finally, the kernel model was fit and used to make predictions. The resulting model was included on the plot with the noisy sine data to show its effectiveness.
+```{python}
+from sklearn.linear_model import LinearRegression
+
+# fit model
+model_kernel = LinearRegression()
+model_kernel.fit(X_kernel, y)
+
+# make predictions
+y_pred = model_kernel.predict(X_kernel)
+
+# plot results
+plt.figure(figsize=(6, 5))
+plt.scatter(x, y, alpha=0.6, label="Noisy sine wave")
+plt.plot(x, y_pred, label="Kernel model")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Kernel function example")
+plt.legend()
+plt.show()
+```
+

@@ -258,5 +258,25 @@
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Models</span>"
     ]
+  },
+  {
+    "objectID": "5_Nonlinearity.html",
+    "href": "5_Nonlinearity.html",
+    "title": "6  Nonlinearity",
+    "section": "",
+    "text": "6.1 Kernel Basis Expansion Method",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Nonlinearity</span>"
+    ]
+  },
+  {
+    "objectID": "5_Nonlinearity.html#kernel-basis-expansion-method",
+    "href": "5_Nonlinearity.html#kernel-basis-expansion-method",
+    "title": "6  Nonlinearity",
+    "section": "",
+    "text": "6.1.1 General Info on Linear Models\nOne principal factor in understanding that linear models \\(\\neq\\) linear relationship is that the “linear” in linear model refers to the linearity in the parameters \\(\\beta\\), not in the predictors \\(x\\). Basis expansion is one way to use a linear model to find understand relationships between nonlinear variables. Basis expansion does this by adding additional functions of \\(x\\) to the linear model. Consider the standard linear model and its variance. \\[\nE[Y \\mid x] = \\beta_0 + \\sum_{j=1}^{p} \\beta_j x_j\n\\] \\[\n\\operatorname{Var}(Y \\mid x) = \\sigma^2\n\\]\nWhen using basis expansion, \\(x\\) is transformed into a set of derived features \\(b_1(x), b_2(x), \\ldots, b_k(x)\\). Then the linear model can be re-written as follows: \\[\nE[Y \\mid x] = \\beta_0 + \\sum_{j=1}^{k} \\beta_j b_j(x)\n\\]\n\n\n6.1.2 Kernels\nKernel basis functions are the same function \\(K\\), placed at different locations in the range of \\(x\\), also called knots. The knot locations can be denoted by \\(c_1, \\ldots, c_M\\). The basis functions for kernels take the following form. \\[\nb_i(x) = K (x - c_i)\n\\] where, \\(K(x)\\) is a kernel function\nKernel basis functions are typically symmetric and continuous. A common choice is the Gaussian kernel, \\(K(u) = e^{-u^2/2}\\).\nKernel functions also typically use a hyperparameter, \\(h\\) to consider the basis functions at wider or narrower scales. The kernel basis function can be re-written in the following form with the hyperparameter. \\[\nb_i(x) = K\\left(\\frac{x-c_i}{h}\\right)\n\\]\nThis kernel function can then be substituted into the linear model as the following. \\[\nE[Y \\mid x] = \\beta_0 + \\sum_{j=1}^{k} \\beta_i K\\left(\\frac{x-c_i}{h}\\right)\n\\]\nLinear combinations of multiple kernel functions can be used in a model, depending on the dataset. At the tails of the dataset, the model reverts back to a value of \\(\\beta_0\\).\n\n\n6.1.3 Example of Kernel Basis Expansion\nAn example plot was created to show the kernel basis expansion approach for using a linear model for nonlinear relationships. A noisey sine wave was used as the dataset for this example.\n\nimport numpy as np\nimport matplotlib.pyplot as plt\n\n# generate one period of a sine wave\nnp.random.seed(24)\nx = np.linspace(0, 2 * np.pi, 100)\ny_true = np.sin(x)\n\n# add random noise\nnoise = np.random.normal(0, 0.2, size=len(x))\ny = y_true + noise\n\n# plot simulated data\nplt.figure(figsize=(6, 4))\nplt.scatter(x, y, alpha=0.7, label=\"Noisy sine wave\")\nplt.xlabel(\"x\")\nplt.ylabel(\"y\")\nplt.title(\"Kernel function example\")\n\n\n\n\n\n\n\n\nNext, the rbf_kernel library from sklearn was used to construct the kernel functions. A total of 10 kernel functions were used, and their centers were placed evenly across the range of x. The hyperparameter \\(h\\) was set to 0.5 for all kernel functions.\n\nfrom sklearn.metrics.pairwise import rbf_kernel\n\n# number of kernel functions used\nM = 10\n\n# place centers evenly across x\ncenters = np.linspace(x.min(), x.max(), M)\n\n# hyperparameter, h, or width of kernel functions\nh = 0.5\n\nThen the \\(h\\) hyperparameter was converted to the \\(\\gamma\\) hyperparameter needed for the kernel function in the rbf_kernel library. Then the kernel functions were calculated.\n\n# convert h to gamma hyperparameter from sklearn rbf_kernel library\ngamma = 1 / (2 * h**2)\n\n# convert x and centers into 2D arrays\nX = x.reshape(-1, 1)\nC = centers.reshape(-1, 1)\n\n# calculate kernel functions\nX_kernel = rbf_kernel(X, C, gamma=gamma)\n\nFinally, the kernel model was fit and used to make predictions. The resulting model was included on the plot with the noisy sine data to show its effectiveness.\n\nfrom sklearn.linear_model import LinearRegression\n\n# fit model\nmodel_kernel = LinearRegression()\nmodel_kernel.fit(X_kernel, y)\n\n# make predictions\ny_pred = model_kernel.predict(X_kernel)\n\n# plot results\nplt.figure(figsize=(6, 5))\nplt.scatter(x, y, alpha=0.6, label=\"Noisy sine wave\")\nplt.plot(x, y_pred, label=\"Kernel model\")\nplt.xlabel(\"x\")\nplt.ylabel(\"y\")\nplt.title(\"Kernel function example\")\nplt.legend()\nplt.show()",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Nonlinearity</span>"
+    ]
   }
 ]
