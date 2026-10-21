@@ -42,14 +42,73 @@ $$
 
 Linear combinations of multiple kernel functions can be used in a model, depending on the dataset. At the tails of the dataset, the model reverts back to a value of $\beta_0$.
 
+Many options can be used for the kernel function, including any function proportional to a density function.
+
+A plot was also created to show how kernel functions sum to create the regression equation. For this example, 3 kernel functions were used. First, a simulated dataset was created using a sine wave over a single period.
+```{python}
+import numpy as np
+
+# simulated dataset of sine wave
+np.random.seed(1)
+x = np.linspace(0, 2 * np.pi, 100)
+```
+
+Next, 3 kernel functions were created by defining their centers, c, widths, h, and using a Gaussian equation. The 3 kernel functions were summed to simulate a regression plot.
+```{python}
+# select three kernel centers
+c_1 = 1
+c_2 = 3
+c_3 = 4
+
+# select kernel widths
+h_1 = 0.5
+h_2 = 0.25
+h_3 = 1
+
+# define Gaussian kernels
+kernel_1 = np.exp(-((x - c_1) / h_1)**2)
+kernel_2 = np.exp(-((x - c_2) / h_2)**2)
+kernel_3 = np.exp(-((x - c_3) / h_3)**2)
+
+# sum three kernels
+kernel_sum = kernel_1 + kernel_2 + kernel_3
+```
+
+Finally, a stacked plot was created to show all 3 kernel functions and their summation.
+```{python}
+import matplotlib.pyplot as plt
+# Create two vertically stacked subplots
+fig, axes = plt.subplots(2, 1, figsize=(6, 5), sharex=True)
+
+# Top subplot: sum of the three kernels
+axes[0].plot(x, kernel_sum, label="Sum of Three Kernels", linewidth=2.5)
+axes[0].set_title("Sum of Three Gaussian Kernels")
+axes[0].set_ylabel("Kernel value")
+axes[0].legend()
+axes[0].grid(True, alpha=0.3)
+
+# Bottom subplot: individual kernels
+axes[1].plot(x, kernel_1, label="Kernel 1")
+axes[1].plot(x, kernel_2, label="Kernel 2")
+axes[1].plot(x, kernel_3, label="Kernel 3")
+axes[1].set_title("Individual Gaussian Kernels")
+axes[1].set_xlabel("x")
+axes[1].set_ylabel("Kernel value")
+axes[1].legend()
+axes[1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+``` 
+
 ### Example of Kernel Basis Expansion
-An example plot was created to show the kernel basis expansion approach for using a linear model for nonlinear relationships. A noisey sine wave was used as the dataset for this example.
+An example plot was created to show the kernel basis expansion approach for using a linear model for nonlinear relationships. A noisy sine wave was used as the dataset for this example.
 ```{python}
 import numpy as np
 import matplotlib.pyplot as plt
 
 # generate one period of a sine wave
-np.random.seed(24)
+np.random.seed(2)
 x = np.linspace(0, 2 * np.pi, 100)
 y_true = np.sin(x)
 
@@ -113,4 +172,3 @@ plt.title("Kernel function example")
 plt.legend()
 plt.show()
 ```
-
