@@ -44,13 +44,13 @@ Linear combinations of multiple kernel functions can be used in a model, dependi
 
 Many options can be used for the kernel function, including any function proportional to a density function.
 
-A plot was also created to show how kernel functions sum to create the regression equation. For this example, 3 kernel functions were used. First, a simulated dataset was created using a sine wave over a single period.
+A plot was also created to show how kernel functions sum to create the regression equation. For this example, 3 kernel functions were used. First, a simulated dataset was created from 0 to 6.
 ```{python}
 import numpy as np
 
 # simulated dataset of sine wave
 np.random.seed(1)
-x = np.linspace(0, 2 * np.pi, 100)
+x = np.linspace(0, 6, 100)
 ```
 
 Next, 3 kernel functions were created by defining their centers, c, widths, h, and using a Gaussian equation. The 3 kernel functions were summed to simulate a regression plot.
@@ -101,8 +101,10 @@ plt.tight_layout()
 plt.show()
 ``` 
 
-### Example of Kernel Basis Expansion
-An example plot was created to show the kernel basis expansion approach for using a linear model for nonlinear relationships. A noisy sine wave was used as the dataset for this example.
+## Computation
+
+### Simulated Dataset
+A simulated dataset was used to show the code implementation of each of the basis expansion methods. The dataset used was a noisy sine wave. The sine wave was created over a single period from 0 to $2\pi$. Random noise was generated from a normal distribution with a mean of 0 and standard deviation of 0.2. This random noise was added to the noise wave to produce the example dataset. The dataset was then plotted.
 ```{python}
 import numpy as np
 import matplotlib.pyplot as plt
@@ -110,6 +112,7 @@ import matplotlib.pyplot as plt
 # generate one period of a sine wave
 np.random.seed(2)
 x = np.linspace(0, 2 * np.pi, 100)
+X = x.reshape(-1,1)
 y_true = np.sin(x)
 
 # add random noise
@@ -121,10 +124,78 @@ plt.figure(figsize=(6, 4))
 plt.scatter(x, y, alpha=0.7, label="Noisy sine wave")
 plt.xlabel("x")
 plt.ylabel("y")
-plt.title("Kernel function example")
+plt.title("Sample Data")
 ```
 
-Next, the rbf_kernel library from sklearn was used to construct the kernel functions. A total of 10 kernel functions were used, and their centers were placed evenly across the range of x. The hyperparameter $h$ was set to 0.5 for all kernel functions.
+### Polynomials
+
+#### Natural Polynomials
+
+The basic equation for a natural polynomial regression is as follows:
+$$
+E[Y \mid x] = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^d
+$$
+
+TEXT HERE
+
+```{python}
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+
+# define natural polynomial degree
+nat_pol_deg = 3
+
+# create natural polynomial model
+nat_poly = PolynomialFeatures(degree = nat_pol_deg)
+X_poly = nat_poly.fit_transform(X)
+
+# fit linear regression model
+nat_poly_model = LinearRegression()
+nat_poly_model.fit(X_poly, y)
+```
+
+TEXT HERE
+
+```{python}
+# make predictions
+y_pred_nat_poly = nat_poly_model.predict(X_poly)
+
+# plot results
+plt.figure(figsize=(6, 5))
+plt.scatter(x, y, alpha=0.6, label="Noisy sine wave")
+plt.plot(x, y_pred_nat_poly, label="Natural Polynomial model")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Natural Polynomial Example")
+plt.legend()
+plt.show()
+
+```
+
+#### Bernstein Polynomials
+
+TEXT
+
+#### Orthogonal Polynomials
+
+TEXT
+
+### Splines
+
+#### Linear Splines
+
+TEXT
+
+#### Cubic Natural Splines
+
+TEXT
+
+#### Restricted Cubic Splines
+
+TEXT
+
+### Kernels
+The rbf_kernel library from sklearn was used to construct the kernel functions. A total of 10 kernel functions were used. Their centers were placed evenly across the range of x, from 0 to $2\pi$. The hyperparameter $h$ was set to 0.5 for all kernel functions.
 ```{python}
 from sklearn.metrics.pairwise import rbf_kernel
 
@@ -160,12 +231,12 @@ model_kernel = LinearRegression()
 model_kernel.fit(X_kernel, y)
 
 # make predictions
-y_pred = model_kernel.predict(X_kernel)
+y_pred_kern = model_kernel.predict(X_kernel)
 
 # plot results
 plt.figure(figsize=(6, 5))
 plt.scatter(x, y, alpha=0.6, label="Noisy sine wave")
-plt.plot(x, y_pred, label="Kernel model")
+plt.plot(x, y_pred_kern, label="Kernel model")
 plt.xlabel("x")
 plt.ylabel("y")
 plt.title("Kernel function example")
