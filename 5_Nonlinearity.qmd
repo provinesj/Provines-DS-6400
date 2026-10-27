@@ -101,6 +101,8 @@ plt.tight_layout()
 plt.show()
 ``` 
 
+Some benefits of using kernel basis expansion include the ability to easily model local behaviors and flexibility of modeling using the $c$ and $h$ parameters.   
+
 ## Computation
 
 ### Simulated Dataset
