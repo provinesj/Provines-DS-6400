@@ -9,15 +9,15 @@ title: 'Nonlinearity'
 
 One principal factor in understanding that linear models $\neq$ linear relationship is that the "linear" in linear model refers to the linearity in the parameters $\beta$, not in the predictors $x$. Basis expansion is one way to use a linear model to find understand relationships between nonlinear variables. Basis expansion does this by adding additional functions of $x$ to the linear model. Consider the standard linear model and its variance.
 $$
-E[Y \mid x] = \beta_0 + \sum_{j=1}^{p} \beta_j x_j
+E[Y \mid x] = \beta_0 + \sum_{i=1}^{n} \beta_i x_i
 $$
 $$
-\operatorname{Var}(Y \mid x) = \sigma^2
+\operatorname{Var}(Y \mid x) = \sigma^2 I
 $$
 
 When using basis expansion, $x$ is transformed into a set of derived features $b_1(x), b_2(x), \ldots, b_k(x)$. Then the linear model can be re-written as follows:
 $$
-E[Y \mid x] = \beta_0 + \sum_{j=1}^{k} \beta_j b_j(x)
+E[Y \mid x] = \beta_0 + \sum_{i=1}^{n} \beta_i b_i(x)
 $$
 
 ### Kernels
@@ -37,28 +37,28 @@ $$
 
 This kernel function can then be substituted into the linear model as the following.
 $$
-E[Y \mid x] = \beta_0 + \sum_{j=1}^{k} \beta_i K\left(\frac{x-c_i}{h}\right)
+E[Y \mid x] = \beta_0 + \sum_{i=1}^{n} \beta_i K\left(\frac{x-c_i}{h}\right)
 $$
 
 Linear combinations of multiple kernel functions can be used in a model, depending on the dataset. At the tails of the dataset, the model reverts back to a value of $\beta_0$.
 
-Many options can be used for the kernel function, including any function proportional to a density function.
+Many different equations can be used for the kernel function, including any function proportional to a density function.
 
-A plot was also created to show how kernel functions sum to create the regression equation. For this example, 3 kernel functions were used. First, a simulated dataset was created from 0 to 6.
+A plot was also created to show how kernel functions sum to create the regression equation. For this example, 3 kernel functions were used. First, a simulated dataset was created from 0 to 10.
 ```{python}
 import numpy as np
 
-# simulated dataset of sine wave
+# simulated dataset
 np.random.seed(1)
-x = np.linspace(0, 6, 100)
+x = np.linspace(0, 10, 100)
 ```
 
 Next, 3 kernel functions were created by defining their centers, c, widths, h, and using a Gaussian equation. The 3 kernel functions were summed to simulate a regression plot.
 ```{python}
 # select three kernel centers
-c_1 = 1
-c_2 = 3
-c_3 = 4
+c_1 = 2
+c_2 = 4
+c_3 = 6
 
 # select kernel widths
 h_1 = 0.5
@@ -66,9 +66,9 @@ h_2 = 0.25
 h_3 = 1
 
 # define Gaussian kernels
-kernel_1 = np.exp(-((x - c_1) / h_1)**2)
-kernel_2 = np.exp(-((x - c_2) / h_2)**2)
-kernel_3 = np.exp(-((x - c_3) / h_3)**2)
+kernel_1 = np.exp(-0.5 * ((x - c_1) / h_1)**2)
+kernel_2 = np.exp(-0.5 * ((x - c_2) / h_2)**2)
+kernel_3 = np.exp(-0.5 * ((x - c_3) / h_3)**2)
 
 # sum three kernels
 kernel_sum = kernel_1 + kernel_2 + kernel_3
@@ -136,8 +136,7 @@ $$
 E[Y \mid x] = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^d
 $$
 
-TEXT HERE
-
+The sklearn PolynomialFeatures library was used for implementing the natural polynomial function. A 3rd degree polynomial was used for this example. The polynomial model was then created and fit to the noisy sine wave data.
 ```{python}
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
@@ -154,8 +153,7 @@ nat_poly_model = LinearRegression()
 nat_poly_model.fit(X_poly, y)
 ```
 
-TEXT HERE
-
+The polynomial model was then used to make predictions along x and was plotted with the noisy sine wave data. Overall, the 3rd degree natural polynomial produced a good fit.
 ```{python}
 # make predictions
 y_pred_nat_poly = nat_poly_model.predict(X_poly)
@@ -169,12 +167,76 @@ plt.ylabel("y")
 plt.title("Natural Polynomial Example")
 plt.legend()
 plt.show()
-
 ```
 
 #### Bernstein Polynomials
 
-TEXT
+The basic equation for a Bernstein polynomial regression is as follows:
+$$
+E[Y \mid x] = \sum_{i=0}^{n} \beta_k B_{k,d}(x)
+$$
+
+where
+$$
+B_{k,d}(x) = \binom{d}{k} x^k (1-x)^{d-k}
+$$
+
+The Bernstein equations require x to be scaled from 0 to 1. This is because the $x$ and $(1-x)$ terms in the equation must both be positive. Therefore, x must be scaled from 0 to $2\pi$ down to 0 to 1.
+```{python}
+# rescale X to 0 to 1
+X_min = X.min()
+X_max = X.max()
+X_bern_scaled = (X - X_min) / (X_max - X_min) 
+```
+
+Next, a third degree Bernstein polynomial was selected as the regression approach. A function was written to calculate the general term in the Bernstein basis expansion. This function used the scipy special combination library for the combination portion of the Bernstein expansion. Then a for loop was used to create a marix containing each term of the Bernstein expansion. 
+```{python}
+# select 3rd degree polynomial
+bern_poly_deg = 3
+
+# use combination library for (N over k) or N choose k
+from scipy.special import comb
+
+# function to calculate Bernstein basis expansion terms
+def bernstein_basis(t, k, d):
+    return comb(d, k) * t**k * (1-t)**(d-k)
+
+# loop to develop all terms in Bernstein expansion
+# each B_k value is an array of the data transformed by a bernstein basis function
+# each B_k array has dimensions: (num of observations x 1).  num of obs = 100 in this case. 
+# bern_terms is a list containing bern_poly_deg + 1 (4 for this example)
+bern_terms = []
+for k in range(bern_poly_deg + 1):
+    B_k = bernstein_basis(X_bern_scaled, k, bern_poly_deg)
+    bern_terms.append(B_k)
+```
+
+The bern_terms list was then transformed from a list of arrays into a resulting design matrix. This was done using the numpy hstack function. This function takes each array in the bern_terms list and combines them horizontally to create an array with dimensions: (num of obs x poly degree+1). 
+```{python}
+# combine basis functions into design matrix
+X_bern =  np.hstack(bern_terms)
+X_bern.shape
+```
+
+Finally, the Bernstein regression model was created, fit, and used to generate predictions. The resulting regression was plotted with the noisy sine wave data to visualize its effectiveness.
+```{python}
+# create and fit Bernstein regression model
+bern_model = LinearRegression()
+bern_model.fit(X_bern, y)
+
+# generate predictions
+y_pred_bern = bern_model.predict(X_bern)
+
+# plot results
+plt.figure(figsize=(6, 5))
+plt.scatter(x, y, alpha=0.6, label="Noisy sine wave")
+plt.plot(x, y_pred_bern, label="Bernstein model")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Bernstein Model Example")
+plt.legend()
+plt.show()
+```
 
 #### Orthogonal Polynomials
 

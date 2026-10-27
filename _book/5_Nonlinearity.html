@@ -293,15 +293,15 @@ E[Y \mid x] = \beta_0 + \sum_{j=1}^{k} \beta_i K\left(\frac{x-c_i}{h}\right)
 <p>Linear combinations of multiple kernel functions can be used in a model, depending on the dataset. At the tails of the dataset, the model reverts back to a value of <span class="math inline">\(\beta_0\)</span>.</p>
 <p>Many options can be used for the kernel function, including any function proportional to a density function.</p>
 <p>A plot was also created to show how kernel functions sum to create the regression equation. For this example, 3 kernel functions were used. First, a simulated dataset was created from 0 to 6.</p>
-<div id="b2adfae5" class="cell" data-execution_count="1">
+<div id="a457bd4a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># simulated dataset of sine wave</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># simulated dataset</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">6</span>, <span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, 3 kernel functions were created by defining their centers, c, widths, h, and using a Gaussian equation. The 3 kernel functions were summed to simulate a regression plot.</p>
-<div id="d1293a28" class="cell" data-execution_count="2">
+<div id="793039cf" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select three kernel centers</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>c_1 <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>c_2 <span class="op">=</span> <span class="dv">3</span></span>
@@ -313,15 +313,15 @@ E[Y \mid x] = \beta_0 + \sum_{j=1}^{k} \beta_i K\left(\frac{x-c_i}{h}\right)
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>h_3 <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># define Gaussian kernels</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>kernel_1 <span class="op">=</span> np.exp(<span class="op">-</span>((x <span class="op">-</span> c_1) <span class="op">/</span> h_1)<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>kernel_2 <span class="op">=</span> np.exp(<span class="op">-</span>((x <span class="op">-</span> c_2) <span class="op">/</span> h_2)<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>kernel_3 <span class="op">=</span> np.exp(<span class="op">-</span>((x <span class="op">-</span> c_3) <span class="op">/</span> h_3)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>kernel_1 <span class="op">=</span> np.exp(<span class="op">-</span><span class="fl">0.5</span><span class="op">*</span>((x <span class="op">-</span> c_1) <span class="op">/</span> h_1)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>kernel_2 <span class="op">=</span> np.exp(<span class="op">-</span><span class="fl">0.5</span><span class="op">*</span>((x <span class="op">-</span> c_2) <span class="op">/</span> h_2)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>kernel_3 <span class="op">=</span> np.exp(<span class="op">-</span><span class="fl">0.5</span><span class="op">*</span>((x <span class="op">-</span> c_3) <span class="op">/</span> h_3)<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># sum three kernels</span></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>kernel_sum <span class="op">=</span> kernel_1 <span class="op">+</span> kernel_2 <span class="op">+</span> kernel_3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Finally, a stacked plot was created to show all 3 kernel functions and their summation.</p>
-<div id="e9ba6843" class="cell" data-execution_count="3">
+<div id="905a2272" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Create two vertically stacked subplots</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
@@ -348,7 +348,7 @@ E[Y \mid x] = \beta_0 + \sum_{j=1}^{k} \beta_i K\left(\frac{x-c_i}{h}\right)
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="5_Nonlinearity_files/figure-html/cell-4-output-1.png" width="568" height="470" class="figure-img"></p>
+<p><img src="5_Nonlinearity_files/figure-html/cell-4-output-1.png" width="567" height="470" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -360,7 +360,7 @@ E[Y \mid x] = \beta_0 + \sum_{j=1}^{k} \beta_i K\left(\frac{x-c_i}{h}\right)
 <section id="simulated-dataset" class="level3" data-number="6.2.1">
 <h3 data-number="6.2.1" class="anchored" data-anchor-id="simulated-dataset"><span class="header-section-number">6.2.1</span> Simulated Dataset</h3>
 <p>A simulated dataset was used to show the code implementation of each of the basis expansion methods. The dataset used was a noisy sine wave. The sine wave was created over a single period from 0 to <span class="math inline">\(2\pi\)</span>. Random noise was generated from a normal distribution with a mean of 0 and standard deviation of 0.2. This random noise was added to the noise wave to produce the example dataset. The dataset was then plotted.</p>
-<div id="6d4b5397" class="cell" data-execution_count="4">
+<div id="cc6f5287" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -397,7 +397,7 @@ E[Y \mid x] = \beta_0 + \sum_{j=1}^{k} \beta_i K\left(\frac{x-c_i}{h}\right)
 E[Y \mid x] = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^d
 \]</span></p>
 <p>TEXT HERE</p>
-<div id="7f7ac527" class="cell" data-execution_count="5">
+<div id="c09571c6" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1421,7 +1421,7 @@ forceTheme('sk-container-id-1');</script>
 </div>
 </div>
 <p>TEXT HERE</p>
-<div id="20371979" class="cell" data-execution_count="6">
+<div id="05f6cc3f" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make predictions</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>y_pred_nat_poly <span class="op">=</span> nat_poly_model.predict(X_poly)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1470,7 +1470,7 @@ forceTheme('sk-container-id-1');</script>
 <section id="kernels-1" class="level3" data-number="6.2.4">
 <h3 data-number="6.2.4" class="anchored" data-anchor-id="kernels-1"><span class="header-section-number">6.2.4</span> Kernels</h3>
 <p>The rbf_kernel library from sklearn was used to construct the kernel functions. A total of 10 kernel functions were used. Their centers were placed evenly across the range of x, from 0 to <span class="math inline">\(2\pi\)</span>. The hyperparameter <span class="math inline">\(h\)</span> was set to 0.5 for all kernel functions.</p>
-<div id="ef0d3405" class="cell" data-execution_count="7">
+<div id="620e81c4" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> rbf_kernel</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># number of kernel functions used</span></span>
@@ -1483,7 +1483,7 @@ forceTheme('sk-container-id-1');</script>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="fl">0.5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then the <span class="math inline">\(h\)</span> hyperparameter was converted to the <span class="math inline">\(\gamma\)</span> hyperparameter needed for the kernel function in the rbf_kernel library. Then the kernel functions were calculated.</p>
-<div id="dd591681" class="cell" data-execution_count="8">
+<div id="4e50b19e" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert h to gamma hyperparameter from sklearn rbf_kernel library</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> h<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1495,7 +1495,7 @@ forceTheme('sk-container-id-1');</script>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>X_kernel <span class="op">=</span> rbf_kernel(X, C, gamma<span class="op">=</span>gamma)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Finally, the kernel model was fit and used to make predictions. The resulting model was included on the plot with the noisy sine data to show its effectiveness.</p>
-<div id="da950bb6" class="cell" data-execution_count="9">
+<div id="1b9e5520" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># fit model</span></span>
