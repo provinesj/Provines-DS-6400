@@ -140,7 +140,7 @@ $$
 E[Y \mid x] = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^d
 $$
 
-The sklearn PolynomialFeatures library was used for implementing the natural polynomial function. A 3rd degree polynomial was used for this example. The polynomial model was then created and fit to the noisy sine wave data. The polynomial model was then used to make predictions along x.
+The sklearn PolynomialFeatures library was used for implementing the natural polynomial function. A 3rd degree polynomial was used for this example. The PolynomialFeatures library in sklearn was used to develop the design matrix. The polynomial model was then created and fit to the noisy sine wave data. The polynomial model was then used to make predictions along x.
 ```{python}
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
@@ -308,10 +308,7 @@ $$
 $c$ = location of knot $k$
 $K$ + total number of knots
 
-The first choice in using the linear spline basis is to select the number of knots used. For this example, 10 knots were selected. The knots were placed at equally spaced locations across the interior of X for simplicity. Therefore knots were not included at the endpoints of X. 
-
-NEED MORE TEXT
-
+The first choice in using the linear spline basis is to select the number of knots used. For this example, 10 knots were selected. The knots were placed at equally spaced locations across X for simplicity. The sklearn SplineTransformer library was used for constructing the linear splines. The model was then fit and used to generated predictions.
 ```{python}
 from sklearn.preprocessing import SplineTransformer
 from sklearn.linear_model import LinearRegression
@@ -431,7 +428,11 @@ plt.show()
 
 #### Restricted Cubic Splines
 
-TEXT
+The restricted cubic splines model was constructed using the patsy dmatrix library, which is used for constructing the design matrix. Similar to the other spline models, the sklearn LinearRegression library was used for fitting the model. 
+
+Within the dmatrix function, cr stands for cubic regression. This approach constructs basis functions that satisfy the natural spline boundary constraints, which force the combined fitted curve to have a second derivative of 0, making the tails linear, which is a key difference of this model compared to the cubic splines. df defines the number of knots. -1 removes the intercept column from the design matrix. X.ravel() converts x to a one dimensional array to be used for fitting the model.
+
+The model was then fit and used to generated predictions.
 
 ```{python}
 from patsy import dmatrix
@@ -552,8 +553,8 @@ plt.show()
 Next, all 7 models were developed.
 ```{python}
 y_pred_nat_poly = natural_poly_regression(X, y, degree=3)
-y_pred_bern = bernstein_regression(X, y, degree=4)
-y_pred_orth = orthogonal_poly_regression(X, y, degree=5)
+y_pred_bern = bernstein_regression(X, y, degree=3)
+y_pred_orth = orthogonal_poly_regression(X, y, degree=3)
 y_pred_lin_spline = linear_spline_regression(X, y, num_knots=10)
 y_pred_cub_spline = cubic_spline_regression(X, y, num_knots=10)
 y_pred_rcs = restricted_cubic_spline_regression(X, y, num_knots=10)

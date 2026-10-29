@@ -287,7 +287,7 @@ E[Y \mid x] = \beta_0 + \sum_{i=1}^{n} \beta_i K\left(\frac{x-c_i}{h}\right)
 <p>Linear combinations of multiple kernel functions can be used in a model, depending on the dataset. At the tails of the dataset, the model reverts back to a value of <span class="math inline">\(\beta_0\)</span>.</p>
 <p>Many different equations can be used for the kernel function, including any function proportional to a density function.</p>
 <p>A plot was also created to show how kernel functions sum to create the regression equation. For this example, 3 kernel functions were used. First, a simulated dataset was created from 0 to 10.</p>
-<div id="3ed064ab" class="cell" data-execution_count="1">
+<div id="92fc3d3e" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># simulated dataset</span></span>
@@ -295,7 +295,7 @@ E[Y \mid x] = \beta_0 + \sum_{i=1}^{n} \beta_i K\left(\frac{x-c_i}{h}\right)
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, 3 kernel functions were created by defining their centers, c, widths, h, and using a Gaussian equation. The 3 kernel functions were summed to simulate a regression plot.</p>
-<div id="2bd5f54a" class="cell" data-execution_count="2">
+<div id="473718db" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select three kernel centers</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>c_1 <span class="op">=</span> <span class="dv">2</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>c_2 <span class="op">=</span> <span class="dv">4</span></span>
@@ -315,7 +315,7 @@ E[Y \mid x] = \beta_0 + \sum_{i=1}^{n} \beta_i K\left(\frac{x-c_i}{h}\right)
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>kernel_sum <span class="op">=</span> kernel_1 <span class="op">+</span> kernel_2 <span class="op">+</span> kernel_3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Finally, a stacked plot was created to show all 3 kernel functions and their summation.</p>
-<div id="44f0c11b" class="cell" data-execution_count="3">
+<div id="fa70f84f" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Create two vertically stacked subplots</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
@@ -355,7 +355,7 @@ E[Y \mid x] = \beta_0 + \sum_{i=1}^{n} \beta_i K\left(\frac{x-c_i}{h}\right)
 <section id="simulated-dataset" class="level3" data-number="6.2.1">
 <h3 data-number="6.2.1" class="anchored" data-anchor-id="simulated-dataset"><span class="header-section-number">6.2.1</span> Simulated Dataset</h3>
 <p>A simulated dataset was used to show the code implementation of each of the basis expansion methods. The dataset used was a noisy sine wave. The sine wave was created over a single period from 0 to <span class="math inline">\(2\pi\)</span>. Random noise was generated from a normal distribution with a mean of 0 and standard deviation of 0.2. This random noise was added to the noise wave to produce the example dataset. The dataset was then plotted.</p>
-<div id="6a201055" class="cell" data-execution_count="4">
+<div id="7c20d87d" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -393,8 +393,8 @@ E[Y \mid x] = \beta_0 + \sum_{i=1}^{n} \beta_i K\left(\frac{x-c_i}{h}\right)
 <p>The basic equation for a natural polynomial regression is as follows: <span class="math display">\[
 E[Y \mid x] = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^d
 \]</span></p>
-<p>The sklearn PolynomialFeatures library was used for implementing the natural polynomial function. A 3rd degree polynomial was used for this example. The polynomial model was then created and fit to the noisy sine wave data. The polynomial model was then used to make predictions along x.</p>
-<div id="be557c48" class="cell" data-execution_count="5">
+<p>The sklearn PolynomialFeatures library was used for implementing the natural polynomial function. A 3rd degree polynomial was used for this example. The PolynomialFeatures library in sklearn was used to develop the design matrix. The polynomial model was then created and fit to the noisy sine wave data. The polynomial model was then used to make predictions along x.</p>
+<div id="bef9bcb2" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -415,7 +415,7 @@ E[Y \mid x] = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^d
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>y_pred_nat_poly <span class="op">=</span> natural_poly_regression(X, y, degree<span class="op">=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The noisy sine wave data nd natural polynomial model were then plotted to visualize the model fit.</p>
-<div id="6a77a29e" class="cell" data-execution_count="6">
+<div id="de662ddb" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot results</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">"Noisy sine wave"</span>)</span>
@@ -446,7 +446,7 @@ B_{k,d}(x) = \binom{d}{k} x^k (1-x)^{d-k}
 <p>Next, a third degree Bernstein polynomial was selected as the regression approach. A function was written to calculate the general term in the Bernstein basis expansion. This function used the scipy special combination library for the combination portion of the Bernstein expansion. Then a for loop was used to create a marix containing each term of the Bernstein expansion.</p>
 <p>The bern_terms list was then transformed from a list of arrays into a resulting design matrix. This was done using the numpy hstack function. This function takes each array in the bern_terms list and combines them horizontally to create an array with dimensions: (num of obs x poly degree+1).</p>
 <p>Finally, the Bernstein regression model was created, fit, and used to generate predictions.</p>
-<div id="6300b3a9" class="cell" data-execution_count="7">
+<div id="0b689a77" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.special <span class="im">import</span> comb</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
@@ -477,7 +477,7 @@ B_{k,d}(x) = \binom{d}{k} x^k (1-x)^{d-k}
 <span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>y_pred_bern <span class="op">=</span> bernstein_regression(X, y, degree<span class="op">=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The resulting Bernstein polynomial was then added to the plot for comparison.</p>
-<div id="e75f83e1" class="cell" data-execution_count="8">
+<div id="ecbe0d10" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot results</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">"Noisy sine wave"</span>)</span>
@@ -501,7 +501,7 @@ B_{k,d}(x) = \binom{d}{k} x^k (1-x)^{d-k}
 <h4 data-number="6.2.2.3" class="anchored" data-anchor-id="orthogonal-polynomials"><span class="header-section-number">6.2.2.3</span> Orthogonal Polynomials</h4>
 <p>To construct an orthogonal polynomial basis expansion, the degree of the polynomial must first be selected. For this example, a third degree polynomial was selected. Next, the raw polynoial features were created using the PolynomialFeatures sklearn library. This approach is the same as was used for the natural polynomial basis.</p>
 <p>Then the numpy QR decomposition was used to transform the raw polynomial features into orthonormal columns, which are orthogonal and have unit length. These orthonormal columns were used to fit the orthogonal polynomial model. Finally, predictions were developed over X using the fitted model.</p>
-<div id="7ee929ce" class="cell" data-execution_count="9">
+<div id="050ac6f6" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -532,7 +532,7 @@ B_{k,d}(x) = \binom{d}{k} x^k (1-x)^{d-k}
 <span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>y_pred_orth <span class="op">=</span> orthogonal_poly_regression(X, y, degree<span class="op">=</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="209e7764" class="cell" data-execution_count="10">
+<div id="302bd648" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot results</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">"Noisy sine wave"</span>)</span>
@@ -566,9 +566,8 @@ f(x) = \beta_0 + \beta_1 x +
 (x - c_k)_+ = \max(0, x - c_k)   
 \]</span></p>
 <p><span class="math inline">\(c\)</span> = location of knot <span class="math inline">\(k\)</span> <span class="math inline">\(K\)</span> + total number of knots</p>
-<p>The first choice in using the linear spline basis is to select the number of knots used. For this example, 10 knots were selected. The knots were placed at equally spaced locations across the interior of X for simplicity. Therefore knots were not included at the endpoints of X.</p>
-<p>NEED MORE TEXT</p>
-<div id="cae1aba7" class="cell" data-execution_count="11">
+<p>The first choice in using the linear spline basis is to select the number of knots used. For this example, 10 knots were selected. The knots were placed at equally spaced locations across X for simplicity. The sklearn SplineTransformer library was used for constructing the linear splines. The model was then fit and used to generated predictions.</p>
+<div id="46562475" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> SplineTransformer</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -593,7 +592,7 @@ f(x) = \beta_0 + \beta_1 x +
 <span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>y_pred_lin_spline <span class="op">=</span> linear_spline_regression(X, y, num_knots<span class="op">=</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then the linear splines model was plotted for comparison to the other models.</p>
-<div id="178ca22a" class="cell" data-execution_count="12">
+<div id="cd7ebe11" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot results</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">"Noisy sine wave"</span>)</span>
@@ -638,7 +637,7 @@ f(x) =
 + \sum_{k=1}^{K} \beta_{k+3}(x-\kappa_k)_+^3
 \]</span></p>
 <p>The cubic splines model was developed using the exact same approach as the linear splines, except that two parameters in the SplineTransformer library were revised. The degree parameter was set to 3 for a cubic function, and the extrapolation parameter was set to ‘continue’ to allow the curve to continue past the boundary knots.</p>
-<div id="8937089a" class="cell" data-execution_count="13">
+<div id="a1ef335e" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> SplineTransformer</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -664,7 +663,7 @@ f(x) =
 <span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>y_pred_cub_spline <span class="op">=</span> cubic_spline_regression(X, y, num_knots<span class="op">=</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The cubic splines model was included on the noisy sine wave plot for comparison.</p>
-<div id="aefb1599" class="cell" data-execution_count="14">
+<div id="423b0cd4" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot results</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">"Noisy sine wave"</span>)</span>
@@ -689,8 +688,10 @@ f(x) =
 </section>
 <section id="restricted-cubic-splines" class="level4" data-number="6.2.3.3">
 <h4 data-number="6.2.3.3" class="anchored" data-anchor-id="restricted-cubic-splines"><span class="header-section-number">6.2.3.3</span> Restricted Cubic Splines</h4>
-<p>TEXT</p>
-<div id="eeeb64be" class="cell" data-execution_count="15">
+<p>The restricted cubic splines model was constructed using the patsy dmatrix library, which is used for constructing the design matrix. Similar to the other spline models, the sklearn LinearRegression library was used for fitting the model.</p>
+<p>Within the dmatrix function, cr stands for cubic regression. This approach constructs basis functions that satisfy the natural spline boundary constraints, which force the combined fitted curve to have a second derivative of 0, making the tails linear, which is a key difference of this model compared to the cubic splines. df defines the number of knots. -1 removes the intercept column from the design matrix. X.ravel() converts x to a one dimensional array to be used for fitting the model.</p>
+<p>The model was then fit and used to generated predictions.</p>
+<div id="53ba9101" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> patsy <span class="im">import</span> dmatrix</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -711,7 +712,7 @@ f(x) =
 <span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>y_pred_rcs <span class="op">=</span> restricted_cubic_spline_regression(X, y, num_knots<span class="op">=</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The restricted cubic splines model was included on the noisy sine wave plot for comparison.</p>
-<div id="48224b66" class="cell" data-execution_count="16">
+<div id="73fbde06" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot results</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">"Noisy sine wave"</span>)</span>
@@ -740,7 +741,7 @@ f(x) =
 <h3 data-number="6.2.4" class="anchored" data-anchor-id="kernels-1"><span class="header-section-number">6.2.4</span> Kernels</h3>
 <p>The rbf_kernel library from sklearn was used to construct the kernel functions. A total of 10 kernel functions were used. Their centers were placed evenly across the range of x, from 0 to <span class="math inline">\(2\pi\)</span>. The hyperparameter <span class="math inline">\(h\)</span> was set to 0.5 for all kernel functions.</p>
 <p>Then the <span class="math inline">\(h\)</span> hyperparameter was converted to the <span class="math inline">\(\gamma\)</span> hyperparameter needed for the kernel function in the rbf_kernel library. Then the kernel functions were calculated.</p>
-<div id="678c071e" class="cell" data-execution_count="17">
+<div id="8e9f6979" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> rbf_kernel</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -769,7 +770,7 @@ f(x) =
 <span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>y_pred_kern <span class="op">=</span> kernel_regression(X, y, M<span class="op">=</span><span class="dv">10</span>, h<span class="op">=</span><span class="fl">0.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Finally, the kernel model was fit and used to make predictions. The resulting model was included on the plot with the noisy sine data to show its effectiveness.</p>
-<div id="1263d932" class="cell" data-execution_count="18">
+<div id="5533f927" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot results</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">"Noisy sine wave"</span>)</span>
@@ -794,7 +795,7 @@ f(x) =
 </div>
 </div>
 <p>A second simulated dataset was also used to compare the seven different linear basis expansion models. This one was a noisy sigmoid function.</p>
-<div id="0516d068" class="cell" data-execution_count="19">
+<div id="67068979" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># generate x values</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">3</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">100</span>)</span>
@@ -825,17 +826,17 @@ f(x) =
 </div>
 </div>
 <p>Next, all 7 models were developed.</p>
-<div id="4bb96531" class="cell" data-execution_count="20">
+<div id="3758b6ab" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>y_pred_nat_poly <span class="op">=</span> natural_poly_regression(X, y, degree<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>y_pred_bern <span class="op">=</span> bernstein_regression(X, y, degree<span class="op">=</span><span class="dv">4</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>y_pred_orth <span class="op">=</span> orthogonal_poly_regression(X, y, degree<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>y_pred_bern <span class="op">=</span> bernstein_regression(X, y, degree<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>y_pred_orth <span class="op">=</span> orthogonal_poly_regression(X, y, degree<span class="op">=</span><span class="dv">3</span>)</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>y_pred_lin_spline <span class="op">=</span> linear_spline_regression(X, y, num_knots<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>y_pred_cub_spline <span class="op">=</span> cubic_spline_regression(X, y, num_knots<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>y_pred_rcs <span class="op">=</span> restricted_cubic_spline_regression(X, y, num_knots<span class="op">=</span><span class="dv">10</span>)</span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>y_pred_kern <span class="op">=</span> kernel_regression(X, y, M<span class="op">=</span><span class="dv">10</span>, h<span class="op">=</span><span class="fl">0.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Finally, all 7 models were plotted for comparison.</p>
-<div id="dc10ab0e" class="cell" data-execution_count="21">
+<div id="25932a23" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot results</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">5</span>))</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">"Noisy sigmoid data"</span>)</span>
