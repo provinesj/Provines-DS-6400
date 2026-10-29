@@ -126,7 +126,9 @@ plt.figure(figsize=(6, 4))
 plt.scatter(x, y, alpha=0.7, label="Noisy sine wave")
 plt.xlabel("x")
 plt.ylabel("y")
-plt.title("Sample Data")
+plt.title("Linear Basis Expansion Examples")
+plt.legend()
+plt.show()
 ```
 
 ### Polynomials
@@ -138,35 +140,37 @@ $$
 E[Y \mid x] = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_d x^d
 $$
 
-The sklearn PolynomialFeatures library was used for implementing the natural polynomial function. A 3rd degree polynomial was used for this example. The polynomial model was then created and fit to the noisy sine wave data.
+The sklearn PolynomialFeatures library was used for implementing the natural polynomial function. A 3rd degree polynomial was used for this example. The polynomial model was then created and fit to the noisy sine wave data. The polynomial model was then used to make predictions along x.
 ```{python}
-from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
 
-# define natural polynomial degree
-nat_pol_deg = 3
+def natural_poly_regression(X, y, degree):
+    # create polynomial features
+    nat_poly = PolynomialFeatures(degree=degree)
+    X_poly = nat_poly.fit_transform(X)
 
-# create natural polynomial model
-nat_poly = PolynomialFeatures(degree = nat_pol_deg)
-X_poly = nat_poly.fit_transform(X)
+    # fit linear regression model
+    model = LinearRegression()
+    model.fit(X_poly, y)
 
-# fit linear regression model
-nat_poly_model = LinearRegression()
-nat_poly_model.fit(X_poly, y)
+    # generate predictions
+    y_pred_nat_poly = model.predict(X_poly)
+
+    return y_pred_nat_poly
+
+y_pred_nat_poly = natural_poly_regression(X, y, degree=3)
 ```
 
-The polynomial model was then used to make predictions along x and was plotted with the noisy sine wave data. Overall, the 3rd degree natural polynomial produced a good fit.
+The noisy sine wave data nd natural polynomial model were then plotted to visualize the model fit.
 ```{python}
-# make predictions
-y_pred_nat_poly = nat_poly_model.predict(X_poly)
-
 # plot results
 plt.figure(figsize=(6, 5))
 plt.scatter(x, y, alpha=0.6, label="Noisy sine wave")
 plt.plot(x, y_pred_nat_poly, label="Natural Polynomial model")
 plt.xlabel("x")
 plt.ylabel("y")
-plt.title("Natural Polynomial Example")
+plt.title("Linear Basis Expansion Examples")
 plt.legend()
 plt.show()
 ```
@@ -183,127 +187,395 @@ $$
 B_{k,d}(x) = \binom{d}{k} x^k (1-x)^{d-k}
 $$
 
-The Bernstein equations require x to be scaled from 0 to 1. This is because the $x$ and $(1-x)$ terms in the equation must both be positive. Therefore, x must be scaled from 0 to $2\pi$ down to 0 to 1.
-```{python}
-# rescale X to 0 to 1
-X_min = X.min()
-X_max = X.max()
-X_bern_scaled = (X - X_min) / (X_max - X_min) 
-```
+The Bernstein equations require X to be scaled from 0 to 1. This is because the $x$ and $(1-x)$ terms in the equation must both be positive. Therefore, x must be scaled from 0 to $2\pi$ down to 0 to 1.
 
 Next, a third degree Bernstein polynomial was selected as the regression approach. A function was written to calculate the general term in the Bernstein basis expansion. This function used the scipy special combination library for the combination portion of the Bernstein expansion. Then a for loop was used to create a marix containing each term of the Bernstein expansion. 
-```{python}
-# select 3rd degree polynomial
-bern_poly_deg = 3
 
-# use combination library for (N over k) or N choose k
+The bern_terms list was then transformed from a list of arrays into a resulting design matrix. This was done using the numpy hstack function. This function takes each array in the bern_terms list and combines them horizontally to create an array with dimensions: (num of obs x poly degree+1).
+
+Finally, the Bernstein regression model was created, fit, and used to generate predictions. 
+```{python}
 from scipy.special import comb
+import numpy as np
+from sklearn.linear_model import LinearRegression
 
-# function to calculate Bernstein basis expansion terms
-def bernstein_basis(t, k, d):
-    return comb(d, k) * t**k * (1-t)**(d-k)
+def bernstein_regression(X, y, degree):
+    # rescale X to the range [0, 1]
+    X = np.asarray(X).reshape(-1, 1)
+    X_scaled = (X - X.min()) / (X.max() - X.min())
 
-# loop to develop all terms in Bernstein expansion
-# each B_k value is an array of the data transformed by a bernstein basis function
-# each B_k array has dimensions: (num of observations x 1).  num of obs = 100 in this case. 
-# bern_terms is a list containing bern_poly_deg + 1 (4 for this example)
-bern_terms = []
-for k in range(bern_poly_deg + 1):
-    B_k = bernstein_basis(X_bern_scaled, k, bern_poly_deg)
-    bern_terms.append(B_k)
+    # create Bernstein basis functions
+    bern_terms = []
+    for k in range(degree + 1):
+        B_k = comb(degree, k) * X_scaled**k * (1 - X_scaled)**(degree - k)
+        bern_terms.append(B_k)
+
+    # combine basis functions into design matrix
+    X_bern = np.hstack(bern_terms)
+
+    # fit regression model
+    model = LinearRegression()
+    model.fit(X_bern, y)
+
+    # generate predictions
+    y_pred_bern = model.predict(X_bern)
+
+    return y_pred_bern
+
+y_pred_bern = bernstein_regression(X, y, degree=3)
 ```
 
-The bern_terms list was then transformed from a list of arrays into a resulting design matrix. This was done using the numpy hstack function. This function takes each array in the bern_terms list and combines them horizontally to create an array with dimensions: (num of obs x poly degree+1). 
+The resulting Bernstein polynomial was then added to the plot for comparison. 
 ```{python}
-# combine basis functions into design matrix
-X_bern =  np.hstack(bern_terms)
-X_bern.shape
-```
-
-Finally, the Bernstein regression model was created, fit, and used to generate predictions. The resulting regression was plotted with the noisy sine wave data to visualize its effectiveness.
-```{python}
-# create and fit Bernstein regression model
-bern_model = LinearRegression()
-bern_model.fit(X_bern, y)
-
-# generate predictions
-y_pred_bern = bern_model.predict(X_bern)
-
 # plot results
 plt.figure(figsize=(6, 5))
 plt.scatter(x, y, alpha=0.6, label="Noisy sine wave")
+plt.plot(x, y_pred_nat_poly, label="Natural Polynomial model")
 plt.plot(x, y_pred_bern, label="Bernstein model")
 plt.xlabel("x")
 plt.ylabel("y")
-plt.title("Bernstein Model Example")
+plt.title("Linear Basis Expansion Examples")
 plt.legend()
 plt.show()
 ```
 
 #### Orthogonal Polynomials
 
-TEXT
+To construct an orthogonal polynomial basis expansion, the degree of the polynomial must first be selected. For this example, a third degree polynomial was selected. Next, the raw polynoial features were created using the PolynomialFeatures sklearn library. This approach is the same as was used for the natural polynomial basis. 
+
+Then the numpy QR decomposition was used to transform the raw polynomial features into orthonormal columns, which are orthogonal and have unit length. These orthonormal columns were used to fit the orthogonal polynomial model. Finally, predictions were developed over X using the fitted model.
+```{python}
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+import numpy as np
+
+def orthogonal_poly_regression(X, y, degree):
+    # create raw polynomial features
+    orth_poly = PolynomialFeatures(degree=degree)
+    X_orth_poly = orth_poly.fit_transform(X)
+
+    # use numpy QR decomposition to turn raw polynomial features into orthonormal columns
+    # Q contains orthonomal columns
+    # R contains transformation information relating original matrix to Q
+    Q, R = np.linalg.qr(X_orth_poly)
+
+    # can check orthonormality of Q columns by running code below. 
+    # .T is transpose
+    # @ is matrix multiplication]
+    # Q.T @ Q
+
+    # fit linear regression model
+    model = LinearRegression(fit_intercept=False)
+    model.fit(Q, y)
+
+    # generate predictions
+    y_pred_orth = model.predict(Q)
+
+    return y_pred_orth
+
+y_pred_orth = orthogonal_poly_regression(X, y, degree=3)
+```
+
+```{python}
+# plot results
+plt.figure(figsize=(6, 5))
+plt.scatter(x, y, alpha=0.6, label="Noisy sine wave")
+plt.plot(x, y_pred_nat_poly, label="Natural Polynomial model")
+plt.plot(x, y_pred_bern, label="Bernstein Polynomial Model")
+plt.plot(x, y_pred_orth, label="Orthogonal Polynomial Model")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Linear Basis Expansion Examples")
+plt.legend()
+plt.show()
+```
 
 ### Splines
 
 #### Linear Splines
 
-TEXT
+The general equation for linear splines is the following:
+$$
+f(x) = \beta_0 + \beta_1 x +
+\sum_{k=1}^{K} \beta_{k+1}(x - c_k)_+
+$$
+
+where
+$$
+(x - c_k)_+ = \max(0, x - c_k)   
+$$
+
+$c$ = location of knot $k$
+$K$ + total number of knots
+
+The first choice in using the linear spline basis is to select the number of knots used. For this example, 10 knots were selected. The knots were placed at equally spaced locations across the interior of X for simplicity. Therefore knots were not included at the endpoints of X. 
+
+NEED MORE TEXT
+
+```{python}
+from sklearn.preprocessing import SplineTransformer
+from sklearn.linear_model import LinearRegression
+
+def linear_spline_regression(X, y, num_knots):
+    # define linear spline basis
+    # degree=1 creates piecewise linear splines
+    # knots='uniform' places knots at uniform, equally spaced locations
+    spline = SplineTransformer(n_knots=num_knots, degree=1, knots='uniform')
+
+    # transform X into spline design matrix
+    X_lin_spline = spline.fit_transform(X)
+
+    # fit linear spline regression model
+    model_lin_spline = LinearRegression()
+    model_lin_spline.fit(X_lin_spline, y)
+
+    # generate predictions
+    y_pred_lin_spline = model_lin_spline.predict(X_lin_spline)
+
+    return y_pred_lin_spline
+
+y_pred_lin_spline = linear_spline_regression(X, y, num_knots=10)
+```
+
+Then the linear splines model was plotted for comparison to the other models.
+```{python}
+# plot results
+plt.figure(figsize=(6, 5))
+plt.scatter(x, y, alpha=0.6, label="Noisy sine wave")
+plt.plot(x, y_pred_nat_poly, label="Natural Polynomial model")
+plt.plot(x, y_pred_bern, label="Bernstein Polynomial Model")
+plt.plot(x, y_pred_orth, label="Orthogonal Polynomial Model")
+plt.plot(x, y_pred_lin_spline, label="Linear Spline Model")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Linear Basis Expansion Examples")
+plt.legend()
+plt.show()
+```
 
 #### Cubic Natural Splines
 
-TEXT
+The general equation for cubic splines is the following:
+$$
+b_0(x) = 1
+$$
+$$
+b_1(x) = x
+$$
+$$
+b_2(x) = x^2
+$$
+$$
+b_3(x) = x^3
+$$
+$$
+b_4(x) = (x-\kappa_1)_+^3
+$$
+$$
+\vdots
+$$
+$$
+b_{3+K}(x) = (x-\kappa_K)_+^3
+$$
+
+Written in the linear format, the equation is as follows:
+$$
+f(x) =
+\beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3
++ \sum_{k=1}^{K} \beta_{k+3}(x-\kappa_k)_+^3
+$$
+
+The cubic splines model was developed using the exact same approach as the linear splines, except that two parameters in the SplineTransformer library were revised. The degree parameter was set to 3 for a cubic function, and the extrapolation parameter was set to 'continue' to allow the curve to continue past the boundary knots.
+```{python}
+from sklearn.preprocessing import SplineTransformer
+from sklearn.linear_model import LinearRegression
+
+def cubic_spline_regression(X, y, num_knots):
+    # define cubic spline basis
+    # degree=3 creates piecewise cubic splines
+    # knots='uniform' places knots at uniform, equally spaced locations
+    # extrapolation='continue' continues the outer cubic pieces beyond the boundary knots
+    spline = SplineTransformer(n_knots=num_knots, degree=3, knots='uniform', extrapolation='continue')
+
+    # transform X into spline design matrix
+    X_cub_spline = spline.fit_transform(X)
+
+    # fit cubic spline regression model
+    model_cub_spline = LinearRegression()
+    model_cub_spline.fit(X_cub_spline, y)
+
+    # generate predictions
+    y_pred_cub_spline = model_cub_spline.predict(X_cub_spline)
+
+    return y_pred_cub_spline
+
+y_pred_cub_spline = cubic_spline_regression(X, y, num_knots=10)
+```
+
+The cubic splines model was included on the noisy sine wave plot for comparison.
+```{python}
+# plot results
+plt.figure(figsize=(6, 5))
+plt.scatter(x, y, alpha=0.6, label="Noisy sine wave")
+plt.plot(x, y_pred_nat_poly, label="Natural Polynomial model")
+plt.plot(x, y_pred_bern, label="Bernstein Polynomial Model")
+plt.plot(x, y_pred_orth, label="Orthogonal Polynomial Model")
+plt.plot(x, y_pred_lin_spline, label="Linear Spline Model")
+plt.plot(x, y_pred_cub_spline, label="Cubic Spline Model")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Linear Basis Expansion Examples")
+plt.legend()
+plt.show()
+```
 
 #### Restricted Cubic Splines
 
 TEXT
 
+```{python}
+from patsy import dmatrix
+from sklearn.linear_model import LinearRegression
+
+def restricted_cubic_spline_regression(X, y, num_knots):
+    # create restricted cubic spline basis
+    # cr() creates a natural cubic spline basis with linear tails
+    X_rcs = dmatrix(f"cr(x, df={num_knots}) - 1", {"x": X.ravel()})
+
+    # fit linear regression model
+    model_rcs = LinearRegression()
+    model_rcs.fit(X_rcs, y)
+
+    # generate predictions
+    y_pred_rcs = model_rcs.predict(X_rcs)
+
+    return y_pred_rcs
+
+y_pred_rcs = restricted_cubic_spline_regression(X, y, num_knots=10)
+```
+
+The restricted cubic splines model was included on the noisy sine wave plot for comparison.
+```{python}
+# plot results
+plt.figure(figsize=(6, 5))
+plt.scatter(x, y, alpha=0.6, label="Noisy sine wave")
+plt.plot(x, y_pred_nat_poly, label="Natural Polynomial model")
+plt.plot(x, y_pred_bern, label="Bernstein Polynomial Model")
+plt.plot(x, y_pred_orth, label="Orthogonal Polynomial Model")
+plt.plot(x, y_pred_lin_spline, label="Linear Spline Model")
+plt.plot(x, y_pred_cub_spline, label="Cubic Spline Model")
+plt.plot(x, y_pred_rcs, label="Restricted Cubic Spline Model")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Linear Basis Expansion Examples")
+plt.legend()
+plt.show()
+```
+
 ### Kernels
 The rbf_kernel library from sklearn was used to construct the kernel functions. A total of 10 kernel functions were used. Their centers were placed evenly across the range of x, from 0 to $2\pi$. The hyperparameter $h$ was set to 0.5 for all kernel functions.
-```{python}
-from sklearn.metrics.pairwise import rbf_kernel
-
-# number of kernel functions used
-M = 10
-
-# place centers evenly across x
-centers = np.linspace(x.min(), x.max(), M)
-
-# hyperparameter, h, or width of kernel functions
-h = 0.5
-```
 
 Then the $h$ hyperparameter was converted to the $\gamma$ hyperparameter needed for the kernel function in the rbf_kernel library. Then the kernel functions were calculated.
 ```{python}
-# convert h to gamma hyperparameter from sklearn rbf_kernel library
-gamma = 1 / (2 * h**2)
+from sklearn.metrics.pairwise import rbf_kernel
+from sklearn.linear_model import LinearRegression
+import numpy as np
 
-# convert x and centers into 2D arrays
-X = x.reshape(-1, 1)
-C = centers.reshape(-1, 1)
+def kernel_regression(X, y, M, h):
+    # place centers evenly across x
+    X = np.asarray(X).reshape(-1, 1)
+    centers = np.linspace(X.min(), X.max(), M)
+    C = centers.reshape(-1, 1)
 
-# calculate kernel functions
-X_kernel = rbf_kernel(X, C, gamma=gamma)
+    # convert h to gamma hyperparameter from sklearn rbf_kernel library
+    gamma = 1 / (2 * h**2)
+
+    # calculate kernel functions
+    X_kernel = rbf_kernel(X, C, gamma=gamma)
+
+    # fit model
+    model = LinearRegression()
+    model.fit(X_kernel, y)
+
+    # make predictions
+    y_pred_kern = model.predict(X_kernel)
+
+    return y_pred_kern
+
+y_pred_kern = kernel_regression(X, y, M=10, h=0.5)
 ```
 
 Finally, the kernel model was fit and used to make predictions. The resulting model was included on the plot with the noisy sine data to show its effectiveness.
 ```{python}
-from sklearn.linear_model import LinearRegression
-
-# fit model
-model_kernel = LinearRegression()
-model_kernel.fit(X_kernel, y)
-
-# make predictions
-y_pred_kern = model_kernel.predict(X_kernel)
-
 # plot results
 plt.figure(figsize=(6, 5))
 plt.scatter(x, y, alpha=0.6, label="Noisy sine wave")
+plt.plot(x, y_pred_nat_poly, label="Natural Polynomial model")
+plt.plot(x, y_pred_bern, label="Bernstein Polynomial Model")
+plt.plot(x, y_pred_orth, label="Orthogonal Polynomial Model")
+plt.plot(x, y_pred_lin_spline, label="Linear Spline Model")
+plt.plot(x, y_pred_cub_spline, label="Cubic Spline Model")
+plt.plot(x, y_pred_rcs, label="Restricted Cubic Spline Model")
 plt.plot(x, y_pred_kern, label="Kernel model")
 plt.xlabel("x")
 plt.ylabel("y")
-plt.title("Kernel function example")
+plt.title("Linear Basis Expansion Examples")
+plt.legend()
+plt.show()
+```
+
+A second simulated dataset was also used to compare the seven different linear basis expansion models. This one was a noisy sigmoid function.
+```{python}
+# generate x values
+np.random.seed(3)
+x = np.linspace(0, 10, 100)
+X = x.reshape(-1, 1)
+
+# create sigmoid function
+y_true = 10 / (1 + np.exp(-1.5 * (x - 5)))
+
+# add random noise
+noise = np.random.normal(0, 0.5, size=len(x))
+y = y_true + noise
+
+# plot dataset
+plt.figure(figsize=(6, 5))
+plt.scatter(x, y, alpha=0.6, label="Noisy sigmoid data")
+plt.plot(x, y_true, label="Actual sigmoid")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Linear Basis Expansion vs. Noisy Sigmoid Dataset")
+plt.legend()
+plt.show()
+```
+
+Next, all 7 models were developed.
+```{python}
+y_pred_nat_poly = natural_poly_regression(X, y, degree=3)
+y_pred_bern = bernstein_regression(X, y, degree=4)
+y_pred_orth = orthogonal_poly_regression(X, y, degree=5)
+y_pred_lin_spline = linear_spline_regression(X, y, num_knots=10)
+y_pred_cub_spline = cubic_spline_regression(X, y, num_knots=10)
+y_pred_rcs = restricted_cubic_spline_regression(X, y, num_knots=10)
+y_pred_kern = kernel_regression(X, y, M=10, h=0.5)
+```
+
+Finally, all 7 models were plotted for comparison.
+```{python}
+# plot results
+plt.figure(figsize=(6, 5))
+plt.scatter(x, y, alpha=0.6, label="Noisy sigmoid data")
+plt.plot(x, y_true, label="Actual sigmoid")
+plt.plot(x, y_pred_nat_poly, label="Nat poly")
+plt.plot(x, y_pred_bern, label="Bern poly")
+plt.plot(x, y_pred_orth, label="Ortho poly")
+plt.plot(x, y_pred_lin_spline, label="Lin spline")
+plt.plot(x, y_pred_cub_spline, label="Cub spline")
+plt.plot(x, y_pred_rcs, label="Restr cub spline")
+plt.plot(x, y_pred_kern, label="Kernel")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Linear Basis Expansion vs. Noisy Sigmoid Dataset")
 plt.legend()
 plt.show()
 ```
