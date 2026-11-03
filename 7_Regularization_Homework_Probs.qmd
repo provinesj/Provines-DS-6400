@@ -1,0 +1,18 @@
+---
+title: 'Regularization Homework Problems'
+
+---
+
+## Load Data & Explore
+
+```{python}
+# still working
+```
+
+## Problem 1
+
+Confirm that OLS cannot create a unique solution for this dataset. Attempt to fit a linear model using lm() and report what happens. How many coefficients does R return as NA, and why?
+
+
+
+

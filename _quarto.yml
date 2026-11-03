@@ -6,12 +6,13 @@ book:
   author: "Jason Provines"
   
   chapters:
-    - index.qmd
-    - 1_Bias In Error Est for CV_VarmaSimon_2006.qmd
-    - 2_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997.qmd
-    - 3_Visualization_Plots.qmd
-    - 4_Models.qmd
-    - 5_Nonlinearity.qmd
+    - 1_index.qmd
+    - 2_Bias In Error Est for CV_VarmaSimon_2006.qmd
+    - 3_Improvements_On_CV_632plus_Bootstrap_EfronTibshirani_1997.qmd
+    - 4_Visualization_Plots.qmd
+    - 5_Models.qmd
+    - 6_Nonlinearity.qmd
+    - 7_Regularization.qmd
     
     
 
@@ -19,6 +20,9 @@ format:
   html:
     theme: cosmo
     toc: true
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show the code"
 
 jupyter: python3
 
