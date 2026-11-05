@@ -1,0 +1,19 @@
+```{r}
+# set working directory
+setwd("C:/Users/provi/Provines GitHub/Provines-DS-6400")
+
+# load original dataset
+riboflavin <- readRDS("riboflavin.rds")
+
+# reconstruct predictor matrix
+X <- matrix(as.numeric(riboflavin$x), nrow = nrow(riboflavin$x), dimnames = dimnames(riboflavin$x))
+
+# combine response and predictors
+riboflavin_df <- data.frame(Sample = rownames(X), y = riboflavin$y, as.data.frame(X, check.names = FALSE))
+
+# export to CSV
+write.csv(riboflavin_df, "riboflavin.csv", row.names = FALSE)
+
+# inspect dimensions
+dim(riboflavin_df)
+```
