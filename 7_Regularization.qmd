@@ -95,7 +95,7 @@ $$
 \sum_{i=1}^{n}(y_i-\hat{y}_i)^2 + \lambda\sum_{j=1}^{p}\beta_j^2
 $$
 
-This penalty term shrinks the coefficients towards zero, which helps to reduce overfitting and improve model generalization. The strength of the penalty is controlled by the hyperparameter $\lambda$. Larger $lambda$ values result in greater shrinkage of the coefficients, while smaller values allow the coefficients to be closer to their ordinary least squares estimates.
+This penalty term shrinks the coefficients towards zero, which helps to reduce overfitting and improve model generalization. The strength of the penalty is controlled by the hyperparameter $\lambda$. Larger $\lambda$ values result in greater shrinkage of the coefficients, while smaller values allow the coefficients to be closer to their ordinary least squares estimates.
 
 The ridge regression was performed using the Ridge library from sklearn. Cross validation was performed using Kfold and cross_val_score. Lambda values were defined on a logarithmic scale from 10^2 to 10^4. 20 different lambda values were evaluated, logarithmically distributed within the scale.
 
@@ -510,3 +510,52 @@ This result shows that for $\alpha$ = 0.75, 43 features were retained. This is g
 ### Part c.
 
 **In one sentence, explain why you needed all 4,088 gene expression values to generate this prediction even though you only fit principal components.**
+
+
+## Journal Paper: The horseshoe estimator for sparse signals by Carvalho, Polson, and Scott (2010)
+
+### Summary
+
+The study describes a new approach to sparsity, which is when a model has relatively few nonzero coefficients compared to the total number of predictors. The proposed approach is called the horseshoe estimator, which is robust, adaptive, and can be usd to develop a closed form solution. Two theorems were developed in the paper. One was used to characterize the horseshoe estimator's tail robustness, and another was used to show the method's efficient convergence.
+
+### Definitions
+
+Sparsity - model has relatively few nonzero coefficients compared to the total number of predictors
+
+Prior - Initial assessment of likelihood of a parameter or hypothesis before observing new data
+
+### Stop Doing
+
+The authors are encouraging readers to stop applying a uniform shrinkage to every $\beta$ coefficient when the underlying signal is believed to be sparse. For example, ridge regression tends to shrink all coefficients toward zero, including potentially large, meaningful signals. The selected shrinkage method should also consider both the signal's behavior near zero and its tail behavior.
+
+### Start Doing
+
+Instead, the authors' horseshoe estimator approach uses Bayesian statistics and a prior that some underlying signals are sparse. The horseshoe estimator uses a local and global shrinkage structure , combining an overall global parameter with individual local parameters for each coefficient. This allows the method to shrink small, relatively meaningless signall $\beta$ coefficients to zero, while minimizing shrinkage on large $\beta$ coefficients on meaningful signals. The horseshoe prior accomplishes this through its sharp concentration near zero and heavy tails.
+
+### Methods
+
+Both simulated and real data were used in the study to show that the horseshoe estimator performs similarly to a Baysean modeling approach. 
+
+500 simulated datasets were used in the analysis and were benchmarked against four alternatives: maximum likelihood estimator, double-exponential model, normal-exponential-gamma model, and empirical-Bayes model. Six configurations of tail weight and sparsity were considered, from very sparse signals with heavy tails to mildly sparse signals with lighter tails. Results suggested that the horseshoe prior method performed the best for the simulated data.
+
+The real dataset used in the paper was a Vanguard mutual fund dataset with n = 86 weekly returns for p = 59 funds. The horseshoe approach performed similarly to the Bayesian model averaging solution, which is a computaitonally intensive approach, and easily outperformed the same alternative approaches used in the simulated datasets.
+
+### Study Details
+
+The horseshoe estimator prior is a probability distribution for the unknown $\beta$ coefficients. Figure 1 shows an illustration of the horseshoe distribution compared to the Cauchy and double-exponential distributions. 
+
+![Figure 1. Graph of the horseshoe prior density, with a sharp peak near zero and heavy tails extending in both directions across the plot.](C:\Users\provi\Provines GitHub\Provines-DS-6400\Figures\Horseshoe_Estimator_Fig1.png)
+
+Near zero, the horseshoe distribution has a very sharp peak, meaning that there is a high probability that most $\beta$ coefficients will be approximately zero. Away from zero, the distribution has a "heavy tail", meaning that while it does decrease, it does so more slowly than the double-exponential distribution. This means that the horseshoe estimator does not heavily penalize large coefficients. Together, these allow the horseshoe prior to eliminate noise-like coefficients, while maintaining meaningful signals.
+
+There are two shrinkage parameters for the horseshoe estimator. The global parameter, $\tau$, controls the shrinkage across all coefficients, while the local parameter, $\lambda_i$, allows for different amounts of shrinkage to be applied for for individual $\beta$ coefficients. 
+
+In the paper, the $\tau$ and $\lambda_i$ parameters were assigned a half-Cauchy prior, meaning that the horseshoe estimator does not require a fixed $\lambda$ hyperparameter selected through cross validation for shrinkage. This makes the approach robust and highly adaptive. 
+
+The horseshoe approach differs from ridge or lasso regression in how it controls the coefficient shrinkage. Ridge and lasso use a common penalty parameter to control the overall amount of shrinkage, while the horseshoe uses individual local parameters to adapt the amount of shrinkage to each coefficient. This allows the horseshoe to strongly shrink noise-like coefficients while preserving meaningful signals.
+
+Signals are determined to be either noise-like or meaningful using posterior shrinkage. The horseshoe estimator uses the observed data to update the amount of shrinkage applied to each coefficient through its posterior distribution. Coefficients that appear to be primarily noise receive strong shrinkage, while coefficients that appear to contain meaningful signals receive less shrinkage and are largely preserved. This behavior is controlled by the shrinkage coefficient, $\kappa_i$, where values near 1 indicate strong shrinkage and values near 0 indicate little shrinkage. 
+
+### Computation Plan
+
+For my computation, I plan to apply the horseshoe estimator approach to the riboflavin dataset. 

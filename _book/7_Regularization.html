@@ -111,7 +111,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
+
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -277,7 +280,7 @@ window.Quarto = {
 <section id="load-data-inspect" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="load-data-inspect"><span class="header-section-number">7.2</span> Load Data &amp; Inspect</h2>
 <p>The riboflavin.rds dataset was intended to be used in R, but was first converted into a CSV file for use in python. After converting the dataset, it was loaded into python and inspected.</p>
-<div id="ddff9895" class="cell" data-execution_count="1">
+<div id="667a5cae" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -683,7 +686,7 @@ window.Quarto = {
 </div>
 </div>
 <p>The dataset has 71 observations and 4088 features. Next, the response variable y was extracted from the dataset and the predictor matrix X was created by dropping y and the sample ID. The shape of both were inspected for confirmation.</p>
-<div id="91d41d74" class="cell" data-execution_count="2">
+<div id="74b92393" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># separate predictors and response</span></span>
@@ -702,7 +705,7 @@ window.Quarto = {
 <h2 data-number="7.3" class="anchored" data-anchor-id="problem-1"><span class="header-section-number">7.3</span> Problem 1</h2>
 <p><strong>Confirm that OLS cannot create a unique solution for this dataset. Attempt to fit a linear model using lm() and report what happens. How many coefficients does R return as NA, and why?</strong></p>
 <p>In python, the linear model can be fit using LinearRegression from sklearn.</p>
-<div id="f165df23" class="cell" data-execution_count="3">
+<div id="9c5584b1" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
@@ -731,7 +734,7 @@ Intercept: 0.22058943050540503</code></pre>
 <li><span class="math inline">\(p\)</span> = number of predictors (columns)</li>
 </ul>
 <p>The actual rank of the design matrix can be computed using the following code.</p>
-<div id="8d51bb69" class="cell" data-execution_count="4">
+<div id="12f132c8" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -767,7 +770,7 @@ Rank deficiency: 4018</code></pre>
 <p>This penalty term shrinks the coefficients towards zero, which helps to reduce overfitting and improve model generalization. The strength of the penalty is controlled by the hyperparameter <span class="math inline">\(\lambda\)</span>. Larger <span class="math inline">\(lambda\)</span> values result in greater shrinkage of the coefficients, while smaller values allow the coefficients to be closer to their ordinary least squares estimates.</p>
 <p>The ridge regression was performed using the Ridge library from sklearn. Cross validation was performed using Kfold and cross_val_score. Lambda values were defined on a logarithmic scale from 10^2 to 10^4. 20 different lambda values were evaluated, logarithmically distributed within the scale.</p>
 <p>First, the features were standardized using the StandardScalar library from sklearn. This library scales the features to have a mean of 0 and standard deviation of 1. This was done because <span class="math inline">\(\beta\)</span> coefficients need to be on the same scale for the penalty term to be effective.</p>
-<div id="20429ee9" class="cell" data-execution_count="5">
+<div id="5bbe548a" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Ridge</span>
@@ -783,7 +786,7 @@ Rank deficiency: 4018</code></pre>
 </details>
 </div>
 <p>The StandardScaler is applied separately within each fold of the cross-validation within the pipeline.</p>
-<div id="0c284264" class="cell" data-execution_count="6">
+<div id="6bcd51ce" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize list to store cross-validation mean squared error (MSE)</span></span>
@@ -801,7 +804,7 @@ Rank deficiency: 4018</code></pre>
 <p>Next, <span class="math inline">\(\lambda_{\min}\)</span> and <span class="math inline">\(\lambda_{1se}\)</span> were computed. These are defined as follows:<br>
 - <span class="math inline">\(\lambda_{\min}\)</span> = Lambda value that produces the minimum cross-validation MSE.<br>
 - <span class="math inline">\(\lambda_{1se}\)</span> = Largest lambda value with cross-validation MSE within one standard error of the minimum.</p>
-<div id="ba79e03b" class="cell" data-execution_count="7">
+<div id="966fd26c" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># identify index of minimum cross validation MSE</span></span>
@@ -820,7 +823,7 @@ Minimum CV-MSE: 0.28877092999069953</code></pre>
 </div>
 </div>
 <p><span class="math inline">\(\lambda_{1se}\)</span> was computed by re-running the cross-validation using the <span class="math inline">\(\lambda_{\min}\)</span> value and calculating the standard error fo the cross-validation MSE across the 10 folds.</p>
-<div id="be3e1b3c" class="cell" data-execution_count="8">
+<div id="9b6c36a8" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit ridge regression at lambda_min</span></span>
@@ -838,7 +841,7 @@ Minimum CV-MSE: 0.28877092999069953</code></pre>
 </div>
 </div>
 <p>Then the one standard error cutoff value was calculated by adding the standard error to the minimum cross-validation MSE. The largest lambda value within this cutoff was identified as <span class="math inline">\(\lambda_{1se}\)</span>.</p>
-<div id="e7936181" class="cell" data-execution_count="9">
+<div id="e45156ad" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate one-standard-error cutoff</span></span>
@@ -856,7 +859,7 @@ MSE cutoff: 0.35653635476174705</code></pre>
 </div>
 </div>
 <p>Finally, a plot of the cross-validation MSE was created with vertical lines for <span class="math inline">\(\lambda_{\min}\)</span> and <span class="math inline">\(\lambda_{1se}\)</span>. The x-axis used a log scale to visualize the relationship between lambda and cross-validation MSE.</p>
-<div id="5b10e552" class="cell" data-execution_count="10">
+<div id="f956122b" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -893,7 +896,7 @@ MSE cutoff: 0.35653635476174705</code></pre>
 <h2 data-number="7.5" class="anchored" data-anchor-id="problem-3"><span class="header-section-number">7.5</span> Problem 3</h2>
 <p><strong>Plot the ridge coefficient path -<span class="math inline">\(log(\lambda)\)</span> (a previous version omitted the negative sign) on the x-axis, coefficient values on the y-axis. Describe qualitatively what happens to the coefficients as <span class="math inline">\(\lambda\)</span> increases. Does any coefficient reach exactly zero?</strong></p>
 <p>First, the ridge coefficients across the lambda grid were calculated and extracted.</p>
-<div id="15d581ee" class="cell" data-execution_count="11">
+<div id="a001a509" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize list to store ridge coefficients</span></span>
@@ -918,7 +921,7 @@ MSE cutoff: 0.35653635476174705</code></pre>
 </div>
 </div>
 <p>Next, the ridge coefficients were plotted.</p>
-<div id="42a5c56b" class="cell" data-execution_count="12">
+<div id="b53fb595" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot ridge coefficient paths</span></span>
@@ -943,7 +946,7 @@ MSE cutoff: 0.35653635476174705</code></pre>
 </div>
 </div>
 <p>As lambda increases, the coefficient values decrease towards zero, but none appear to reach exaclty zero. This was verified using the code below.</p>
-<div id="1a17fe4d" class="cell" data-execution_count="13">
+<div id="6d852d3d" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># count coefficients that are exactly zero</span></span>
@@ -975,7 +978,7 @@ MSE cutoff: 0.35653635476174705</code></pre>
 \]</span></p>
 <p>The lasso penalty shrinks some coefficients to exactly zero, which allows for feature selection.</p>
 <p>The lasso regression was performed using the lasso library from sklearn. Lambda values were defined on a log scale, similar to what was done for problem 2.</p>
-<div id="7899f149" class="cell" data-execution_count="14">
+<div id="1afe3bca" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Lasso</span>
@@ -991,7 +994,7 @@ MSE cutoff: 0.35653635476174705</code></pre>
 </details>
 </div>
 <p>Next, the lasso regression was fit across the lambda grid and the cross-validation MSE was calculated.</p>
-<div id="ff6dadb4" class="cell" data-execution_count="15">
+<div id="7b0b6fa8" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize list to store cross-validation mean squared error (MSE)</span></span>
@@ -1007,7 +1010,7 @@ MSE cutoff: 0.35653635476174705</code></pre>
 </details>
 </div>
 <p>Then the minimum cross-validation MSE and corresponding <span class="math inline">\(\lambda_{min}\)</span> were identified.</p>
-<div id="428cee96" class="cell" data-execution_count="16">
+<div id="89953bec" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># identify index of minimum cross-validation MSE</span></span>
@@ -1026,7 +1029,7 @@ Minimum CV-MSE: 0.2075410417878735</code></pre>
 </div>
 </div>
 <p><span class="math inline">\(\lambda_{1se}\)</span> was computed following the same procedure as in problem 2, by re-running the cross-validation using the <span class="math inline">\(\lambda_{\min}\)</span> value and calculating the standard error for the cross-validation MSE across the 10 folds.</p>
-<div id="e40cc89a" class="cell" data-execution_count="17">
+<div id="dcd8dd8f" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit lasso at lambda_min</span></span>
@@ -1044,7 +1047,7 @@ Minimum CV-MSE: 0.2075410417878735</code></pre>
 </div>
 </div>
 <p>Then, the one standard error cutoff value was calculated and the largest lambda value within this cutoff was identified as <span class="math inline">\(\lambda_{1se}\)</span>.</p>
-<div id="c14d6cdb" class="cell" data-execution_count="18">
+<div id="4046b6bf" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate one-standard-error cutoff</span></span>
@@ -1062,7 +1065,7 @@ MSE cutoff: 0.27085487623767196</code></pre>
 </div>
 </div>
 <p>Finally, the lasso model was fit using <span class="math inline">\(\lambda_{1se}\)</span> and the number of retained features were calculated.</p>
-<div id="38a81340" class="cell" data-execution_count="19">
+<div id="4d0cc684" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit lasso at lambda_1se</span></span>
@@ -1084,7 +1087,7 @@ MSE cutoff: 0.27085487623767196</code></pre>
 </div>
 <p>This confirmed that 27 features were retained, having non-zero coefficients. This demonstrates lasso’s ability to perform feature selection.</p>
 <p>Next, the coefficients across the lambda grid were calculated and extracted for plotting the coefficient path.</p>
-<div id="634ef962" class="cell" data-execution_count="20">
+<div id="0da9c3b5" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize list to store lasso coefficients</span></span>
@@ -1104,7 +1107,7 @@ MSE cutoff: 0.27085487623767196</code></pre>
 </details>
 </div>
 <p>The lasso coefficients were then plotted for visualization. <span class="math inline">\(\lambda_{1se}\)</span> is included on the plot to show where the which features are retained.</p>
-<div id="f3e6320f" class="cell" data-execution_count="21">
+<div id="723ab0d7" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Show the code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot lasso coefficient paths</span></span>
@@ -1124,35 +1127,39 @@ MSE cutoff: 0.27085487623767196</code></pre>
 <span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
+<div class="cell-output cell-output-stderr">
+<pre><code>C:\Users\provi\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\IPython\core\pylabtools.py:158: UserWarning: Creating legend with loc="best" can be slow with large amounts of data.
+  fig.canvas.print_figure(bytes_io, **kw)</code></pre>
+</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="7_Regularization_files/figure-html/cell-22-output-1.png" width="535" height="377" class="figure-img"></p>
+<p><img src="7_Regularization_files/figure-html/cell-22-output-2.png" width="535" height="377" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Finally, the cross-validation MSE results were plotted for visualization, with vertical lines at <span class="math inline">\(\lambda_{min}\)</span> and <span class="math inline">\(\lambda_{1se}\)</span>.</p>
-<div id="b5b19a41" class="cell" data-execution_count="22">
+<div id="2e717c55" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot cross-validation MSE</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>))</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>plt.plot(lambdas, cv_mse_lasso, marker<span class="op">=</span><span class="st">"o"</span>, markersize<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="co"># add vertical lines for selected lambda values</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>plt.axvline(lambda_min_lasso, color<span class="op">=</span><span class="st">"red"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, label<span class="op">=</span><span class="st">"lambda_min"</span>)</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>plt.axvline(lambda_1se_lasso, color<span class="op">=</span><span class="st">"blue"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, label<span class="op">=</span><span class="st">"lambda_1se"</span>)</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="co"># format plot</span></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>plt.xscale(<span class="st">"log"</span>)</span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Lambda"</span>)</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Cross-Validation MSE"</span>)</span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Lasso Regression: 10-Fold Cross-Validation"</span>)</span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot cross-validation MSE</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>))</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>plt.plot(lambdas, cv_mse_lasso, marker<span class="op">=</span><span class="st">"o"</span>, markersize<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co"># add vertical lines for selected lambda values</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>plt.axvline(lambda_min_lasso, color<span class="op">=</span><span class="st">"red"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, label<span class="op">=</span><span class="st">"lambda_min"</span>)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>plt.axvline(lambda_1se_lasso, color<span class="op">=</span><span class="st">"blue"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, label<span class="op">=</span><span class="st">"lambda_1se"</span>)</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co"># format plot</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>plt.xscale(<span class="st">"log"</span>)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Lambda"</span>)</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Cross-Validation MSE"</span>)</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Lasso Regression: 10-Fold Cross-Validation"</span>)</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -1175,51 +1182,51 @@ MSE cutoff: 0.27085487623767196</code></pre>
 \right]
 \]</span></p>
 <p>First, the elastic net was fit across a grid of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\lambda\)</span> values.</p>
-<div id="07143cc3" class="cell" data-execution_count="23">
+<div id="5b677917" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> ElasticNet</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define alpha values to evaluate</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>alphas <span class="op">=</span> [<span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>]</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co"># define lambda values to evaluate</span></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>lambdas <span class="op">=</span> np.logspace(<span class="op">-</span><span class="dv">4</span>, <span class="dv">0</span>, <span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> ElasticNet</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define alpha values to evaluate</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>alphas <span class="op">=</span> [<span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>]</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co"># define lambda values to evaluate</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>lambdas <span class="op">=</span> np.logspace(<span class="op">-</span><span class="dv">4</span>, <span class="dv">0</span>, <span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Next, the elastic net model was fit for each combination of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\lambda\)</span>, and the cross-validation MSE was calculated.</p>
-<div id="a75bd31c" class="cell" data-execution_count="24">
+<div id="7ad6fbdb" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># store results for each alpha</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>elastic_net_results <span class="op">=</span> []</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a <span class="kw">in</span> alphas:</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    cv_mse <span class="op">=</span> []</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> lam <span class="kw">in</span> lambdas:</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> make_pipeline(StandardScaler(), ElasticNet(alpha<span class="op">=</span>lam, l1_ratio<span class="op">=</span>a, max_iter<span class="op">=</span><span class="dv">10000</span>))</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> cross_val_score(model, X, y, cv<span class="op">=</span>cv, scoring<span class="op">=</span><span class="st">"neg_mean_squared_error"</span>)</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>        cv_mse.append(<span class="op">-</span>scores.mean())</span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># identify minimum CV-MSE for this alpha</span></span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    min_idx <span class="op">=</span> np.argmin(cv_mse)</span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># store results for this alpha</span></span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>    elastic_net_results.append({<span class="st">"alpha"</span>: a, <span class="st">"lambda_min"</span>: lambdas[min_idx], <span class="st">"CV-MSE"</span>: cv_mse[min_idx]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># store results for each alpha</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>elastic_net_results <span class="op">=</span> []</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a <span class="kw">in</span> alphas:</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    cv_mse <span class="op">=</span> []</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> lam <span class="kw">in</span> lambdas:</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> make_pipeline(StandardScaler(), ElasticNet(alpha<span class="op">=</span>lam, l1_ratio<span class="op">=</span>a, max_iter<span class="op">=</span><span class="dv">10000</span>))</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>        scores <span class="op">=</span> cross_val_score(model, X, y, cv<span class="op">=</span>cv, scoring<span class="op">=</span><span class="st">"neg_mean_squared_error"</span>)</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>        cv_mse.append(<span class="op">-</span>scores.mean())</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># identify minimum CV-MSE for this alpha</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>    min_idx <span class="op">=</span> np.argmin(cv_mse)</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># store results for this alpha</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>    elastic_net_results.append({<span class="st">"alpha"</span>: a, <span class="st">"lambda_min"</span>: lambdas[min_idx], <span class="st">"CV-MSE"</span>: cv_mse[min_idx]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>Then the results were converted to a dataframe for display.</p>
-<div id="4c9aa603" class="cell" data-execution_count="25">
+<div id="48e248dd" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert results to a dataframe</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>elastic_net_df <span class="op">=</span> pd.DataFrame(elastic_net_results)</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># display results</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>elastic_net_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert results to a dataframe</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>elastic_net_df <span class="op">=</span> pd.DataFrame(elastic_net_results)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co"># display results</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>elastic_net_results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>[{'alpha': 0.25,
@@ -1235,26 +1242,26 @@ MSE cutoff: 0.27085487623767196</code></pre>
 </div>
 <p>When <span class="math inline">\(\alpha\)</span> = 0.75, it produced the lowest CV-MSE, making it the best of the three elastic net models evaluated.</p>
 <p>Next, the number of features retained was calculated for each <span class="math inline">\(\alpha\)</span> value.</p>
-<div id="5bccf521" class="cell" data-execution_count="26">
+<div id="8e6487f7" class="cell" data-execution_count="26">
 <details class="code-fold">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># store the number of retained features</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>elastic_net_features <span class="op">=</span> []</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> result <span class="kw">in</span> elastic_net_results:</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> make_pipeline(StandardScaler(), ElasticNet(alpha<span class="op">=</span>result[<span class="st">"lambda_min"</span>], l1_ratio<span class="op">=</span>result[<span class="st">"alpha"</span>], max_iter<span class="op">=</span><span class="dv">10000</span>))</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    model.fit(X, y)</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># count nonzero coefficients</span></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    num_retained <span class="op">=</span> np.<span class="bu">sum</span>(model.named_steps[<span class="st">"elasticnet"</span>].coef_ <span class="op">!=</span> <span class="dv">0</span>)</span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>    elastic_net_features.append(num_retained)</span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="co"># add feature counts to results dataframe</span></span>
-<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>elastic_net_df[<span class="st">"Features Retained"</span>] <span class="op">=</span> elastic_net_features</span>
-<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>elastic_net_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># store the number of retained features</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>elastic_net_features <span class="op">=</span> []</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> result <span class="kw">in</span> elastic_net_results:</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> make_pipeline(StandardScaler(), ElasticNet(alpha<span class="op">=</span>result[<span class="st">"lambda_min"</span>], l1_ratio<span class="op">=</span>result[<span class="st">"alpha"</span>], max_iter<span class="op">=</span><span class="dv">10000</span>))</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    model.fit(X, y)</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># count nonzero coefficients</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    num_retained <span class="op">=</span> np.<span class="bu">sum</span>(model.named_steps[<span class="st">"elasticnet"</span>].coef_ <span class="op">!=</span> <span class="dv">0</span>)</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>    elastic_net_features.append(num_retained)</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a><span class="co"># add feature counts to results dataframe</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>elastic_net_df[<span class="st">"Features Retained"</span>] <span class="op">=</span> elastic_net_features</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>elastic_net_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="26">
 <div>
