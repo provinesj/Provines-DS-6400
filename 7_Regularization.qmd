@@ -559,3 +559,286 @@ Signals are determined to be either noise-like or meaningful using posterior shr
 ### Computation Plan
 
 For my computation, I plan to apply the horseshoe estimator approach to the riboflavin dataset. 
+
+### Computation
+
+First, the data was loaded into python, and the predictor and target matrices were separated.
+```{python}
+import pandas as pd
+
+# load exported dataset
+df = pd.read_csv("riboflavin.csv")
+
+# separate predictors and response
+X = df.drop(columns=["Sample", "y"])
+y = df["y"]
+
+print("X shape:", X.shape)
+print("y shape:", y.shape)
+```
+
+First, the predictors were standardized. This will allow the magnitude of the $\beta$ coefficients to be comparable, making shrinkage easier to interpret. The StandardScaler library was used for stsandardization, scaling each predictor to have a mean of 0 and a standard deviation of 1.
+
+```{python}
+from sklearn.preprocessing import StandardScaler
+
+# standardize predictors
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# verify predictors have been standardized
+print("Shape:", X_scaled.shape)
+print("Means:", X_scaled.mean(axis=0)[:5])
+print("Standard deviations:", X_scaled.std(axis=0)[:5])
+```
+
+The Bayesian prior used in this computation for the $\beta_j$ coefficients is given by the following distribution. This is the same prior was used in the Carvalho, Polson, and Scott (2010) paper.
+$$
+\beta_j \mid \lambda_j, \tau \sim N(0, \tau^2\lambda_j^2)
+$$
+
+where:
+- $\beta_j$ = regression coefficient
+- $\lambda_j$ = local shrinkage parameter   
+- $\tau$ = global shrinkage parameter   
+- $\tau \lambda_j$ = conditional standard deviation of $\beta_j$   
+
+The predictor matrix, y, was then inspected to determine values for the mean and standard deviation the data.
+```{python}
+print("Mean:", y.mean())
+print("Standard deviation:", y.std())
+print("Minimum:", y.min())
+print("Maximum:", y.max())
+```
+
+Based on these results, a mean of -7.16 and a standard deviation of 1 were chosen for the $\beta_o$ (intercept) prior. This is given by the following expression. 
+$$
+\beta_0 \sim N(-7.16, 1^2)
+$$
+
+The standard deviation, $\sigma$, describes the remaining variability in the targets that the regression model does not explain. The $\sigma$ prior was assumed to have a half-normal distribution, with only positive numbers. It is described in the following expression. 
+$$
+\sigma \sim N^+(0, 1)
+$$
+
+Next, a prior for the global shrinkage parameter, $\tau$ was determined. The $\tau$ factor controls the overall shrinkage of the predictor coefficients. Smaller $\tau$ values provide stronger shrinkage toward zero, while larger $\tau$ values provide weaker shrinkage, allowing more coefficients to move away from zero. A half-Cauchy prior was assigned for $\tau$, described in the following expression. The standard deviation was first assumed to be 1, but was then iterated based on the results.
+$$
+\tau \sim N^+(0, 1)
+$$
+
+A summary of all the priors is provided below.
+$$
+\begin{aligned}
+\text{Intercept:}\quad
+&\beta_0 \sim N(-7.16, 1^2)\\[6pt]
+\text{Gene coefficients:}\quad
+&\beta_j \mid \lambda_j,\tau
+\sim N(0,\tau^2\lambda_j^2)\\[6pt]
+\text{Local scales:}\quad
+&\lambda_j \sim C^+(0,1)\\[6pt]
+\text{Global scale:}\quad
+&\tau \sim C^+(0,1)\\[6pt]
+\text{Residual standard deviation:}\quad
+&\sigma \sim N^+(0,1)
+\end{aligned}
+$$
+
+For the computation, the PyMC library of python was selected for implementing the Bayesian horseshoe estimator model. The priors were defined in the model.
+
+The equation for the conditional mean as shown in the following was also implemented to calculate the expected response for each observation.
+$$
+\hat{y}_i = \beta_0 + \sum_{j=1}^{4088} x_{ij}^{*}\beta_j
+$$
+
+where:
+- $\hat{y}_i$ = conditional mean for observation i   
+- $\beta_0$ = intercept   
+- $x^*_{ij}$ = standardized value of predictor j for observation i   
+- $\beta_j$ = regression coefficient for predictor j
+
+The likelihood was also defined by the following expression.
+$$
+y_i \sim N(\hat{y}_i,\sigma^2)
+$$
+
+where:
+- $\hat{y}_i = conditional mean of the distribution for observation i   
+- $\sigma$ = residual standard deviation   
+- $y_i$ = observed response for observation i   
+
+```{python}
+import pymc as pm
+
+n, p = X_scaled.shape
+
+# develop model
+with pm.Model() as model:
+
+    # define priors
+    beta_0 = pm.Normal("beta_0", mu=-7.16, sigma=1) # intercept
+    lam = pm.HalfCauchy("lam", beta=1, shape=p)     # local shrinkage, 1 for each predictor
+    tau = pm.HalfCauchy("tau", beta=1)              # global shrinkage
+    z = pm.Normal("z", mu=0, sigma=1, shape=p)      # standard normal non-centered parameterization variable to make beta sampling more computationally efficient. sampling beta directly would be centered.
+    beta = pm.Deterministic("beta", z * tau * lam)  # beta coefficients, beta=z*tau*lam
+
+    # define conditional mean function
+    y_hat = beta_0 + pm.math.dot(X_scaled, beta) 
+
+    # residual std dev to account for uncertainty
+    sigma = pm.HalfNormal("sigma", sigma=1)
+
+    # define likelihood 
+    y_obs = pm.Normal("y_obs", mu=y_hat, sigma=sigma, observed=y)
+```
+
+After the model was defined, it was used to generate prior predictive samples. These prior predictive samples were generated without looking at the dataset. Their main purpose is to verify that the assumed priors can be used to generate plausible data. Quartiles of the prior predictions were evaluated to evaluate the model and priors.
+```{python}
+import numpy as np
+
+# generate prior predictive samples
+prior = pm.sample_prior_predictive(model=model, draws=100, random_seed=10)
+
+# examine the distribution of simulated responses
+prior_y = prior.prior_predictive["y_obs"].values
+
+print("Prior predictive response quantiles:")
+print(np.quantile(prior_y, [0.05, 0.50, 0.95]))
+```
+
+Initially, the prior predictions ranged from approximately -58,000 to 51,000, with a mean of 1.35. This means the $\beta$ values were too large. Therefore the scale of $\tau$ (global shrinkage) needed to be decreased (smaller $\tau$ means more shrinkage). It was decreased using the following equation developed for high dimensional horseshoe regression.
+$$
+\tau_0 =
+\frac{p_0}{p-p_0}
+\frac{\sigma}{\sqrt{n}}
+$$
+
+where:
+$p_O$ = expected number of meaningful predictors
+$p$ = total number of predictors (4,088)
+$\sigma$ = residual standard deviation
+$n$ = number of observations (71)
+
+It was assumed that there was $p_O$ = 25 meaningful genes in the riboflavin dataset. The model was redefined using these parameters.
+```{python}
+import pymc as pm
+
+n, p = X_scaled.shape
+
+# develop model
+with pm.Model() as model:
+
+    # define priors
+    beta_0 = pm.Normal("beta_0", mu=-7.16, sigma=1) # intercept
+    lam = pm.HalfCauchy("lam", beta=1, shape=p)     # local shrinkage, 1 for each predictor
+    z = pm.Normal("z", mu=0, sigma=1, shape=p)      # standard normal non-centered parameterization variable to make beta sampling more computationally efficient. sampling beta directly would be centered.
+
+    # residual std dev to account for uncertainty
+    sigma = pm.HalfNormal("sigma", sigma=1)
+
+    # new formula to calibrate global shrinkage using expected meaningful predictors
+    p0 = 25
+    tau0 = (p0 / (p - p0)) * sigma / np.sqrt(n)
+    
+    # new tau prior
+    tau = pm.HalfCauchy("tau", beta=tau0)              # global shrinkage
+
+    beta = pm.Deterministic("beta", z * tau * lam)  # beta coefficients, beta=z*tau*lam
+
+    # define conditional mean function
+    y_hat = beta_0 + pm.math.dot(X_scaled, beta) 
+
+    # define likelihood 
+    y_obs = pm.Normal("y_obs", mu=y_hat, sigma=sigma, observed=y)
+```
+
+Then the new model was used to generate new prior predictions.
+```{python}
+import numpy as np
+
+# generate prior predictive samples
+prior = pm.sample_prior_predictive(model=model, draws=100, random_seed=10)
+
+# examine the distribution of simulated responses
+prior_y = prior.prior_predictive["y_obs"].values
+
+print("Prior predictive response quantiles:")
+print(np.quantile(prior_y, [0.05, 0.50, 0.95]))
+```
+
+The updated model prior predictions ranged from -39.1 to 26.7, with a mean of -7.04. The updated $\tau$ produced a substantial improvement, with the mean of the prior predictions closely resembling the observed mean (-7.16). Even so, the heavy tails of the half-Cauchy distribution allowed some large $\beta$ values near the ends of the prior predictions. 
+
+Next, a plot was generated to compare the distributions of the observations vs. the prior predictions using the model.
+```{python}
+import matplotlib.pyplot as plt
+
+# flatten prior predictive samples
+prior_y = prior.prior_predictive["y_obs"].values.flatten()
+
+# convert observed response to numpy array
+observed_y = y.to_numpy()
+
+# plot prior predictive and observed response distributions
+plt.figure(figsize=(6, 5))
+
+plt.hist(prior_y, bins=100, range=(-12, -3), density=True, alpha=0.6, label="Prior predictive")
+
+plt.hist(observed_y, bins=100, range=(-12, -3), density=True, alpha=0.6, label="Observed")
+
+plt.title("Prior Predictive vs. Observed Response")
+plt.xlabel("Response")
+plt.ylabel("Density")
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+```
+
+As shown in the figure, the prior predictions follow a similar distribution shape as the observations, but the heavier tails allow for more prior predictions to occur on the ends of the dataset. This shows that the prior used to generate the model are plausible.
+
+Then, posterior sampling was conducted. This step introduces the observations with the priors, and the horseshoe estimator learns which $\beta$ coefficients are meaningful and which should receive strong shrinkage. 
+```{python}
+
+# # generate posterior samples
+# with model:
+#     trace = pm.sample(draws=100, tune=150, chains=2, target_accept=0.90, random_seed=3)
+```
+
+TEXT ABOUT RESULTS
+
+The results were inspected to evaluate the model. 
+```{python}
+
+# import arviz as az
+
+# # summarize key posterior parameters
+# summary = az.summary(trace, var_names=["beta_0", "sigma", "tau"], round_to=3)
+
+# print(summary)
+
+# # count divergent transitions
+# divergences = trace.sample_stats["diverging"].sum().item()
+# print(f"Divergences: {divergences}")
+```
+
+TEXT ABOUT RESULTS
+
+Then the $\beta$ coefficients were used to develop posterior mean predictions.
+```{python}
+
+# beta_0_mean = trace.posterior["beta_0"].mean().item()
+
+# beta_mean = trace.posterior["beta"].mean(dim=("chain", "draw")).values
+
+# y_pred = beta_0_mean + X_scaled @ beta_mean
+```
+
+Finally, the mean squared error was computed on the training dataset.
+```{python}
+
+# from sklearn.metrics import mean_squared_error
+
+# # calculate training MSE
+# mse = mean_squared_error(y, y_pred)
+
+# print(f"Horseshoe Training MSE: {mse:.4f}")
+```
